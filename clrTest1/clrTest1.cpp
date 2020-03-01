@@ -1,12 +1,13 @@
 #include "stdafx.h"
 
 #include "clrTest1.h"
+//#include "bridge.h"
 
 using namespace clrTest1;
 
 Class1::Class1()
 {
-    this->sTLinkInterface = new STLinkInterface();
+    this->sTLinkInterface = new STLinkInterface(STLINK_BRIDGE);
 }
 
 Class1::~Class1()
@@ -15,12 +16,26 @@ Class1::~Class1()
 }
 
 //STLink_EnumStlinkInterfaceT     Class1::GetIfId(void) const { return m_ifId; }
-//STLinkIf_StatusT                Class1::LoadStlinkLibrary(const char *pPathOfProcess);
-bool                            Class1::IsLibraryLoaded()
+STLinkIf_StatusT Class1::LoadStlinkLibrary(String^ PathOfProcess)
+{
+	const char* path = StringToCharPtr(PathOfProcess);
+	return sTLinkInterface->LoadStlinkLibrary(path);
+}
+bool Class1::IsLibraryLoaded()
 {
     return sTLinkInterface->IsLibraryLoaded();
 }
-//STLinkIf_StatusT                Class1::EnumDevices(uint32_t *pNumDevices, bool bClearList);
+
+STLinkIf_StatusT Class1::EnumDevices([Out] uint32_t% NumDevices, bool bClearList)
+{
+	uint32_t *pNumDevices = new uint32_t(0);
+	STLinkIf_StatusT  status = sTLinkInterface->EnumDevices(pNumDevices, bClearList);
+
+	NumDevices = (*pNumDevices);
+	delete pNumDevices;
+	return status;
+}
+
 //STLinkIf_StatusT                Class1::GetDeviceInfo2(int StlinkInstId, STLink_DeviceInfo2T *pInfo, uint32_t InfoSize);
 //STLinkIf_StatusT                Class1::OpenDevice(int StlinkInstId, uint32_t StlinkIdTcp, bool bOpenExclusive, void **pHandle);
 //STLinkIf_StatusT                Class1::OpenDevice(const char *pSerialNumber, bool bStrict, uint32_t StlinkIdTcp, bool bOpenExclusive, void **pHandle);
@@ -32,4 +47,11 @@ String^                    Class1::GetPathOfProcess(void)
     String^ temp = gcnew String(sTLinkInterface->GetPathOfProcess());
 
     return gcnew String(sTLinkInterface->GetPathOfProcess());
+}
+
+const char * Class1::StringToCharPtr(String ^ s)
+{
+	using namespace Runtime::InteropServices;
+	const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+	return chars;
 }

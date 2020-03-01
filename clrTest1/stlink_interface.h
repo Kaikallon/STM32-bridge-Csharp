@@ -34,7 +34,8 @@
 /* Exported types and constants ----------------------------------------------*/
 // Warning if modified update also: ConvSTLinkIfToBrgStatus
 /// Interface Error and Status
-typedef enum {
+public enum STLinkIf_StatusT  
+{
 	STLINKIF_NO_ERR = 0,         ///< OK (no error)
 	STLINKIF_CONNECT_ERR,        ///< USB Connection error
 	STLINKIF_DLL_ERR,            ///< USB DLL error
@@ -47,7 +48,7 @@ typedef enum {
 	STLINKIF_GET_INFO_ERR,       ///< Error getting STLink device information
 	STLINKIF_STLINK_SN_NOT_FOUND,///< Required STLink serial number not found error
 	STLINKIF_CLOSE_ERR           ///< Error during device Close
-} STLinkIf_StatusT;
+} ;
 
 /* Class -------------------------------------------------------------------- */
 /// STLinkInterface Class
