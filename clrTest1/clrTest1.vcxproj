@@ -146,6 +146,7 @@
     <ClInclude Include="stlink_if_common.h" />
     <ClInclude Include="stlink_interface.h" />
     <ClInclude Include="stlink_type.h" />
+    <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
@@ -160,6 +161,7 @@
     </ClCompile>
     <ClCompile Include="stlink_device.cpp" />
     <ClCompile Include="stlink_interface.cpp" />
+    <ClCompile Include="Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
