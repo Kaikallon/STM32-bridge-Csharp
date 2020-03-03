@@ -93,7 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>"SDK Path\Include";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>SDK Path\Include;C:\Users\Alexander\source\repos\clrTest1\clrTest1\h;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
@@ -133,34 +133,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="bridge.h" />
     <ClInclude Include="clrTest1.h" />
-    <ClInclude Include="criticalsectionlock.h" />
+    <ClInclude Include="h\bridge.h" />
+    <ClInclude Include="h\criticalsectionlock.h" />
+    <ClInclude Include="h\STLinkUSBDriver.h" />
+    <ClInclude Include="h\stlink_device.h" />
+    <ClInclude Include="h\stlink_fw_api_bridge.h" />
+    <ClInclude Include="h\stlink_fw_api_common.h" />
+    <ClInclude Include="h\stlink_fw_const_bridge.h" />
+    <ClInclude Include="h\stlink_if_common.h" />
+    <ClInclude Include="h\stlink_interface.h" />
+    <ClInclude Include="h\stlink_type.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="STLinkUSBDriver.h" />
-    <ClInclude Include="stlink_device.h" />
-    <ClInclude Include="stlink_fw_api_bridge.h" />
-    <ClInclude Include="stlink_fw_api_common.h" />
-    <ClInclude Include="stlink_fw_const_bridge.h" />
-    <ClInclude Include="stlink_if_common.h" />
-    <ClInclude Include="stlink_interface.h" />
-    <ClInclude Include="stlink_type.h" />
     <ClInclude Include="Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="bridge.cpp" />
     <ClCompile Include="clrTest1.cpp" />
-    <ClCompile Include="criticalsectionlock.cpp" />
+    <ClCompile Include="src\bridge.cpp" />
+    <ClCompile Include="src\criticalsectionlock.cpp" />
+    <ClCompile Include="src\stlink_device.cpp" />
+    <ClCompile Include="src\stlink_interface.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="stlink_device.cpp" />
-    <ClCompile Include="stlink_interface.cpp" />
     <ClCompile Include="Wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>

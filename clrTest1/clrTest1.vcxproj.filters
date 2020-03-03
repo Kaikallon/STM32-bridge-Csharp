@@ -24,37 +24,37 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stlink_fw_api_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="STLinkUSBDriver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stlink_interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stlink_type.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bridge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="criticalsectionlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stlink_device.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stlink_fw_api_bridge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stlink_fw_const_bridge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stlink_if_common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Wrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\bridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\criticalsectionlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\stlink_device.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\stlink_fw_api_bridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\stlink_fw_api_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\stlink_fw_const_bridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\stlink_if_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\stlink_interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\stlink_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="h\STLinkUSBDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,19 +68,19 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bridge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="criticalsectionlock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stlink_device.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stlink_interface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Wrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\criticalsectionlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stlink_device.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stlink_interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
