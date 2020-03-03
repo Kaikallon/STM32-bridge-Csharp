@@ -34,20 +34,20 @@
 /* Exported types and constants ----------------------------------------------*/
 // Warning if modified update also: ConvSTLinkIfToBrgStatus
 /// Interface Error and Status
-public enum STLinkIf_StatusT  
+public enum class STLinkIf_StatusT  
 {
-	STLINKIF_NO_ERR = 0,         ///< OK (no error)
-	STLINKIF_CONNECT_ERR,        ///< USB Connection error
-	STLINKIF_DLL_ERR,            ///< USB DLL error
-	STLINKIF_USB_COMM_ERR,       ///< USB Communication error
-	STLINKIF_PARAM_ERR,          ///< Wrong parameters error
-	STLINKIF_NO_STLINK,          ///< STLink device not opened error
-	STLINKIF_NOT_SUPPORTED,      ///< Parameter error
-	STLINKIF_PERMISSION_ERR,     ///< STLink device already in use by another program error
-	STLINKIF_ENUM_ERR,           ///< USB enumeration error
-	STLINKIF_GET_INFO_ERR,       ///< Error getting STLink device information
-	STLINKIF_STLINK_SN_NOT_FOUND,///< Required STLink serial number not found error
-	STLINKIF_CLOSE_ERR           ///< Error during device Close
+	NO_ERR = 0,         ///< OK (no error)
+	CONNECT_ERR,        ///< USB Connection error
+	DLL_ERR,            ///< USB DLL error
+	USB_COMM_ERR,       ///< USB Communication error
+	PARAM_ERR,          ///< Wrong parameters error
+	NO_STLINK,          ///< STLink device not opened error
+	NOT_SUPPORTED,      ///< Parameter error
+	PERMISSION_ERR,     ///< STLink device already in use by another program error
+	ENUM_ERR,           ///< USB enumeration error
+	GET_INFO_ERR,       ///< Error getting STLink device information
+	SN_NOT_FOUND,       ///< Required STLink serial number not found error
+	CLOSE_ERR           ///< Error during device Close
 } ;
 
 /* Class -------------------------------------------------------------------- */

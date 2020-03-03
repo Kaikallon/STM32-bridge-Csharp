@@ -38,4 +38,7 @@ namespace clrTest1
         //STLinkIf_StatusT                SendCommand(void *pHandle, uint32_t StlinkIdTcp, STLink_DeviceRequestT *pDevReq, const uint16_t UsbTimeoutMs);
         String^                    GetPathOfProcess(void);
 	};
+
+
+
 }

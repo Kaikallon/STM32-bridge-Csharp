@@ -106,23 +106,23 @@ void StlinkDevice::SetOpenModeExclusive(bool bExclusive)
  * @param[in]  StlinkInstId  Instance ID in the list of enumerated STLink devices.
  *                           Create one instance of StlinkDevice by device.
  * @return STLinkInterface::OpenDevice() errors
- * @retval #STLINKIF_CONNECT_ERR Wrong StlinkInstId or USB error
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #CONNECT_ERR Wrong StlinkInstId or USB error
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT StlinkDevice::PrivOpenStlink(int StlinkInstId)
 {
-	STLinkIf_StatusT ifStatus=STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus= STLinkIf_StatusT::NO_ERR;
 
 	if( m_bStlinkConnected == false ) {
 		// Open the device
 		ifStatus = m_pStlinkInterface->OpenDevice(StlinkInstId, 0, m_bOpenExclusive, &m_handle);
-		if( ifStatus != STLINKIF_NO_ERR ) {
+		if( ifStatus != STLinkIf_StatusT::NO_ERR ) {
 			LogTrace("%s STLink device USB connection failure", LogInterfaceString[m_pStlinkInterface->GetIfId()]);
-			return STLINKIF_CONNECT_ERR;
+			return STLinkIf_StatusT::CONNECT_ERR;
 		}
 		m_bStlinkConnected = true;
 		ifStatus = PrivGetVersionExt(&m_Version);
-		if( ifStatus != STLINKIF_NO_ERR )
+		if( ifStatus != STLinkIf_StatusT::NO_ERR )
 		{
 			LogTrace("STLink get Extended version failure");
 			PrivCloseStlink();
@@ -133,7 +133,7 @@ STLinkIf_StatusT StlinkDevice::PrivOpenStlink(int StlinkInstId)
 
 	if( m_bStlinkConnected == false )
 	{
-		return STLINKIF_CONNECT_ERR;
+		return STLinkIf_StatusT::CONNECT_ERR;
 	}
 	return ifStatus;
 }
@@ -147,34 +147,34 @@ STLinkIf_StatusT StlinkDevice::PrivOpenStlink(int StlinkInstId)
  * @param[in]  pSerialNumber  STLink serial number (ASCII).
  * @param[in]  bStrict 	 Used if STLink with required serial number is not found, but one other STLink is found:
  *                       choose if we open or not the other STLink. \n
- *                       If bStrict is true, the command will return #STLINKIF_STLINK_SN_NOT_FOUND if the
+ *                       If bStrict is true, the command will return #SN_NOT_FOUND if the
  *                       given SerialNumber is not found.\n
  *                       If bStrict is false and the given serial number is not found and one (and only one)
  *                       STLink is found, the command will attempt to open the STLink even if
  *                       the serial number does not match.
  * @return STLinkInterface::OpenDevice() errors
- * @retval #STLINKIF_CONNECT_ERR USB error
- * @retval #STLINKIF_STLINK_SN_NOT_FOUND Serial number not found
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #CONNECT_ERR USB error
+ * @retval #SN_NOT_FOUND Serial number not found
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT StlinkDevice::PrivOpenStlink(const char *pSerialNumber, bool bStrict) {
-	STLinkIf_StatusT ifStatus=STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus= STLinkIf_StatusT::NO_ERR;
 	STLink_DeviceInfo2T devInfo2;
 	char * pEnumUniqueId = devInfo2.EnumUniqueId;
 
 	if( pSerialNumber == NULL ) {
 		LogTrace("NULL pointer for pSerialNumber in OpenStlink");
-		return STLINKIF_PARAM_ERR;
+		return STLinkIf_StatusT::PARAM_ERR;
 	}
 
 	if( m_pStlinkInterface == NULL ) {
-		return STLINKIF_DLL_ERR;
+		return STLinkIf_StatusT::DLL_ERR;
 	}
 
 	if( m_bStlinkConnected == false )
 	{
 		ifStatus = m_pStlinkInterface->OpenDevice(pSerialNumber, bStrict, 0, m_bOpenExclusive, &m_handle);
-		if( ifStatus == STLINKIF_NO_ERR ) {
+		if( ifStatus == STLinkIf_StatusT::NO_ERR ) {
 			m_bStlinkConnected = true;
 		}
 	}
@@ -183,7 +183,7 @@ STLinkIf_StatusT StlinkDevice::PrivOpenStlink(const char *pSerialNumber, bool bS
 /*
  * @brief Close STLink USB communication, with the device instance that was opened by StlinkDevice::PrivOpenStlink()
  *
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT StlinkDevice::PrivCloseStlink(void)
 {
@@ -192,23 +192,23 @@ STLinkIf_StatusT StlinkDevice::PrivCloseStlink(void)
 		if( (m_handle != NULL) )
 		{
 			if( m_pStlinkInterface != NULL ) {
-				if( m_pStlinkInterface->CloseDevice(m_handle, 0) != STLINKIF_NO_ERR ) {
+				if( m_pStlinkInterface->CloseDevice(m_handle, 0) != STLinkIf_StatusT::NO_ERR ) {
 					LogTrace("Error closing %s USB communication", LogInterfaceString[m_pStlinkInterface->GetIfId()]);
 				}
-			} // else STLINKIF_DLL_ERR
+			} // else DLL_ERR
 		}
 		// Consider the communication is closed even if error
 		m_bStlinkConnected = false;
 	}
-	return STLINKIF_NO_ERR;
+	return STLinkIf_StatusT::NO_ERR;
 }
 
 /*
  * @brief This routine gets USB VID and PID, and firmware version of the STLink device.
  * @param[out] pVersion Pointer filled with version information.
  *
- * @retval #STLINKIF_NO_STLINK If StlinkDevice::PrivOpenStlink() not called before
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #NO_STLINK If StlinkDevice::PrivOpenStlink() not called before
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT StlinkDevice::PrivGetVersionExt(Stlk_VersionExtT* pVersion)
 {
@@ -218,7 +218,7 @@ STLinkIf_StatusT StlinkDevice::PrivGetVersionExt(Stlk_VersionExtT* pVersion)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after PrivOpenStlink
-		return STLINKIF_NO_STLINK;
+		return STLinkIf_StatusT::NO_STLINK;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -237,7 +237,7 @@ STLinkIf_StatusT StlinkDevice::PrivGetVersionExt(Stlk_VersionExtT* pVersion)
 	ifStatus = SendRequest(pRq);
 	delete pRq;
 
-	if( ifStatus == STLINKIF_NO_ERR ) {
+	if( ifStatus == STLinkIf_StatusT::NO_ERR ) {
 		pVersion->Major_Ver = version[0];
 		pVersion->Jtag_Ver = version[2];
 		pVersion->Swim_Ver = version[1];
@@ -255,11 +255,11 @@ STLinkIf_StatusT StlinkDevice::PrivGetVersionExt(Stlk_VersionExtT* pVersion)
  * @param[in] pDevReq USB request to send.
  * @param[in] UsbTimeoutMs if 0 use default (5s) else use UsbTimeoutMs.
  * 
- * @retval #STLINKIF_USB_COMM_ERR USB error when sending the request
- * @retval #STLINKIF_PARAM_ERR Null pointer
- * @retval #STLINKIF_NO_STLINK If StlinkDevice::PrivOpenStlink() not called before
- * @retval #STLINKIF_DLL_ERR StlinkInterface not initialized
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #USB_COMM_ERR USB error when sending the request
+ * @retval #PARAM_ERR Null pointer
+ * @retval #NO_STLINK If StlinkDevice::PrivOpenStlink() not called before
+ * @retval #DLL_ERR StlinkInterface not initialized
+ * @retval #NO_ERR If no error
 */
 STLinkIf_StatusT StlinkDevice::SendRequest(STLink_DeviceRequestT *pDevReq,
 											 const uint16_t UsbTimeoutMs)
@@ -267,22 +267,22 @@ STLinkIf_StatusT StlinkDevice::SendRequest(STLink_DeviceRequestT *pDevReq,
 	STLinkIf_StatusT ifStatus;
 
 	if( pDevReq == NULL ) {
-		return STLINKIF_PARAM_ERR;
+		return STLinkIf_StatusT::PARAM_ERR;
 	}
 
 	if( m_bStlinkConnected == false ) {
-		return STLINKIF_NO_STLINK;
+		return STLinkIf_StatusT::NO_STLINK;
 	}
 
 	if( m_pStlinkInterface == NULL ) {
-		return STLINKIF_DLL_ERR;
+		return STLinkIf_StatusT::DLL_ERR;
 	}
 
 	ifStatus = m_pStlinkInterface->SendCommand(m_handle, 0, pDevReq, UsbTimeoutMs);
-	if( ifStatus != STLINKIF_NO_ERR) {
-		ifStatus = STLINKIF_USB_COMM_ERR;
+	if( ifStatus != STLinkIf_StatusT::NO_ERR) {
+		ifStatus = STLinkIf_StatusT::USB_COMM_ERR;
 	} else {
-		ifStatus = STLINKIF_NO_ERR;
+		ifStatus = STLinkIf_StatusT::NO_ERR;
 	}
 
 	return ifStatus;
@@ -295,9 +295,9 @@ STLinkIf_StatusT StlinkDevice::SendRequest(STLink_DeviceRequestT *pDevReq,
  *           Bridge connector). If T_VCC is not connected return 0V.
  * @param[out] pVoltage  Target volatge in V.
  *
- * @retval #STLINKIF_NO_STLINK If StlinkDevice::PrivOpenStlink() not called before
- * @retval #STLINKIF_PARAM_ERR If NULL pointer
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #NO_STLINK If StlinkDevice::PrivOpenStlink() not called before
+ * @retval #PARAM_ERR If NULL pointer
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT StlinkDevice::PrivGetTargetVoltage(float *pVoltage)
 {
@@ -307,7 +307,7 @@ STLinkIf_StatusT StlinkDevice::PrivGetTargetVoltage(float *pVoltage)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after PrivOpenStlink
-		return STLINKIF_NO_STLINK;
+		return STLinkIf_StatusT::NO_STLINK;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -325,7 +325,7 @@ STLinkIf_StatusT StlinkDevice::PrivGetTargetVoltage(float *pVoltage)
 
 	delete pRq;
 
-	if( ifStatus == STLINKIF_NO_ERR )
+	if( ifStatus == STLinkIf_StatusT::NO_ERR )
 	{
 		// First returned value is the ADC measure for VREFINT (according to datasheet: 1.2V);
 		// the second value is Vtarget/2;

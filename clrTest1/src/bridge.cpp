@@ -120,40 +120,40 @@ Brg_StatusT Brg::ConvSTLinkIfToBrgStatus(STLinkIf_StatusT IfStat)
 {
 	Brg_StatusT  brgStat;
 	switch(IfStat){
-		case STLINKIF_NO_ERR:
+		case STLinkIf_StatusT::NO_ERR:
 			brgStat = BRG_NO_ERR;
 			break;
-		case STLINKIF_CONNECT_ERR:
+		case STLinkIf_StatusT::CONNECT_ERR:
 			brgStat = BRG_CONNECT_ERR;
 			break;
-		case STLINKIF_DLL_ERR:
+		case STLinkIf_StatusT::DLL_ERR:
 			brgStat = BRG_DLL_ERR;
 			break;
-		case STLINKIF_USB_COMM_ERR:
+		case STLinkIf_StatusT::USB_COMM_ERR:
 			brgStat = BRG_USB_COMM_ERR;
 			break;
-		case STLINKIF_PARAM_ERR:
+		case STLinkIf_StatusT::PARAM_ERR:
 			brgStat = BRG_PARAM_ERR;
 			break;
-		case STLINKIF_NO_STLINK:
+		case STLinkIf_StatusT::NO_STLINK:
 			brgStat = BRG_NO_STLINK;
 			break;
-		case STLINKIF_NOT_SUPPORTED:
+		case STLinkIf_StatusT::NOT_SUPPORTED:
 			brgStat = BRG_NOT_SUPPORTED;
 			break;
-		case STLINKIF_PERMISSION_ERR:
+		case STLinkIf_StatusT::PERMISSION_ERR:
 			brgStat = BRG_PERMISSION_ERR;
 			break;
-		case STLINKIF_ENUM_ERR:
+		case STLinkIf_StatusT::ENUM_ERR:
 			brgStat = BRG_ENUM_ERR;
 			break;
-		case STLINKIF_GET_INFO_ERR:
+		case STLinkIf_StatusT::GET_INFO_ERR:
 			brgStat = BRG_GET_INFO_ERR;
 			break;
-		case STLINKIF_STLINK_SN_NOT_FOUND:
+		case STLinkIf_StatusT::SN_NOT_FOUND:
 			brgStat = BRG_STLINK_SN_NOT_FOUND;
 			break;
-		case STLINKIF_CLOSE_ERR:
+		case STLinkIf_StatusT::CLOSE_ERR:
 			brgStat = BRG_CLOSE_ERR;
 			break;
 		default:
@@ -198,7 +198,7 @@ bool Brg::IsOldBrgFwVersion(void) const {
  */
 Brg_StatusT Brg::OpenStlink(int StlinkInstId)
 {
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 	Brg_StatusT brgStatus;
 
 	ifStatus = StlinkDevice::PrivOpenStlink(StlinkInstId);
@@ -237,7 +237,7 @@ Brg_StatusT Brg::OpenStlink(int StlinkInstId)
  * @retval #BRG_NO_ERR If no error
  */
 Brg_StatusT Brg::OpenStlink(const char *pSerialNumber, bool bStrict) {
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 	Brg_StatusT brgStatus;
 
 	ifStatus = StlinkDevice::PrivOpenStlink(pSerialNumber, bStrict);
@@ -326,7 +326,7 @@ Brg_StatusT Brg::CloseBridge(uint8_t BrgCom)
  */
 Brg_StatusT Brg::ST_GetVersionExt(Stlk_VersionExtT* pVersion)
 {
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 	ifStatus = StlinkDevice::PrivGetVersionExt(pVersion);
 	return ConvSTLinkIfToBrgStatus(ifStatus);
 }
@@ -342,7 +342,7 @@ Brg_StatusT Brg::SendRequestAndAnalyzeStatus(STLink_DeviceRequestT *pDevReq,
 	STLinkIf_StatusT ifStatus;
 
 	ifStatus = StlinkDevice::SendRequest(pDevReq, UsbTimeoutMs);
-	if( ifStatus != STLINKIF_NO_ERR) {
+	if( ifStatus != STLinkIf_StatusT::NO_ERR) {
 		return BRG_USB_COMM_ERR;
 	}
 	// Analyse status
@@ -2890,7 +2890,7 @@ Brg_StatusT Brg::SetResetGPIO(uint8_t GpioMask, const Brg_GpioValT *pGpioVal, ui
  */
 Brg_StatusT Brg::GetTargetVoltage(float *pVoltage)
 {
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 	ifStatus = StlinkDevice::PrivGetTargetVoltage(pVoltage);
 	return ConvSTLinkIfToBrgStatus(ifStatus);
 }

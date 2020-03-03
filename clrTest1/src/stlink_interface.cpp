@@ -126,17 +126,17 @@ void STLinkInterface::LogTrace(const char *pMessage, ...)
  * @param[in]  pPathOfProcess  Path, in ASCII, where STLinkUSBDriver library is searched
  *                             when not found in current dir, for Windows.
  *
- * @retval #STLINKIF_NOT_SUPPORTED m_ifId not supported yet
- * @retval #STLINKIF_DLL_ERR  STLinkUSBDriver library not loaded
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #NOT_SUPPORTED m_ifId not supported yet
+ * @retval #DLL_ERR  STLinkUSBDriver library not loaded
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT  STLinkInterface::LoadStlinkLibrary(const char *pPathOfProcess)
 {
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 
 	// Only BRIDGE interface supported currently
 	if( m_ifId != STLINK_BRIDGE ) {
-		return STLINKIF_NOT_SUPPORTED;
+		return STLinkIf_StatusT::NOT_SUPPORTED;
 	}
 
 	if( m_bApiDllLoaded == false ) {
@@ -175,10 +175,10 @@ STLinkIf_StatusT  STLinkInterface::LoadStlinkLibrary(const char *pPathOfProcess)
 
 		if( m_hMod == NULL ) {
 			LogTrace("STLinkInterface Failure loading STLinkUSBDriver.dll");
-			ifStatus = STLINKIF_DLL_ERR;
+			ifStatus = STLinkIf_StatusT::DLL_ERR;
 		}
 
-		if( ifStatus == STLINKIF_NO_ERR ) {
+		if( ifStatus == STLinkIf_StatusT::NO_ERR ) {
 			LogTrace("STLinkInterface STLinkUSBDriver.dll loaded");
 			if( m_ifId == STLINK_BRIDGE ) {
 				// Get the needed API
@@ -195,14 +195,14 @@ STLinkIf_StatusT  STLinkInterface::LoadStlinkLibrary(const char *pPathOfProcess)
 					|| (STLink_GetDeviceInfo2 == NULL) || (STLink_OpenDevice == NULL) || (STLink_CloseDevice == NULL)
 					|| (STLink_SendCommand == NULL) ) {
 					// TCP routines are required and missing
-					ifStatus = STLINKIF_DLL_ERR;
+					ifStatus = STLinkIf_StatusT::DLL_ERR;
 				}
 			}
 		}
 #else // !WIN32
         // nothing to do
 #endif
-		if( ifStatus == STLINKIF_NO_ERR ) {
+		if( ifStatus == STLinkIf_StatusT::NO_ERR ) {
 			m_bApiDllLoaded = true;
 		}
 	}
@@ -230,16 +230,16 @@ bool STLinkInterface::IsLibraryLoaded() {
  * @param[out] pNumDevices Pointer where the function returns the number of connected STLink m_ifId interfaces.
  *                          Can be NULL if not wanted.
  *
- * @retval #STLINKIF_NOT_SUPPORTED If STLinkUSBDriver is too old for given m_ifId or m_ifId not supported yet
- * @retval #STLINKIF_NO_STLINK No STLink with given m_ifId connected.
- * @retval #STLINKIF_PERMISSION_ERR Lack of permission during enumeration
- * @retval #STLINKIF_ENUM_ERR Error during enumeration
- * @retval #STLINKIF_DLL_ERR  STLinkUSBDriver library not loaded
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #NOT_SUPPORTED If STLinkUSBDriver is too old for given m_ifId or m_ifId not supported yet
+ * @retval #NO_STLINK No STLink with given m_ifId connected.
+ * @retval #PERMISSION_ERR Lack of permission during enumeration
+ * @retval #ENUM_ERR Error during enumeration
+ * @retval #DLL_ERR  STLinkUSBDriver library not loaded
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT STLinkInterface::EnumDevices(uint32_t *pNumDevices, bool bClearList)
 {
-	STLinkIf_StatusT ifStatus = STLINKIF_NOT_SUPPORTED;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NOT_SUPPORTED;
 	uint32_t status = SS_OK;
 
 	if( pNumDevices != NULL ) {
@@ -252,7 +252,7 @@ STLinkIf_StatusT STLinkInterface::EnumDevices(uint32_t *pNumDevices, bool bClear
 			if( status == SS_BAD_PARAMETER ) {
 				// DLL is too old and does not support BRIDGE interface
 				m_bApiDllLoaded = false;
-				return STLINKIF_DLL_ERR;
+				return STLinkIf_StatusT::DLL_ERR;
 			}
 			// Note that STLink_Reenumerate might fail because of issue during serial number retrieving
 			// which is not a blocking error here; 
@@ -260,18 +260,18 @@ STLinkIf_StatusT STLinkInterface::EnumDevices(uint32_t *pNumDevices, bool bClear
 
 			if( m_nbEnumDevices == 0 ) {
 				LogTrace("No STLink device with %s interface detected on the USB", LogIfString[m_ifId]);
-				return STLINKIF_NO_STLINK;
+				return STLinkIf_StatusT::NO_STLINK;
 			}
 
 			if( status == SS_OK ) {
-				ifStatus = STLINKIF_NO_ERR;
+				ifStatus = STLinkIf_StatusT::NO_ERR;
 			} else {
 				if( status == SS_PERMISSION_ERR ) {
 					LogTrace("STLinkInterface Lack of permission during enumeration");
-					ifStatus = STLINKIF_PERMISSION_ERR;
+					ifStatus = STLinkIf_StatusT::PERMISSION_ERR;
 				} else {
 					LogTrace("STLinkInterface Error during enumeration");
-					ifStatus = STLINKIF_ENUM_ERR;
+					ifStatus = STLinkIf_StatusT::ENUM_ERR;
 				}
 			}
 
@@ -279,10 +279,10 @@ STLinkIf_StatusT STLinkInterface::EnumDevices(uint32_t *pNumDevices, bool bClear
 				*pNumDevices=(int)m_nbEnumDevices;
 			}
 		} else {
-			ifStatus = STLINKIF_NOT_SUPPORTED;
+			ifStatus = STLinkIf_StatusT::NOT_SUPPORTED;
 		}
 	} else { // IsLibraryLoaded()
-		ifStatus = STLINKIF_DLL_ERR;
+		ifStatus = STLinkIf_StatusT::DLL_ERR;
 	}
 	return ifStatus;
 }
@@ -302,18 +302,18 @@ STLinkIf_StatusT STLinkInterface::EnumDevices(uint32_t *pNumDevices, bool bClear
  *               caller. In standard case, bClearList == 0 has to be preferred.
  * @param[out] pNumDevices Pointer where the function returns the number of connected STLink devices
  *                         with the required interface. Can be NULL if not wanted.
- * @warning #STLINKIF_PERMISSION_ERR can be returned if one device is already opened by another program,
+ * @warning #PERMISSION_ERR can be returned if one device is already opened by another program,
  *          however the device is listed in pNumDevices.
  *
- * @retval #STLINKIF_NOT_SUPPORTED Parameter(s) error
- * @retval #STLINKIF_DLL_ERR Error in loading STLinkUSBDriver library or too old not supporting current Interface
- * @retval #STLINKIF_PERMISSION_ERR Lack of permission during USB enumeration
- * @retval #STLINKIF_ENUM_ERR USB enumeration error
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #NOT_SUPPORTED Parameter(s) error
+ * @retval #DLL_ERR Error in loading STLinkUSBDriver library or too old not supporting current Interface
+ * @retval #PERMISSION_ERR Lack of permission during USB enumeration
+ * @retval #ENUM_ERR USB enumeration error
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT STLinkInterface::EnumDevicesIfRequired(uint32_t *pNumDevices, bool bForceRenum, bool bClearList)
 {
-	STLinkIf_StatusT ifStatus=STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus= STLinkIf_StatusT::NO_ERR;
 	uint32_t status = SS_OK;
 
 	if( pNumDevices != NULL ) {
@@ -321,16 +321,16 @@ STLinkIf_StatusT STLinkInterface::EnumDevicesIfRequired(uint32_t *pNumDevices, b
 		*pNumDevices=0;
 	}
 	if( m_ifId != STLINK_BRIDGE ) {
-		return STLINKIF_NOT_SUPPORTED;
+		return STLinkIf_StatusT::NOT_SUPPORTED;
 	}
 
 	if( (m_bDevInterfaceEnumerated == false) || (bForceRenum==true) ) {
 
 		ifStatus = EnumDevices(pNumDevices, bClearList);
 		if( m_nbEnumDevices == 0 ) {
-			return STLINKIF_NO_STLINK;
+			return STLinkIf_StatusT::NO_STLINK;
 		}
-		if( ifStatus == STLINKIF_NO_ERR ) {
+		if( ifStatus == STLinkIf_StatusT::NO_ERR ) {
 			// All is OK; no more necessary to do it again
 			m_bDevInterfaceEnumerated = true;
 		}
@@ -352,48 +352,48 @@ STLinkIf_StatusT STLinkInterface::EnumDevicesIfRequired(uint32_t *pNumDevices, b
  * @param[out] pInfo  Pointer to the caller-allocated #STLink_DeviceInfo2T instance.
  *
  * @return STLinkInterface::EnumDevices() errors
- * @retval #STLINKIF_NOT_SUPPORTED If STLinkUSBDriver is too old for given m_ifId or m_ifId not supported yet
- * @retval #STLINKIF_GET_INFO_ERR Error in STLinkUSBDriver to retrieve the information
- * @retval #STLINKIF_PARAM_ERR Wrong StlinkInstId or NULL pInfo pointer
- * @retval #STLINKIF_DLL_ERR  STLinkUSBDriver library not loaded
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #NOT_SUPPORTED If STLinkUSBDriver is too old for given m_ifId or m_ifId not supported yet
+ * @retval #GET_INFO_ERR Error in STLinkUSBDriver to retrieve the information
+ * @retval #PARAM_ERR Wrong StlinkInstId or NULL pInfo pointer
+ * @retval #DLL_ERR  STLinkUSBDriver library not loaded
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT STLinkInterface::GetDeviceInfo2(int StlinkInstId, STLink_DeviceInfo2T *pInfo, uint32_t InfoSize)
 {
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 
 	if( IsLibraryLoaded() == true ) {
 #ifdef WIN32
 		if( STLink_GetDeviceInfo2 == NULL ) {
 			// STLinkUSBDriver is too old 
-			return STLINKIF_NOT_SUPPORTED;
+			return STLinkIf_StatusT::NOT_SUPPORTED;
 		}
 #endif
 
 		// Enumerate the current STLink interface if not already done
 		ifStatus = EnumDevicesIfRequired(NULL, false, false);
-		if( ifStatus != STLINKIF_NO_ERR ) {
+		if( ifStatus != STLinkIf_StatusT::NO_ERR ) {
 			return ifStatus;
 		}
 
 		if( m_ifId == STLINK_BRIDGE ) {
 			if( (StlinkInstId<0) || (((unsigned int)StlinkInstId) >= m_nbEnumDevices) ) {
 				LogTrace("%s Bad STLink instance id (%d > %d)", LogIfString[m_ifId], StlinkInstId, m_nbEnumDevices-1);
-				return STLINKIF_PARAM_ERR;
+				return STLinkIf_StatusT::PARAM_ERR;
 			}
 			if( pInfo == NULL ) {
 				LogTrace("%s Bad parameter in GetDeviceInfo2 (NULL pointer)", LogIfString[m_ifId]);
-				return STLINKIF_PARAM_ERR;
+				return STLinkIf_StatusT::PARAM_ERR;
 			}
 
 			if( STLink_GetDeviceInfo2(m_ifId, StlinkInstId, pInfo, InfoSize) != SS_OK ) {
-				return STLINKIF_GET_INFO_ERR;
+				return STLinkIf_StatusT::GET_INFO_ERR;
 			}
 		} else {
-			ifStatus = STLINKIF_NOT_SUPPORTED;
+			ifStatus = STLinkIf_StatusT::NOT_SUPPORTED;
 		}
 	} else {
-		ifStatus = STLINKIF_DLL_ERR;
+		ifStatus = STLinkIf_StatusT::DLL_ERR;
 	}
 	return ifStatus;
 }
@@ -408,39 +408,39 @@ STLinkIf_StatusT STLinkInterface::GetDeviceInfo2(int StlinkInstId, STLink_Device
  * @param[out] pHandle        Handle of the opened STLink device
  *
  * @return STLinkInterface::EnumDevices() errors
- * @retval #STLINKIF_CONNECT_ERR Wrong StlinkInstId or USB error
- * @retval #STLINKIF_NOT_SUPPORTED m_ifId not supported yet
- * @retval #STLINKIF_DLL_ERR STLinkUSBDriver library not loaded
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #CONNECT_ERR Wrong StlinkInstId or USB error
+ * @retval #NOT_SUPPORTED m_ifId not supported yet
+ * @retval #DLL_ERR STLinkUSBDriver library not loaded
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT STLinkInterface::OpenDevice(int StlinkInstId, uint32_t StlinkIdTcp, bool bOpenExclusive, void **pHandle)
 {
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 	uint32_t status;
 
 	if( IsLibraryLoaded() == true ) {
 		if( m_ifId == STLINK_BRIDGE ) {
 			// Enumerate the STLink interface if not already done
 			ifStatus = EnumDevicesIfRequired(NULL, false, false);
-			if( ifStatus != STLINKIF_NO_ERR ) {
+			if( ifStatus != STLinkIf_StatusT::NO_ERR ) {
 				return ifStatus;
 			}
 
 			if( (StlinkInstId<0) || (((unsigned int)StlinkInstId) >= m_nbEnumDevices) ) {
 				LogTrace("%s Bad STLink instance id (%d > %d)", LogIfString[m_ifId], StlinkInstId, m_nbEnumDevices-1);
-				return STLINKIF_PARAM_ERR;
+				return STLinkIf_StatusT::PARAM_ERR;
 			}
 			// Open the device
 			status = STLink_OpenDevice(m_ifId, StlinkInstId, (bOpenExclusive==true)?1:0, pHandle);
 			if( status != SS_OK ) {
 				LogTrace("%s STLink device USB connection failure", LogIfString[m_ifId]);
-				ifStatus = STLINKIF_CONNECT_ERR;
+				ifStatus = STLinkIf_StatusT::CONNECT_ERR;
 			}
 		} else {
-			ifStatus = STLINKIF_NOT_SUPPORTED;
+			ifStatus = STLinkIf_StatusT::NOT_SUPPORTED;
 		}
 	} else {
-		ifStatus = STLINKIF_DLL_ERR;
+		ifStatus = STLinkIf_StatusT::DLL_ERR;
 	}
 	return ifStatus;
 }
@@ -453,38 +453,38 @@ STLinkIf_StatusT STLinkInterface::OpenDevice(int StlinkInstId, uint32_t StlinkId
  * @param[in]  pSerialNumber  STLink serial number (ASCII).
  * @param[in]  bStrict 	 Used if STLink with required serial number is not found, but one other STLink is found:
  *                       choose if we open or not the other STLink. \n
- *                       If bStrict is true, the command will return #STLINKIF_STLINK_SN_NOT_FOUND if the
+ *                       If bStrict is true, the command will return #SN_NOT_FOUND if the
  *                       given SerialNumber is not found.\n
  *                       If bStrict is false and the given serial number is not found and one (and only one)
  *                       STLink is found, the command will attempt to open the STLink even if
  *                       the serial number does not match.
  * @return STLinkInterface::EnumDevices() errors
- * @retval #STLINKIF_CONNECT_ERR USB error
- * @retval #STLINKIF_STLINK_SN_NOT_FOUND Serial number not found
- * @retval #STLINKIF_PARAM_ERR if NULL pointer
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #CONNECT_ERR USB error
+ * @retval #SN_NOT_FOUND Serial number not found
+ * @retval #PARAM_ERR if NULL pointer
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT STLinkInterface::OpenDevice(const char *pSerialNumber, bool bStrict, uint32_t StlinkIdTcp, bool bOpenExclusive, void **pHandle) {
-	STLinkIf_StatusT ifStatus=STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus= STLinkIf_StatusT::NO_ERR;
 	int stlinkInstId;
 	STLink_DeviceInfo2T devInfo2;
 	char * pEnumUniqueId = devInfo2.EnumUniqueId;
 
 	if( pSerialNumber == NULL ) {
 		LogTrace("NULL pointer for pSerialNumber in OpenStlink");
-		return STLINKIF_PARAM_ERR;
+		return STLinkIf_StatusT::PARAM_ERR;
 	}
 
 	// Enumerate the current STLink interface if not already done
 	ifStatus = EnumDevicesIfRequired(NULL, false, false);
-	if( ifStatus != STLINKIF_NO_ERR ) {
+	if( ifStatus != STLinkIf_StatusT::NO_ERR ) {
 		return ifStatus;
 	}
 
 	// Look for the given serialNumber
 	for( stlinkInstId=0; (uint32_t)stlinkInstId<m_nbEnumDevices; stlinkInstId++ ) {
 		ifStatus = GetDeviceInfo2(stlinkInstId, &devInfo2, sizeof(devInfo2));		
-		if( ifStatus != STLINKIF_NO_ERR ) {
+		if( ifStatus != STLinkIf_StatusT::NO_ERR ) {
 			return ifStatus;
 		}
 		if( strcmp(pSerialNumber, pEnumUniqueId) == 0 ) {
@@ -500,7 +500,7 @@ STLinkIf_StatusT STLinkInterface::OpenDevice(const char *pSerialNumber, bool bSt
 		return OpenDevice(0, 0, bOpenExclusive, pHandle);
 	}
 	LogTrace("STLink serial number (%s) not found; can not open.", pSerialNumber);
-	return STLINKIF_STLINK_SN_NOT_FOUND;
+	return STLinkIf_StatusT::SN_NOT_FOUND;
 }
 /*
  * @brief Called by StlinkDevice object, do not use directly.
@@ -509,15 +509,15 @@ STLinkIf_StatusT STLinkInterface::OpenDevice(const char *pSerialNumber, bool bSt
  * @param[in]  pHandle        Handle of the opened STLink device (returned by STLinkInterface::OpenDevice())
  * @param[in]  stlinkIdTcp    0 (unused)
  *
- * @retval #STLINKIF_CLOSE_ERR Error at USB side
- * @retval #STLINKIF_NOT_SUPPORTED m_ifId not supported yet
- * @retval #STLINKIF_DLL_ERR 
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #CLOSE_ERR Error at USB side
+ * @retval #NOT_SUPPORTED m_ifId not supported yet
+ * @retval #DLL_ERR 
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT STLinkInterface::CloseDevice(void *pHandle, uint32_t StlinkIdTcp)
 {
 	uint32_t status=SS_OK;
-	STLinkIf_StatusT ifStatus = STLINKIF_NO_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::NO_ERR;
 
 	if( IsLibraryLoaded() == true ) {
 		if( m_ifId == STLINK_BRIDGE ) {
@@ -525,14 +525,14 @@ STLinkIf_StatusT STLinkInterface::CloseDevice(void *pHandle, uint32_t StlinkIdTc
 				status = STLink_CloseDevice(pHandle);
 				if( status != SS_OK ) {
 					LogTrace("%s Error closing USB communication", LogIfString[m_ifId]);
-					ifStatus = STLINKIF_CLOSE_ERR;
+					ifStatus = STLinkIf_StatusT::CLOSE_ERR;
 				}
 			}
 		} else {
-			ifStatus = STLINKIF_NOT_SUPPORTED;
+			ifStatus = STLinkIf_StatusT::NOT_SUPPORTED;
 		}
 	} else {
-		ifStatus = STLINKIF_DLL_ERR;
+		ifStatus = STLinkIf_StatusT::DLL_ERR;
 	}
 	return ifStatus;
 }
@@ -545,11 +545,11 @@ STLinkIf_StatusT STLinkInterface::CloseDevice(void *pHandle, uint32_t StlinkIdTc
  * @param[in,out]  pDevReq    Command to send (contains a pointer to answer buffer if any)
  * @param[in]  UsbTimeoutMs   if 0 use default (5s) else use UsbTimeoutMs.
  *
- * @retval #STLINKIF_PARAM_ERR Null pointer error
- * @retval #STLINKIF_USB_COMM_ERR USB communication error
- * @retval #STLINKIF_NOT_SUPPORTED m_ifId not supported yet
- * @retval #STLINKIF_DLL_ERR 
- * @retval #STLINKIF_NO_ERR If no error
+ * @retval #PARAM_ERR Null pointer error
+ * @retval #USB_COMM_ERR USB communication error
+ * @retval #NOT_SUPPORTED m_ifId not supported yet
+ * @retval #DLL_ERR 
+ * @retval #NO_ERR If no error
  */
 STLinkIf_StatusT STLinkInterface::SendCommand(void *pHandle,
                                               uint32_t StlinkIdTcp, STLink_DeviceRequestT *pDevReq,
@@ -557,10 +557,10 @@ STLinkIf_StatusT STLinkInterface::SendCommand(void *pHandle,
 {
 	uint32_t ret;
 	uint32_t usbTimeout = DEFAULT_TIMEOUT;
-	STLinkIf_StatusT ifStatus = STLINKIF_PARAM_ERR;
+	STLinkIf_StatusT ifStatus = STLinkIf_StatusT::PARAM_ERR;
 
 	if( pDevReq == NULL ) {
-		return STLINKIF_PARAM_ERR;
+		return STLinkIf_StatusT::PARAM_ERR;
 	}
 
 	// Create a Mutex to avoid concurrent access to STLink_SendCommand 
@@ -581,15 +581,15 @@ STLinkIf_StatusT STLinkInterface::SendCommand(void *pHandle,
 					(unsigned short)pDevReq->CDBByte[3], (unsigned short)pDevReq->CDBByte[4], (unsigned short)pDevReq->CDBByte[5], 
 					(unsigned short)pDevReq->CDBByte[6], (unsigned short)pDevReq->CDBByte[7], (unsigned short)pDevReq->CDBByte[8],
 					(unsigned short)pDevReq->CDBByte[9]);
-				ifStatus = STLINKIF_USB_COMM_ERR;
+				ifStatus = STLinkIf_StatusT::USB_COMM_ERR;
 			} else {
-				ifStatus = STLINKIF_NO_ERR;
+				ifStatus = STLinkIf_StatusT::NO_ERR;
 			}
 		} else {
-			ifStatus = STLINKIF_NOT_SUPPORTED;
+			ifStatus = STLinkIf_StatusT::NOT_SUPPORTED;
 		}
 	} else {
-		ifStatus = STLINKIF_DLL_ERR;
+		ifStatus = STLinkIf_StatusT::DLL_ERR;
 	}
 	return ifStatus;
 }
