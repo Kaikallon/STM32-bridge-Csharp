@@ -1,3 +1,33 @@
+/******************************************************************************************************************
+FILENAME :
+	Wrapper.h
+DESCRIPTION :
+	Provides a set of functions that wrap the STLink Bridge API for use in a .NET environment.
+PUBLIC FUNCTIONS :
+AUTHOR(s) :
+	Alexander Andersson
+START DATE : 2020-03-02
+*******************************************************************************************************************
+		   &&&&&&&&&&&&&&&&.                &&&&&&&&&&&&&&&&                      (@@@@@@@@@
+		  &&&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                      @@@@@@@@@@@@#
+		 #&&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                      @@@@@@@@@@@@@@@
+		 &&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                     @@@@@@@@@@@@@@@@@@
+						,,,,,,,,,,,,,,,,                                     @@@@@@@@@@@@@@@@@@@@.
+					   .,,,,,,,,,,,,,,,.                                    @@@@@@@@@@@@@@@@@@@@@@@
+					   ,,,,,,,,,,,,,,,,                                    @@@@@@@@@@@@ @@@@@@@@@@@@
+					  ,,,,,,,,,,,,,,,,                                    *@@@@@@@@@@@@  @@@@@@@@@@@@
+					 ,,,,,,,,,,,,,,,,                                      @@@@@@@@@@@@   (@@@@@@@@@@@&
+	&&&&&&&&&&&&&&&&                .,,,,,,,,,,,,,,,,                        @@@@@@@@@@     @@@@@@@@@@@@
+   &&&&&&&&&&&&&&&&                 ,,,,,,,,,,,,,,,,                      ,//////            @@@@@@@@@@@@
+  &&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,                  @@@@@@@@@@@@@     @@@@@@@@@@@@@@@@ .@(
+ %&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,                .@@@@@@@@@@@@@@@@/   @@@@@@@@@@@@@@@@@@@@,
+.&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,.               @@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@
+				,,,,,,,,,,,,,,,,                                @@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@@@@@@@@@@@@@@@*
+			   ,,,,,,,,,,,,,,,,.                              &@@@@@@@@@@@*                        %@@@@@@@@@@@@
+			  .,,,,,,,,,,,,,,,,                              @@@@@@@@@@@@                            @@@@@@@@@@@@
+			  ,,,,,,,,,,,,,,,,                              @@@@@@@@@@@@                              @@@@@@@@@@@@.
+******************************************************************************************************************/
+
 #pragma once
 #include "stlink_interface.h"
 #include "bridge.h"
@@ -8,7 +38,7 @@ using namespace System::Runtime::InteropServices;
 
 namespace STLinkCLRWrapper
 {
-    // Structure used to contain the device info data for CLR
+    // Structure used to contain the device info data for CLR, copied and modified from stlink_interface.h
     public value struct DeviceInfo
     {
         uint32_t StLinkUsbId; ///< ST-LINK-SERVER Device cookie in little endian format, to use in STLINK_TCP_CMD_OPEN_DEVICE
@@ -34,6 +64,8 @@ namespace STLinkCLRWrapper
     public:
         Wrapper();
         ~Wrapper();
+		!Wrapper();
+
 
         Brg_StatusT InitBridge();
         STLinkIf_StatusT GetInterfaceStatus();
@@ -42,6 +74,9 @@ namespace STLinkCLRWrapper
         STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo>% results);
         Brg_StatusT      OpenBridge(String^ device);
         Brg_StatusT      TestVoltage([Out] float% result);
+		Brg_StatusT		 GPIOInit();
+		Brg_StatusT		 GPIOWrite();
+		Brg_StatusT		 CanTest();
         
 	};
 }
