@@ -18,7 +18,7 @@ namespace CSharpTest
         {
             InitializeComponent();
         }
-        clrTest1.Class1 Class1 = new Class1();
+        //clrTest1.Class1 Class1 = new Class1();
         private void button1_Click(object sender, EventArgs e)
         {
             //if (!Class1.IsLibraryLoaded())
@@ -36,7 +36,10 @@ namespace CSharpTest
             //    Console.WriteLine("num: " + num.ToString());
             //}
             Wrapper wrapper = new Wrapper();
-            wrapper.Init();
+            List<DeviceInfo> devices = new List<DeviceInfo>();
+            STLinkIf_StatusT status = wrapper.EnumerateDevices(out devices);
+
+
         }
     }
 }

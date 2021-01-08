@@ -39,7 +39,7 @@ using namespace System::Runtime::InteropServices;
 namespace STLinkCLRWrapper
 {
     // Structure used to contain the device info data for CLR, copied and modified from stlink_interface.h
-    public value struct DeviceInfo
+    public ref struct DeviceInfo
     {
         uint32_t StLinkUsbId; ///< ST-LINK-SERVER Device cookie in little endian format, to use in STLINK_TCP_CMD_OPEN_DEVICE
         String^ EnumUniqueId; ///< Unique instance ID from system enumeration (equal to
@@ -71,7 +71,7 @@ namespace STLinkCLRWrapper
         STLinkIf_StatusT GetInterfaceStatus();
         Brg_StatusT GetBridgeStatus();
 
-        STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo>% results);
+		STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo^>^% results);
         Brg_StatusT      OpenBridge(String^ device);
         Brg_StatusT      TestVoltage([Out] float% result);
 		Brg_StatusT		 GPIOInit();

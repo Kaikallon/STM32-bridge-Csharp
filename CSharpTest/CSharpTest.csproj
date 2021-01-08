@@ -82,7 +82,7 @@
   <ItemGroup>
     <ProjectReference Include="..\clrTest1\clrTest1.vcxproj">
       <Project>{1765041a-710b-4085-8aba-e1f618901390}</Project>
-      <Name>clrTest1</Name>
+      <Name>STLinkBridgeCLRWrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
