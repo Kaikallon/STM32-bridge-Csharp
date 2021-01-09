@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using clrTest1;
 using STLinkCLRWrapper;
 
 namespace CSharpTest
@@ -48,7 +47,12 @@ namespace CSharpTest
         private void btn_OpenBridge_Click(object sender, EventArgs e)
         {
             Wrapper wrapper = new Wrapper();
-            //wrapper.OpenBridge("");
+            if (dgv_stLinks.CurrentRow != null)
+            {
+                var deviceInfo = dgv_stLinks.CurrentRow.DataBoundItem as DeviceInfo;
+                if (deviceInfo != null)
+                    wrapper.InitBridge(deviceInfo);
+            }
         }
     }
 }

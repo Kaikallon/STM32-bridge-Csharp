@@ -7,26 +7,7 @@ PUBLIC FUNCTIONS :
 AUTHOR(s) :
 	Alexander Andersson
 START DATE : 2020-03-02
-*******************************************************************************************************************
-		   &&&&&&&&&&&&&&&&.                &&&&&&&&&&&&&&&&                      (@@@@@@@@@
-		  &&&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                      @@@@@@@@@@@@#
-		 #&&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                      @@@@@@@@@@@@@@@
-		 &&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                     @@@@@@@@@@@@@@@@@@
-						,,,,,,,,,,,,,,,,                                     @@@@@@@@@@@@@@@@@@@@.
-					   .,,,,,,,,,,,,,,,.                                    @@@@@@@@@@@@@@@@@@@@@@@
-					   ,,,,,,,,,,,,,,,,                                    @@@@@@@@@@@@ @@@@@@@@@@@@
-					  ,,,,,,,,,,,,,,,,                                    *@@@@@@@@@@@@  @@@@@@@@@@@@
-					 ,,,,,,,,,,,,,,,,                                      @@@@@@@@@@@@   (@@@@@@@@@@@&
-	&&&&&&&&&&&&&&&&                .,,,,,,,,,,,,,,,,                        @@@@@@@@@@     @@@@@@@@@@@@
-   &&&&&&&&&&&&&&&&                 ,,,,,,,,,,,,,,,,                      ,//////            @@@@@@@@@@@@
-  &&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,                  @@@@@@@@@@@@@     @@@@@@@@@@@@@@@@ .@(
- %&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,                .@@@@@@@@@@@@@@@@/   @@@@@@@@@@@@@@@@@@@@,
-.&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,.               @@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@
-				,,,,,,,,,,,,,,,,                                @@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@@@@@@@@@@@@@@@*
-			   ,,,,,,,,,,,,,,,,.                              &@@@@@@@@@@@*                        %@@@@@@@@@@@@
-			  .,,,,,,,,,,,,,,,,                              @@@@@@@@@@@@                            @@@@@@@@@@@@
-			  ,,,,,,,,,,,,,,,,                              @@@@@@@@@@@@                              @@@@@@@@@@@@.
-******************************************************************************************************************/
+*******************************************************************************************************************/
 
 #pragma once
 #include "stlink_interface.h"
@@ -46,7 +27,7 @@ namespace STLinkCLRWrapper
                                                    ///< device Serial number in some cases, but not always ...)
         property uint16_t VendorId;  ///< Vendor  ID from USB device descriptor (system enumeration)
         property uint16_t ProductId; ///< Product ID from USB device descriptor (system enumeration)
-        property uint8_t DeviceUsed; ///< On windows, equal to 1 if device interface was already opened from 
+        property bool     DeviceUsed; ///< On windows, equal to 1 if device interface was already opened from 
                             ///< externally when enumerating or trying to open
         // NOTE: do not modify the existing fields in the structure. But for any evolution,
         // add a new field at the end in order to keep ascendant compatibility.
@@ -57,23 +38,24 @@ namespace STLinkCLRWrapper
     private:
         STLinkInterface* sTLinkInterface = NULL;
         Brg* Bridge = NULL;
-        STLink_DeviceInfo2T* deviceInfo = NULL;
-        Brg_StatusT BridgeStatus = BRG_NO_ERR;
+        //STLink_DeviceInfo2T* deviceInfo = NULL;
+        Brg_StatusT BridgeStatus = Brg_StatusT::BRG_NO_ERR;
         STLinkIf_StatusT InterfaceStatus = STLinkIf_StatusT::NO_ERR;
-        const char* StringToCharPtr(String^ s);
+        //const char* StringToCharPtr(String^ s);
     public:
         Wrapper();
         ~Wrapper();
 		!Wrapper();
 
 
-        Brg_StatusT InitBridge();
+        Brg_StatusT InitBridge(DeviceInfo^ device);
         STLinkIf_StatusT GetInterfaceStatus();
         Brg_StatusT GetBridgeStatus();
 
 		STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo^>^% results);
-        Brg_StatusT      OpenBridge(String^ device);
+        Brg_StatusT      OpenBridge(DeviceInfo^ device);
         Brg_StatusT      TestVoltage([Out] float% result);
+		Brg_StatusT       TestGetClock();
 		Brg_StatusT		 GPIOInit();
 		Brg_StatusT		 GPIOWrite();
 		Brg_StatusT		 CanTest();

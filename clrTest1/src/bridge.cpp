@@ -121,43 +121,43 @@ Brg_StatusT Brg::ConvSTLinkIfToBrgStatus(STLinkIf_StatusT IfStat)
 	Brg_StatusT  brgStat;
 	switch(IfStat){
 		case STLinkIf_StatusT::NO_ERR:
-			brgStat = BRG_NO_ERR;
+			brgStat = Brg_StatusT::BRG_NO_ERR;
 			break;
 		case STLinkIf_StatusT::CONNECT_ERR:
-			brgStat = BRG_CONNECT_ERR;
+			brgStat = Brg_StatusT::BRG_CONNECT_ERR;
 			break;
 		case STLinkIf_StatusT::DLL_ERR:
-			brgStat = BRG_DLL_ERR;
+			brgStat = Brg_StatusT::BRG_DLL_ERR;
 			break;
 		case STLinkIf_StatusT::USB_COMM_ERR:
-			brgStat = BRG_USB_COMM_ERR;
+			brgStat = Brg_StatusT::BRG_USB_COMM_ERR;
 			break;
 		case STLinkIf_StatusT::PARAM_ERR:
-			brgStat = BRG_PARAM_ERR;
+			brgStat = Brg_StatusT::BRG_PARAM_ERR;
 			break;
 		case STLinkIf_StatusT::NO_STLINK:
-			brgStat = BRG_NO_STLINK;
+			brgStat = Brg_StatusT::BRG_NO_STLINK;
 			break;
 		case STLinkIf_StatusT::NOT_SUPPORTED:
-			brgStat = BRG_NOT_SUPPORTED;
+			brgStat = Brg_StatusT::BRG_NOT_SUPPORTED;
 			break;
 		case STLinkIf_StatusT::PERMISSION_ERR:
-			brgStat = BRG_PERMISSION_ERR;
+			brgStat = Brg_StatusT::BRG_PERMISSION_ERR;
 			break;
 		case STLinkIf_StatusT::ENUM_ERR:
-			brgStat = BRG_ENUM_ERR;
+			brgStat = Brg_StatusT::BRG_ENUM_ERR;
 			break;
 		case STLinkIf_StatusT::GET_INFO_ERR:
-			brgStat = BRG_GET_INFO_ERR;
+			brgStat = Brg_StatusT::BRG_GET_INFO_ERR;
 			break;
 		case STLinkIf_StatusT::SN_NOT_FOUND:
-			brgStat = BRG_STLINK_SN_NOT_FOUND;
+			brgStat = Brg_StatusT::BRG_STLINK_SN_NOT_FOUND;
 			break;
 		case STLinkIf_StatusT::CLOSE_ERR:
-			brgStat = BRG_CLOSE_ERR;
+			brgStat = Brg_StatusT::BRG_CLOSE_ERR;
 			break;
 		default:
-			brgStat = BRG_INTERFACE_ERR;
+			brgStat = Brg_StatusT::BRG_INTERFACE_ERR;
 			break;
 	}
 	return brgStat;
@@ -204,13 +204,13 @@ Brg_StatusT Brg::OpenStlink(int StlinkInstId)
 	ifStatus = StlinkDevice::PrivOpenStlink(StlinkInstId);
 
 	brgStatus = ConvSTLinkIfToBrgStatus(ifStatus);
-	if( brgStatus == BRG_NO_ERR ) {
+	if( brgStatus == Brg_StatusT::BRG_NO_ERR ) {
 		// All is OK but send a warning in case of old firmware
 		if( IsOldBrgFwVersion() == true )
 		{
 			LogTrace("The detected STLink firmware BRIDGE version (V%d.B%d) is compatible with PC software but is not the most recent one",
 				(int)m_Version.Major_Ver, (int)m_Version.Bridge_Ver);
-			brgStatus = BRG_OLD_FIRMWARE_WARNING;
+			brgStatus = Brg_StatusT::BRG_OLD_FIRMWARE_WARNING;
 		}
 	}
 	return brgStatus;
@@ -243,13 +243,13 @@ Brg_StatusT Brg::OpenStlink(const char *pSerialNumber, bool bStrict) {
 	ifStatus = StlinkDevice::PrivOpenStlink(pSerialNumber, bStrict);
 
 	brgStatus = ConvSTLinkIfToBrgStatus(ifStatus);
-	if( brgStatus == BRG_NO_ERR ) {
+	if( brgStatus == Brg_StatusT::BRG_NO_ERR ) {
 		// All is OK but send a warning in case of old firmware
 		if( IsOldBrgFwVersion() == true )
 		{
 			LogTrace("The detected STLink firmware BRIDGE version (V%d.B%d) is compatible with PC software but is not the most recent one",
 				(int)m_Version.Major_Ver, (int)m_Version.Bridge_Ver);
-			brgStatus = BRG_OLD_FIRMWARE_WARNING;
+			brgStatus = Brg_StatusT::BRG_OLD_FIRMWARE_WARNING;
 		}
 	}
 	return brgStatus;
@@ -263,7 +263,7 @@ Brg_StatusT Brg::OpenStlink(const char *pSerialNumber, bool bStrict) {
 Brg_StatusT Brg::CloseStlink(void)
 {
 	StlinkDevice::PrivCloseStlink();
-	return BRG_NO_ERR;
+	return Brg_StatusT::BRG_NO_ERR;
 }
 /**
  * @ingroup DEVICE
@@ -283,11 +283,11 @@ Brg_StatusT Brg::CloseBridge(uint8_t BrgCom)
 
 	if( (BrgCom != COM_SPI)&&(BrgCom != COM_I2C)&&(BrgCom != COM_CAN)
 		 &&(BrgCom != COM_GPIO)&&(BrgCom != COM_UNDEF_ALL) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 
 	if( BrgCom == COM_UNDEF_ALL ) { // Close all bridge interfaces
@@ -338,16 +338,16 @@ Brg_StatusT Brg::SendRequestAndAnalyzeStatus(STLink_DeviceRequestT *pDevReq,
                                              const uint16_t *pStatus,
 											 const uint16_t UsbTimeoutMs)
 {
-	Brg_StatusT brgStat = BRG_PARAM_ERR;
+	Brg_StatusT brgStat = Brg_StatusT::BRG_PARAM_ERR;
 	STLinkIf_StatusT ifStatus;
 
 	ifStatus = StlinkDevice::SendRequest(pDevReq, UsbTimeoutMs);
 	if( ifStatus != STLinkIf_StatusT::NO_ERR) {
-		return BRG_USB_COMM_ERR;
+		return Brg_StatusT::BRG_USB_COMM_ERR;
 	}
 	// Analyse status
 	brgStat = AnalyzeStatus(pStatus);
-	if( brgStat == BRG_TARGET_CMD_ERR ) {
+	if( brgStat == Brg_StatusT::BRG_TARGET_CMD_ERR ) {
 		// Default error
 		// If useful, one can add some error codes in Brg_StatusT corresponding
 		// to firmware error codes from stlink_firmware_const.h.
@@ -376,45 +376,45 @@ Brg_StatusT Brg::AnalyzeStatus(const uint16_t *pStatus)
 			// Precise some cases for upper layers
 			if( *pStatus == STLINK_BRIDGE_UNKNOWN_CMD) {
 				LogTrace("BRIDGE Command not supported");
-				return BRG_CMD_NOT_SUPPORTED;
+				return Brg_StatusT::BRG_CMD_NOT_SUPPORTED;
 			}
 			if( *pStatus == STLINK_BRIDGE_BAD_PARAM) {
 				LogTrace("BRIDGE Bad command parameter");
-				return BRG_PARAM_ERR;
+				return Brg_StatusT::BRG_PARAM_ERR;
 			}
 			if( *pStatus == STLINK_BRIDGE_SPI_ERROR) {
 				LogTrace("BRIDGE SPI issue");
-				return BRG_SPI_ERR;
+				return Brg_StatusT::BRG_SPI_ERR;
 			}
 			if( *pStatus == STLINK_BRIDGE_I2C_ERROR) {
 				LogTrace("BRIDGE I2C issue");
-				return BRG_I2C_ERR;
+				return Brg_StatusT::BRG_I2C_ERR;
 			}
 			if( *pStatus == STLINK_BRIDGE_CAN_ERROR) {
 				LogTrace("BRIDGE CAN issue");
-				return BRG_CAN_ERR;
+				return Brg_StatusT::BRG_CAN_ERR;
 			}
 			if( *pStatus == STLINK_BRIDGE_INIT_NOT_DONE) {
 				LogTrace("This BRIDGE command requires the com to be initialized: call Init function");
-				return BRG_COM_INIT_NOT_DONE;
+				return Brg_StatusT::BRG_COM_INIT_NOT_DONE;
 			}
 			if( *pStatus == STLINK_BRIDGE_ABORT_TRANS) {
 				LogTrace("BRIDGE Incorrect command order in partial (I2C) transaction, current transaction aborted");
-				return BRG_COM_CMD_ORDER_ERR;
+				return Brg_StatusT::BRG_COM_CMD_ORDER_ERR;
 			}
 			if( *pStatus == STLINK_BRIDGE_TIMEOUT_ERR) {
 				LogTrace("BRIDGE Timeout waiting for command execution");
-				return BRG_TARGET_CMD_TIMEOUT;
+				return Brg_StatusT::BRG_TARGET_CMD_TIMEOUT;
 			}
 			if( *pStatus == STLINK_BRIDGE_CMD_BUSY) {
 				LogTrace("BRIDGE Command busy (only GET_RWCMD_STATUS allowed in this state)");
-				return BRG_CMD_BUSY;
+				return Brg_StatusT::BRG_CMD_BUSY;
 			}
 			// All other errors will be seen as "target command" error.
-			return BRG_TARGET_CMD_ERR;
+			return Brg_StatusT::BRG_TARGET_CMD_ERR;
 		}
 	}
-	return BRG_NO_ERR;
+	return Brg_StatusT::BRG_NO_ERR;
 }
 /**
  * @ingroup BRIDGE
@@ -436,15 +436,15 @@ Brg_StatusT Brg::GetClk(uint8_t BrgCom, uint32_t *pBrgInputClk, uint32_t *pStlHC
 	uint8_t answer[12]={0,0,0,0,0,0,0,0,0,0,0,0};
 
 	if( (pBrgInputClk == NULL) || (pStlHClk == NULL) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( (BrgCom != COM_SPI)&&(BrgCom != COM_I2C)&&(BrgCom != COM_CAN)&&(BrgCom != COM_GPIO) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -492,10 +492,10 @@ Brg_StatusT Brg::InitSPI(const Brg_SpiInitT *pInitParams)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( pInitParams == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	pRq = new STLink_DeviceRequestT;
 	memset(pRq, 0, sizeof(STLink_DeviceRequestT));
@@ -526,7 +526,7 @@ Brg_StatusT Brg::InitSPI(const Brg_SpiInitT *pInitParams)
 			pRq->CDBByte[8] = (uint8_t)((pInitParams->CrcPoly>>8)&0xFF);
 		} else {
 			delete pRq;
-			return BRG_PARAM_ERR;
+			return Brg_StatusT::BRG_PARAM_ERR;
 		}
 	}
 
@@ -570,15 +570,15 @@ Brg_StatusT Brg::GetSPIbaudratePrescal(uint32_t ReqSpiFreqKHz, Brg_SpiBaudrateT 
 	uint32_t calcBaudrate=1, finalBaudrate=1;
 
 	if( (ReqSpiFreqKHz == 0) || (pBaudrate == NULL) || (pFinalSpiFreqKHz == NULL) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	// Get the current SPI input Clk
 	brgStat = GetClk(COM_SPI, &spiInputClkKHz, &stlHClkKHz);
-	if( brgStat == BRG_NO_ERR ) {
+	if( brgStat == Brg_StatusT::BRG_NO_ERR ) {
 		calcBaudrate = spiInputClkKHz/ReqSpiFreqKHz;
 		// Apply a smaller frequency if not exact
 		if( calcBaudrate <= 2 ) {
@@ -607,14 +607,14 @@ Brg_StatusT Brg::GetSPIbaudratePrescal(uint32_t ReqSpiFreqKHz, Brg_SpiBaudrateT 
 			*pBaudrate = SPI_BAUDRATEPRESCALER_256;
 		} else {
 			// smaller frequency not possible use a different error code
-			brgStat = BRG_COM_FREQ_NOT_SUPPORTED; 
+			brgStat = Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED;
 			finalBaudrate = 256;
 			*pBaudrate = SPI_BAUDRATEPRESCALER_256;
 		}
 	}
 	*pFinalSpiFreqKHz = spiInputClkKHz/finalBaudrate;
-	if( (brgStat == BRG_NO_ERR) && ( *pFinalSpiFreqKHz != ReqSpiFreqKHz) ) {
-		brgStat = BRG_COM_FREQ_MODIFIED;
+	if( (brgStat == Brg_StatusT::BRG_NO_ERR) && ( *pFinalSpiFreqKHz != ReqSpiFreqKHz) ) {
+		brgStat = Brg_StatusT::BRG_COM_FREQ_MODIFIED;
 	}
 	return brgStat;
 }
@@ -636,7 +636,7 @@ Brg_StatusT Brg::SetSPIpinCS(Brg_SpiNssLevelT NssLevel)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -678,13 +678,13 @@ Brg_StatusT Brg::ReadSPI(uint8_t *pBuffer, uint16_t SizeInBytes, uint16_t *pSize
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( pBuffer == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( SizeInBytes==0 ) {
-		return BRG_NO_ERR;
+		return Brg_StatusT::BRG_NO_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -706,12 +706,12 @@ Brg_StatusT Brg::ReadSPI(uint8_t *pBuffer, uint16_t SizeInBytes, uint16_t *pSize
 
 	delete pRq;
 
-	if( brgStat == BRG_NO_ERR )
+	if( brgStat == Brg_StatusT::BRG_NO_ERR )
 	{	// pErrorInfo currently unused
 		brgStat = GetLastReadWriteStatus(pSizeRead, NULL);
 	}
 
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("SPI Error (%d) in ReadSPI (%d bytes)", (int)brgStat,(int)SizeInBytes);
 		if( pSizeRead != NULL ) {
 			LogTrace("SPI Only %d bytes read without error",(int)*pSizeRead);
@@ -750,13 +750,13 @@ Brg_StatusT Brg::WriteSPI(const uint8_t *pBuffer, uint16_t SizeInBytes, uint16_t
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( pBuffer == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( SizeInBytes==0 ) {
-		return BRG_NO_ERR;
+		return Brg_StatusT::BRG_NO_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -792,12 +792,12 @@ Brg_StatusT Brg::WriteSPI(const uint8_t *pBuffer, uint16_t SizeInBytes, uint16_t
 
 	delete pRq;
 
-	if( brgStat == BRG_NO_ERR )
+	if( brgStat == Brg_StatusT::BRG_NO_ERR )
 	{	// pErrorInfo currently unused
 		brgStat = GetLastReadWriteStatus(pSizeWritten,NULL);
 	}
 
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("SPI Error (%d) in WriteSPI (%d bytes)", (int)brgStat,(int)SizeInBytes);
 		if( pSizeWritten != NULL ) {
 			LogTrace("SPI Only %d bytes written without error",(int)*pSizeWritten);
@@ -824,10 +824,10 @@ Brg_StatusT Brg::InitI2C(const Brg_I2cInitT *pInitParams)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( pInitParams == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	pRq = new STLink_DeviceRequestT;
 	memset(pRq, 0, sizeof(STLink_DeviceRequestT));
@@ -846,7 +846,7 @@ Brg_StatusT Brg::InitI2C(const Brg_I2cInitT *pInitParams)
 		pRq->CDBByte[7] = (uint8_t) (pInitParams->OwnAddr>>8);
 	} else {
 		delete pRq;
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	// AddressingMode
 	pRq->CDBByte[8] = (uint8_t) pInitParams->AddrMode;
@@ -860,7 +860,7 @@ Brg_StatusT Brg::InitI2C(const Brg_I2cInitT *pInitParams)
 			pRq->CDBByte[9] = ((uint8_t)pInitParams->Dnf & 0x0F) | ((((uint8_t)pInitParams->AnFilterEn) << 7) & 0x80);
 		} else {
 			delete pRq;
-			return BRG_PARAM_ERR;
+			return Brg_StatusT::BRG_PARAM_ERR;
 		}		
 	}
 	// Reset partial I2C transaction global
@@ -895,17 +895,17 @@ Brg_StatusT Brg::InitI2C(const Brg_I2cInitT *pInitParams)
 Brg_StatusT Brg::GetI2cTiming(I2cModeT I2CSpeedMode, int SpeedFrequency, int DNFn,
                               int RiseTime, int FallTime, bool bAF, uint32_t *pTimingReg)
 {
-	Brg_StatusT brgStatus=BRG_NO_ERR;
+	Brg_StatusT brgStatus= Brg_StatusT::BRG_NO_ERR;
 	double clockSource;
 	uint32_t stlHClkKHz, i2cInputClkKHz;
 
 	if( pTimingReg == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 
 	*pTimingReg = 0; // Default if error
@@ -914,12 +914,12 @@ Brg_StatusT Brg::GetI2cTiming(I2cModeT I2CSpeedMode, int SpeedFrequency, int DNF
 		|| ((I2CSpeedMode == I2C_FAST) && ((SpeedFrequency >400) || (RiseTime > 300) || (FallTime > 300)))
 		|| ((I2CSpeedMode == I2C_FAST_PLUS) && ((SpeedFrequency >1000) || (RiseTime > 120) || (FallTime > 120)))
 	     ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	// Get the current I2C input Clk
 	brgStatus = GetClk(COM_I2C, &i2cInputClkKHz, &stlHClkKHz);
-	if( brgStatus == BRG_NO_ERR ) {
+	if( brgStatus == Brg_StatusT::BRG_NO_ERR ) {
 		clockSource = (double)i2cInputClkKHz;
 		brgStatus = CalculateI2cTimingReg(I2CSpeedMode, SpeedFrequency, clockSource, DNFn,
 		                                  RiseTime, FallTime, bAF, pTimingReg);
@@ -934,10 +934,10 @@ Brg_StatusT Brg::CalculateI2cTimingReg(I2cModeT I2CSpeedMode, int SpeedFrequency
                                        int RiseTime, int FallTime, bool bAF, uint32_t *pTimingReg)
 {
 #define MAX_I2C_MODEL_NB 40
-	Brg_StatusT brgStatus=BRG_NO_ERR;
+	Brg_StatusT brgStatus= Brg_StatusT::BRG_NO_ERR;
 
 	if( (SpeedFrequency == 0) || (ClockSource == 0) || (pTimingReg == NULL) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
     // SCLL & SCLH  settings
@@ -1187,9 +1187,9 @@ Brg_StatusT Brg::CalculateI2cTimingReg(I2cModeT I2CSpeedMode, int SpeedFrequency
 					(uint32_t)sdadel<<16 | // Bits 19:16 SDADEL[3:0]: Data hold time
 					(uint32_t)i2Sel<<8 | // Bits 15:8 SCLH[7:0]: SCL high period (master mode)
 					(uint32_t)i1Sel); // Bits 7:0 SCLL[7:0]: SCL low period (master mode)
-		brgStatus = BRG_NO_ERR;
+		brgStatus = Brg_StatusT::BRG_NO_ERR;
 	} else {
-		brgStatus = BRG_PARAM_ERR;
+		brgStatus = Brg_StatusT::BRG_PARAM_ERR;
 	}
 
     delete [] pSCLL;
@@ -1263,10 +1263,10 @@ Brg_StatusT Brg::ReadI2Ccmd(uint8_t *pBuffer, uint16_t Addr,
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( (pBuffer == NULL) || (SizeInBytes==0) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -1291,12 +1291,12 @@ Brg_StatusT Brg::ReadI2Ccmd(uint8_t *pBuffer, uint16_t Addr,
 
 	delete pRq;
 
-	if( brgStat == BRG_NO_ERR )
+	if( brgStat == Brg_StatusT::BRG_NO_ERR )
 	{
 		brgStat = GetLastReadWriteStatus(pSizeRead, pErrorInfo);
 	}
 
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("I2C Error (%d) in ReadI2C (%d bytes)", (int)brgStat,(int)SizeInBytes);
 		if( pSizeRead != NULL ) {
 			LogTrace("I2C Only %d bytes read without error",(int)*pSizeRead);
@@ -1448,14 +1448,14 @@ Brg_StatusT Brg::ReadNoWaitI2C(uint16_t Addr, uint16_t SizeInBytes, uint16_t *pS
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( IsReadNoWaitI2CSupport() == false ) {
 		// Command supported starting firmware version B3
-		return BRG_CMD_NOT_SUPPORTED;
+		return Brg_StatusT::BRG_CMD_NOT_SUPPORTED;
 	}
 	if( (SizeInBytes > 512) || (SizeInBytes==0) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	// Timeout param: timeout for BUSY state at target side
@@ -1468,7 +1468,7 @@ Brg_StatusT Brg::ReadNoWaitI2C(uint16_t Addr, uint16_t SizeInBytes, uint16_t *pS
 		}
 	}
 	if( SizeInBytes==0 ) {
-		return BRG_NO_ERR;
+		return Brg_StatusT::BRG_NO_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -1494,7 +1494,7 @@ Brg_StatusT Brg::ReadNoWaitI2C(uint16_t Addr, uint16_t SizeInBytes, uint16_t *pS
 
 	delete pRq;
 
-	if( brgStat == BRG_NO_ERR ) // answer is same format as GetLastReadWriteStatus()
+	if( brgStat == Brg_StatusT::BRG_NO_ERR ) // answer is same format as GetLastReadWriteStatus()
 	{
 		brgStat = AnalyzeStatus(&answer[0]);
 		if( pSizeRead != NULL ) {
@@ -1503,9 +1503,9 @@ Brg_StatusT Brg::ReadNoWaitI2C(uint16_t Addr, uint16_t SizeInBytes, uint16_t *pS
 		// unused (uint32_t)answer[2] | (uint32_t)answer[3]<<16;
 	}
 
-	if( brgStat == BRG_CMD_BUSY ) {
+	if( brgStat == Brg_StatusT::BRG_CMD_BUSY ) {
 		LogTrace("I2C (Busy) (%d) in ReadNoWaitI2C (%d bytes)", (int)brgStat,(int)SizeInBytes);
-	} else if( brgStat != BRG_NO_ERR ) {
+	} else if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("I2C Error (%d) in ReadNoWaitI2C (%d bytes)", (int)brgStat,(int)SizeInBytes);
 		if( pSizeRead != NULL ) {
 			LogTrace("I2C Only %d bytes read without error",(int)*pSizeRead);
@@ -1561,23 +1561,23 @@ Brg_StatusT Brg::GetReadDataI2C(uint8_t *pBuffer, uint16_t SizeInBytes)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( IsReadNoWaitI2CSupport() == false ) {
 		// Command supported starting firmware version B3
-		return BRG_CMD_NOT_SUPPORTED;
+		return Brg_StatusT::BRG_CMD_NOT_SUPPORTED;
 	}
 	if( (pBuffer == NULL) || (SizeInBytes > 512) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( SizeInBytes==0 ) {
-		return BRG_NO_ERR;
+		return Brg_StatusT::BRG_NO_ERR;
 	}
 	// send get status to be sure we are not in busy must be done outside this command
 	// using: brgStat = GetLastReadWriteStatus(NULL, NULL)
-	brgStat = BRG_NO_ERR;
+	brgStat = Brg_StatusT::BRG_NO_ERR;
 
-	if( brgStat == BRG_NO_ERR )
+	if( brgStat == Brg_StatusT::BRG_NO_ERR )
 	{
 		pRq = new STLink_DeviceRequestT;
 		memset(pRq, 0, sizeof(STLink_DeviceRequestT));
@@ -1598,7 +1598,7 @@ Brg_StatusT Brg::GetReadDataI2C(uint8_t *pBuffer, uint16_t SizeInBytes)
 
 		delete pRq;
 
-		if( brgStat != BRG_NO_ERR ) {
+		if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 			LogTrace("I2C Error (%d) in ReadI2C (%d bytes)", (int)brgStat,(int)SizeInBytes);
 		}
 #ifdef USING_TRACELOG
@@ -1669,10 +1669,10 @@ Brg_StatusT Brg::WriteI2Ccmd(const uint8_t *pBuffer, uint16_t Addr,
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( (pBuffer == NULL) || (Size == 0) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -1712,12 +1712,12 @@ Brg_StatusT Brg::WriteI2Ccmd(const uint8_t *pBuffer, uint16_t Addr,
 
 	delete pRq;
 
-	if( brgStat == BRG_NO_ERR )
+	if( brgStat == Brg_StatusT::BRG_NO_ERR )
 	{
 		brgStat = GetLastReadWriteStatus(pSizeWritten, pErrorInfo);
 	}
 
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("I2C Error (%d) in WriteI2C (%d bytes)", (int)brgStat,(int)Size);
 		if( pSizeWritten != NULL ) {
 			LogTrace("I2C Only %d bytes written without error",(int)*pSizeWritten);
@@ -1843,10 +1843,10 @@ Brg_StatusT Brg::InitCAN(const Brg_CanInitT *pInitParams, Brg_InitTypeT InitType
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( pInitParams == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	pBitTimeConf = &pInitParams->BitTimeConf;
 	// Check BitTimeConf parameters
@@ -1854,11 +1854,11 @@ Brg_StatusT Brg::InitCAN(const Brg_CanInitT *pInitParams, Brg_InitTypeT InitType
 		(pBitTimeConf->PhaseSeg1InTq < 1) || (pBitTimeConf->PhaseSeg1InTq > 8) || // PHASE_SEG1 = 1 to 8 time quantum
 		(pBitTimeConf->PhaseSeg2InTq < 1) || (pBitTimeConf->PhaseSeg2InTq > 8) || // PHASE_SEG2 = 1 to 8 time quantum
 		(pBitTimeConf->SjwInTq < 1) || (pBitTimeConf->SjwInTq > 4) ) {// Synchro Jump Width = 1 to 4 time quantum
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	// Check prescaler
 	if( (pInitParams->Prescaler < 1) || (pInitParams->Prescaler > 1024) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -1959,25 +1959,25 @@ Brg_StatusT Brg::GetCANbaudratePrescal(const Brg_CanBitTimeConfT *pBitTimeConf, 
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( (pBitTimeConf == NULL) || (pPrescal == NULL) || (pFinalBaudrate == NULL) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	// Check Brg_CanBitTimeConfT parameters
 	if( (pBitTimeConf->PropSegInTq < 1) || (pBitTimeConf->PropSegInTq > 8) || // PROP_SEG = 1 to 8 time quantum
 		(pBitTimeConf->PhaseSeg1InTq < 1) || (pBitTimeConf->PhaseSeg1InTq > 8) || // PHASE_SEG1 = 1 to 8 time quantum
 		(pBitTimeConf->PhaseSeg2InTq < 1) || (pBitTimeConf->PhaseSeg2InTq > 8) || // PHASE_SEG2 = 1 to 8 time quantum
 		(pBitTimeConf->SjwInTq < 1) || (pBitTimeConf->SjwInTq > 4) ) {// Synchro Jump Width = 1 to 4 time quantum
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	// Check requested BaudRate (max 1Mb/s)
 	if( (ReqBaudrate < 1) || (ReqBaudrate > 1000000) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	// Get the current CAN input Clk
 	brgStat = GetClk(COM_CAN, &canInputClkKHz, &stlHClkKHz);
-	if( brgStat == BRG_NO_ERR ) {
+	if( brgStat == Brg_StatusT::BRG_NO_ERR ) {
 		/* Bit timing
 		  The bit timing logic monitors the serial bus-line and performs sampling and adjustment of
 		  the sample point by synchronizing on the start-bit edge and resynchronizing on the following edges.
@@ -2018,9 +2018,9 @@ Brg_StatusT Brg::GetCANbaudratePrescal(const Brg_CanBitTimeConfT *pBitTimeConf, 
 		if( (calcPrescal < 1)||(calcPrescal > 1024) ) {
 			// if found prescaler is <1 baudrate or N need to be decreased,
 			// if found prescaler is >1024 baudrate or N need to be increased.
-			brgStat = BRG_COM_FREQ_NOT_SUPPORTED;
+			brgStat = Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED;
 		} else if( ReqBaudrate != *pFinalBaudrate ) {
-			brgStat = BRG_COM_FREQ_MODIFIED; // ReqBaudrate is different from pFinalBaudrate
+			brgStat = Brg_StatusT::BRG_COM_FREQ_MODIFIED; // ReqBaudrate is different from pFinalBaudrate
 		}
 	}
 
@@ -2035,7 +2035,7 @@ Brg_StatusT Brg::GetCANbaudratePrescal(const Brg_CanBitTimeConfT *pBitTimeConf, 
  */
 Brg_StatusT Brg::FormatFilter32bitCAN(const Brg_FilterBitsT *pInConf, uint8_t *pOutConf)
 {
-	Brg_StatusT brgStat = BRG_NO_ERR;
+	Brg_StatusT brgStat = Brg_StatusT::BRG_NO_ERR;
 	// FilterId/Mask format default 0: Id=0, CAN_ID_STANDARD, CAN_DATA_FRAME
 	if( pInConf->RTR == CAN_REMOTE_FRAME ) {
 		pOutConf[0] |= 1<<1; //bit1 RTR
@@ -2043,10 +2043,10 @@ Brg_StatusT Brg::FormatFilter32bitCAN(const Brg_FilterBitsT *pInConf, uint8_t *p
 	if( pInConf->IDE == CAN_ID_EXTENDED ) {
 		pOutConf[0] |= 1<<2; //bit2 IDE
 		if( pInConf->ID > 0x1FFFFFFF ) {
-			brgStat = BRG_PARAM_ERR;
+			brgStat = Brg_StatusT::BRG_PARAM_ERR;
 		}
 	} else if( pInConf->ID > 0x7FF ) { // CAN_ID_STANDARD
-		brgStat = BRG_PARAM_ERR;
+		brgStat = Brg_StatusT::BRG_PARAM_ERR;
 	}
 	pOutConf[0] |= (uint8_t)(((pInConf->ID>>11)<<3)&0xF8); // [7:3]= Id[15:11]
 	pOutConf[1] |= (uint8_t)((pInConf->ID>>16)&0xFF); // [15:8]= Id[23:16]
@@ -2065,7 +2065,7 @@ Brg_StatusT Brg::FormatFilter32bitCAN(const Brg_FilterBitsT *pInConf, uint8_t *p
 Brg_StatusT Brg::FormatFilter16bitCAN(const Brg_FilterBitsT *pInConf, uint8_t *pOutConf)
 {
 	// filterId/Mask format default 0: Id=0, CAN_ID_STANDARD, CAN_DATA_FRAME
-	Brg_StatusT brgStat = BRG_NO_ERR;
+	Brg_StatusT brgStat = Brg_StatusT::BRG_NO_ERR;
 	// filterId/Mask format default 0: Id=0, CAN_ID_STANDARD, CAN_DATA_FRAME
 	if( pInConf->RTR == CAN_REMOTE_FRAME ) {
 		pOutConf[0] |= 1<<4; //bit4 RTR
@@ -2073,10 +2073,10 @@ Brg_StatusT Brg::FormatFilter16bitCAN(const Brg_FilterBitsT *pInConf, uint8_t *p
 	if( pInConf->IDE == CAN_ID_EXTENDED ) {
 		pOutConf[0] |= 1<<3; //bit3 IDE
 		if( pInConf->ID > 0x1FFFFFFF ) {
-			brgStat = BRG_PARAM_ERR;
+			brgStat = Brg_StatusT::BRG_PARAM_ERR;
 		}
 	} else if( pInConf->ID > 0x7FF ) { // CAN_ID_STANDARD
-		brgStat = BRG_PARAM_ERR;
+		brgStat = Brg_StatusT::BRG_PARAM_ERR;
 	}
 	pOutConf[0] |= (uint8_t)((pInConf->ID>>26)&0x07); // [2:0]= Id[28:26]
 	pOutConf[0] |= (uint8_t)(((pInConf->ID)<<5)&0xE0); // [7:5]= Id[2:0]
@@ -2106,14 +2106,14 @@ Brg_StatusT Brg::InitFilterCAN(const Brg_CanFilterConfT *pInitParams)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( pInitParams == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	// Check Filter number
 	if( pInitParams->FilterBankNb > 13 ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	// Filter configuration
@@ -2138,7 +2138,7 @@ Brg_StatusT Brg::InitFilterCAN(const Brg_CanFilterConfT *pInitParams)
 		// 32bit: [31:21] = Id[10:0], [20:3]= Id[28:11], [2]=IDE, [1]=RTR, [0]=0
 		// ID0 in FilterIdHigh+Low
 		brgStat = FormatFilter32bitCAN(&pInitParams->Id[0], &filterId[0]);
-		if( brgStat == BRG_NO_ERR ) {
+		if( brgStat == Brg_StatusT::BRG_NO_ERR ) {
 			if( pInitParams->FilterMode == CAN_FILTER_ID_MASK ) { // Mask0 in FilterMaskHigh+Low
 				brgStat = FormatFilter32bitCAN(&pInitParams->Mask[0], &filterMask[0]);
 			} else { //CAN_FILTER_ID_LIST, ID1 in FilterMaskHigh+Low
@@ -2151,28 +2151,28 @@ Brg_StatusT Brg::InitFilterCAN(const Brg_CanFilterConfT *pInitParams)
 		// ID0 in FilterIdHigh
 		brgStat = FormatFilter16bitCAN(&pInitParams->Id[0], &filterId[2]);
 		if( pInitParams->FilterMode == CAN_FILTER_ID_MASK ) {
-			if( brgStat == BRG_NO_ERR ) { // Mask0 in MaskIdHigh
+			if( brgStat == Brg_StatusT::BRG_NO_ERR ) { // Mask0 in MaskIdHigh
 				brgStat = FormatFilter16bitCAN(&pInitParams->Mask[0], &filterMask[2]);
 			}
-			if( brgStat == BRG_NO_ERR ) { // ID1 in FilterIdLow
+			if( brgStat == Brg_StatusT::BRG_NO_ERR ) { // ID1 in FilterIdLow
 				brgStat = FormatFilter16bitCAN(&pInitParams->Id[1], &filterId[0]);
 			}
-			if( brgStat == BRG_NO_ERR ) { // Mask1 in MaskIdLow
+			if( brgStat == Brg_StatusT::BRG_NO_ERR ) { // Mask1 in MaskIdLow
 				brgStat = FormatFilter16bitCAN(&pInitParams->Mask[1], &filterMask[0]);
 			}
 		} else { //CAN_FILTER_ID_LIST
-			if( brgStat == BRG_NO_ERR ) { // ID1 in FilterIdLow
+			if( brgStat == Brg_StatusT::BRG_NO_ERR ) { // ID1 in FilterIdLow
 				brgStat = FormatFilter16bitCAN(&pInitParams->Id[1], &filterId[0]);
 			}
-			if( brgStat == BRG_NO_ERR ) { // ID2 in MaskIdHigh
+			if( brgStat == Brg_StatusT::BRG_NO_ERR ) { // ID2 in MaskIdHigh
 				brgStat = FormatFilter16bitCAN(&pInitParams->Id[2], &filterMask[2]);
 			}
-			if( brgStat == BRG_NO_ERR ) { // ID3 in MaskIdLow
+			if( brgStat == Brg_StatusT::BRG_NO_ERR ) { // ID3 in MaskIdLow
 				brgStat = FormatFilter16bitCAN(&pInitParams->Id[3], &filterMask[0]);
 			}
 		}
 	}
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		return brgStat;
 	}
 
@@ -2232,11 +2232,11 @@ Brg_StatusT Brg::StartMsgReceptionCAN(void)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( IsCanSupport() == false ) {
 		// Command not supported on first FW bridge version (B1)
-		return BRG_CMD_NOT_SUPPORTED;
+		return Brg_StatusT::BRG_CMD_NOT_SUPPORTED;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -2254,11 +2254,11 @@ Brg_StatusT Brg::StartMsgReceptionCAN(void)
 	pRq->SenseLength=DEFAULT_SENSE_LEN;
 
 	brgStat = SendRequestAndAnalyzeStatus(pRq, (uint16_t*)answer);
-	if( (answer[2] != CAN_MSG_FORMAT_V1)&&(brgStat == BRG_NO_ERR) ) { //robustness
+	if( (answer[2] != CAN_MSG_FORMAT_V1)&&(brgStat == Brg_StatusT::BRG_NO_ERR) ) { //robustness
 		StopMsgReceptionCAN();
-		brgStat = BRG_PARAM_ERR;
+		brgStat = Brg_StatusT::BRG_PARAM_ERR;
 	}
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("CAN Error (%d) in StartMsgReceptionCAN (firmware msg format: %d, host format: %d)",
 		         (int)brgStat, (int)answer[2], (int)CAN_MSG_FORMAT_V1);
 	}
@@ -2285,11 +2285,11 @@ Brg_StatusT Brg::StopMsgReceptionCAN(void)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( IsCanSupport() == false ) {
 		// Command not supported on first FW bridge version (B1)
-		return BRG_CMD_NOT_SUPPORTED;
+		return Brg_StatusT::BRG_CMD_NOT_SUPPORTED;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -2331,14 +2331,14 @@ Brg_StatusT Brg::GetRxMsgNbCAN(uint16_t *pMsgNb)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( IsCanSupport() == false ) {
 		// Command not supported on first FW bridge version (B1)
-		return BRG_CMD_NOT_SUPPORTED;
+		return Brg_StatusT::BRG_CMD_NOT_SUPPORTED;
 	}
 	if( pMsgNb == NULL ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -2356,8 +2356,8 @@ Brg_StatusT Brg::GetRxMsgNbCAN(uint16_t *pMsgNb)
 
 	brgStat = SendRequestAndAnalyzeStatus(pRq, (uint16_t*)answer);
 	*pMsgNb = (uint16_t)(answer[2] | (((uint16_t)answer[3]<<8)&0xFF00));
-	if( (answer[4] != CAN_MSG_FORMAT_V1)&&(brgStat == BRG_NO_ERR) ) { //robustness
-		brgStat = BRG_PARAM_ERR;
+	if( (answer[4] != CAN_MSG_FORMAT_V1)&&(brgStat == Brg_StatusT::BRG_NO_ERR) ) { //robustness
+		brgStat = Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	delete pRq;
@@ -2404,21 +2404,21 @@ Brg_StatusT Brg::GetRxMsgCAN(Brg_CanRxMsgT *pCanMsg, uint16_t MsgNb, uint8_t *pB
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( IsCanSupport() == false ) {
 		// Command not supported on first FW bridge version (B1)
-		return BRG_CMD_NOT_SUPPORTED;
+		return Brg_StatusT::BRG_CMD_NOT_SUPPORTED;
 	}
 	if( (pCanMsg == NULL) || (pBuffer == NULL) || (pDataSizeInBytes == NULL) || (MsgNb < 1) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	*pDataSizeInBytes = 0; // Default
 	answerSize = MsgNb*CAN_READ_MSG_SIZE_V1;
 	pAnswer = new uint8_t[answerSize];
 	if( pAnswer == NULL ) {
-		return BRG_MEM_ALLOC_ERR;
+		return Brg_StatusT::BRG_MEM_ALLOC_ERR;
 	}
 	pRq = new STLink_DeviceRequestT;
 	memset(pRq, 0, sizeof(STLink_DeviceRequestT));
@@ -2442,7 +2442,7 @@ Brg_StatusT Brg::GetRxMsgCAN(Brg_CanRxMsgT *pCanMsg, uint16_t MsgNb, uint8_t *pB
 	// Warning if MsgNb is not correct, a 2 bytes error status is received from the FW instead
 	// of answerSize bytes, this is a host issue and can lead to USB com err or wrongly
 	// interpreted answer
-	if( brgStat == BRG_NO_ERR ) {
+	if( brgStat == Brg_StatusT::BRG_NO_ERR ) {
 		uint8_t overrunErr;
 		pReadCanMsg = &pAnswer[0]; //First received message
 		buffDataSize = BufSizeInBytes;
@@ -2470,8 +2470,8 @@ Brg_StatusT Brg::GetRxMsgCAN(Brg_CanRxMsgT *pCanMsg, uint16_t MsgNb, uint8_t *pB
 				} else { // Buffer overrun error (2)
 					pCanMsg[j].Overrun = CAN_RX_BUFF_OVERRUN;
 				}
-				if( brgStat == BRG_NO_ERR ) {
-					brgStat = BRG_OVERRUN_ERR;
+				if( brgStat == Brg_StatusT::BRG_NO_ERR ) {
+					brgStat = Brg_StatusT::BRG_OVERRUN_ERR;
 					firstErrMsgNb = j;
 					LogTrace("CAN Overrun Error in GetRxMsgCAN (first error %d at %d/%d msg)",
                              (int)overrunErr, (int)firstErrMsgNb, (int)MsgNb);
@@ -2487,8 +2487,8 @@ Brg_StatusT Brg::GetRxMsgCAN(Brg_CanRxMsgT *pCanMsg, uint16_t MsgNb, uint8_t *pB
 					msgDataSize = pCanMsg[j].DLC;
 				} else {
 					msgDataSize = buffDataSize; // limit copied data to max buffer size
-					if( brgStat == BRG_NO_ERR ) {
-						brgStat = BRG_OVERRUN_ERR;
+					if( brgStat == Brg_StatusT::BRG_NO_ERR ) {
+						brgStat = Brg_StatusT::BRG_OVERRUN_ERR;
 						LogTrace("CAN Data Error in GetRxMsgCAN: BufSizeInBytes too small (error at %d/%d msg)",
 						         (int)j, (int)MsgNb);
 					}
@@ -2511,7 +2511,7 @@ Brg_StatusT Brg::GetRxMsgCAN(Brg_CanRxMsgT *pCanMsg, uint16_t MsgNb, uint8_t *pB
 		*pDataSizeInBytes = buffDataOffset;
 	}
 
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("CAN Error (%d) in GetRxMsgCAN (max %d bytes, %d msg)",
 		         (int)brgStat, (int)BufSizeInBytes, (int)MsgNb);
 	}
@@ -2551,23 +2551,23 @@ Brg_StatusT Brg::WriteMsgCAN(const Brg_CanTxMsgT *pCanMsg, const uint8_t *pBuffe
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( (pCanMsg == NULL) || (pBuffer == NULL) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( (pCanMsg->DLC > 8) || (SizeInBytes > 8) ) { // CAN message DATA FIELD = 8 bytes max
-			return BRG_PARAM_ERR;
+			return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	msgType = 0; // Default CAN_ID_STANDARD CAN_DATA_FRAME, bit2=0 reserved
 	if( pCanMsg->IDE == CAN_ID_EXTENDED ) {
 		msgType |= 1; // bit0
 		if( pCanMsg->ID > 0x1FFFFFFF ) { // 29bits ID
-			return BRG_PARAM_ERR;
+			return Brg_StatusT::BRG_PARAM_ERR;
 		}
 	} else if( pCanMsg->ID > 0x7FF ) { // CAN_ID_STANDARD 11bits ID
-			return BRG_PARAM_ERR;
+			return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( pCanMsg->RTR == CAN_REMOTE_FRAME ) {
 		msgType |= 1<<1; // bit1
@@ -2615,12 +2615,12 @@ Brg_StatusT Brg::WriteMsgCAN(const Brg_CanTxMsgT *pCanMsg, const uint8_t *pBuffe
 
 	delete pRq;
 
-	if( brgStat == BRG_NO_ERR )
+	if( brgStat == Brg_StatusT::BRG_NO_ERR )
 	{	// pSizeWritten not useful for CAN, pErrorInfo currently unused
 		brgStat = GetLastReadWriteStatus(NULL, NULL);
 	}
 
-	if( brgStat != BRG_NO_ERR ) {
+	if( brgStat != Brg_StatusT::BRG_NO_ERR ) {
 		LogTrace("CAN Error (%d) in WriteMsgCAN (%d bytes)", (int)brgStat,(int)SizeInBytes);
 	}
 	return brgStat;
@@ -2649,7 +2649,7 @@ Brg_StatusT Brg::GetLastReadWriteStatus(uint16_t *pBytesWithoutError, uint32_t *
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -2665,10 +2665,10 @@ Brg_StatusT Brg::GetLastReadWriteStatus(uint16_t *pBytesWithoutError, uint32_t *
 
 	brgStat = SendRequestAndAnalyzeStatus(pRq, (uint16_t *)answer);
 
-	if( (pBytesWithoutError != NULL) && (brgStat != BRG_NO_ERR) ) {
+	if( (pBytesWithoutError != NULL) && (brgStat != Brg_StatusT::BRG_NO_ERR) ) {
 		*pBytesWithoutError = answer[1];
 	}
-	if( (pErrorInfo != NULL) && (brgStat != BRG_NO_ERR) ) {
+	if( (pErrorInfo != NULL) && (brgStat != Brg_StatusT::BRG_NO_ERR) ) {
 		*pErrorInfo = (uint32_t)answer[2] | (uint32_t)answer[3]<<16;
 	}
 
@@ -2706,14 +2706,14 @@ Brg_StatusT Brg::InitGPIO(const Brg_GpioInitT *pInitParams)
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 	if( (pInitParams == NULL) || (pInitParams->pGpioConf == NULL) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 	if( ((pInitParams->ConfigNb != 1) && (pInitParams->ConfigNb != BRG_GPIO_MAX_NB)) ||
 		((pInitParams->GpioMask & BRG_GPIO_ALL) == 0) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -2768,12 +2768,12 @@ Brg_StatusT Brg::ReadGPIO(uint8_t GpioMask, Brg_GpioValT *pGpioVal, uint8_t *pGp
 	uint8_t answer[8]={0,0,0,0,0,0,0,0};
 
 	if( (pGpioVal == NULL) || (pGpioErrorMask == NULL) || ((GpioMask & BRG_GPIO_ALL) == 0) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -2795,8 +2795,8 @@ Brg_StatusT Brg::ReadGPIO(uint8_t GpioMask, Brg_GpioValT *pGpioVal, uint8_t *pGp
 
 	// Answer byte2 GPIO error mask (0 if no error, 1 if error)
 	*pGpioErrorMask = answer[2];
-	if( (brgStat == BRG_NO_ERR)&&(*pGpioErrorMask & GpioMask) != 0 ) {
-		brgStat = BRG_GPIO_ERR;
+	if( (brgStat == Brg_StatusT::BRG_NO_ERR)&&(*pGpioErrorMask & GpioMask) != 0 ) {
+		brgStat = Brg_StatusT::BRG_GPIO_ERR;
 	}
 	// Answer byte3 GPIO read value (0 or 1), if GPIO is present in the mask, retrieve the read value
 	for( int i=0; i<BRG_GPIO_MAX_NB; i++ ) {
@@ -2832,12 +2832,12 @@ Brg_StatusT Brg::SetResetGPIO(uint8_t GpioMask, const Brg_GpioValT *pGpioVal, ui
 	uint8_t answer[8]={0,0,0,0,0,0,0,0};
 
 	if( (pGpioVal == NULL) || (pGpioErrorMask == NULL) || ((GpioMask & BRG_GPIO_ALL) == 0) ) {
-		return BRG_PARAM_ERR;
+		return Brg_StatusT::BRG_PARAM_ERR;
 	}
 
 	if( m_bStlinkConnected == false ) {
 		// The function should be called at least after OpenStlink
-		return BRG_NO_STLINK;
+		return Brg_StatusT::BRG_NO_STLINK;
 	}
 
 	pRq = new STLink_DeviceRequestT;
@@ -2868,8 +2868,8 @@ Brg_StatusT Brg::SetResetGPIO(uint8_t GpioMask, const Brg_GpioValT *pGpioVal, ui
 	// Answer byte2 GPIO error mask (0 if no error, 1 if error)
 	// byte3-7 unused
 	*pGpioErrorMask = answer[2];
-	if( (brgStat == BRG_NO_ERR)&&(*pGpioErrorMask & GpioMask) != 0 ) {
-		brgStat = BRG_GPIO_ERR;
+	if( (brgStat == Brg_StatusT::BRG_NO_ERR)&&(*pGpioErrorMask & GpioMask) != 0 ) {
+		brgStat = Brg_StatusT::BRG_GPIO_ERR;
 	}
 
 	delete pRq;

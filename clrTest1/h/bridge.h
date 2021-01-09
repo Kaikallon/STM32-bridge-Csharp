@@ -32,7 +32,7 @@
  * @{
  */
 /// Bridge Error and Status
-typedef enum {
+public enum class Brg_StatusT {
 	BRG_NO_ERR = 0,           ///< OK (no error)
 	BRG_CONNECT_ERR,          ///< USB Connection error
 	BRG_DLL_ERR,              ///< USB DLL error
@@ -64,7 +64,7 @@ typedef enum {
 	BRG_CMD_BUSY,             ///< Command busy: only Brg::GetLastReadWriteStatus() command allowed in that case
 	BRG_CLOSE_ERR,            ///< Error during device Close
 	BRG_INTERFACE_ERR         ///< Unknown default error returned by STLinkInterface
-} Brg_StatusT;
+} ;
 
 #define COM_SPI STLINK_SPI_COM   ///< 0x2 SPI Bridge communication parameter
 #define COM_I2C STLINK_I2C_COM   ///< 0x3 I2C Bridge communication parameter

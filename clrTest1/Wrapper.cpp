@@ -7,26 +7,7 @@ PUBLIC FUNCTIONS :
 AUTHOR(s) :
 	Alexander Andersson
 START DATE : 2020-03-02
-*******************************************************************************************************************
-		   &&&&&&&&&&&&&&&&.                &&&&&&&&&&&&&&&&                      (@@@@@@@@@
-		  &&&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                      @@@@@@@@@@@@#
-		 #&&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                      @@@@@@@@@@@@@@@
-		 &&&&&&&&&&&&&&&&                &&&&&&&&&&&&&&&&                     @@@@@@@@@@@@@@@@@@
-						,,,,,,,,,,,,,,,,                                     @@@@@@@@@@@@@@@@@@@@.
-					   .,,,,,,,,,,,,,,,.                                    @@@@@@@@@@@@@@@@@@@@@@@
-					   ,,,,,,,,,,,,,,,,                                    @@@@@@@@@@@@ @@@@@@@@@@@@
-					  ,,,,,,,,,,,,,,,,                                    *@@@@@@@@@@@@  @@@@@@@@@@@@
-					 ,,,,,,,,,,,,,,,,                                      @@@@@@@@@@@@   (@@@@@@@@@@@&
-	&&&&&&&&&&&&&&&&                .,,,,,,,,,,,,,,,,                        @@@@@@@@@@     @@@@@@@@@@@@
-   &&&&&&&&&&&&&&&&                 ,,,,,,,,,,,,,,,,                      ,//////            @@@@@@@@@@@@
-  &&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,                  @@@@@@@@@@@@@     @@@@@@@@@@@@@@@@ .@(
- %&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,                .@@@@@@@@@@@@@@@@/   @@@@@@@@@@@@@@@@@@@@,
-.&&&&&&&&&&&&&&&&                ,,,,,,,,,,,,,,,,.               @@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@
-				,,,,,,,,,,,,,,,,                                @@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@@@@@@@@@@@@@@@*
-			   ,,,,,,,,,,,,,,,,.                              &@@@@@@@@@@@*                        %@@@@@@@@@@@@
-			  .,,,,,,,,,,,,,,,,                              @@@@@@@@@@@@                            @@@@@@@@@@@@
-			  ,,,,,,,,,,,,,,,,                              @@@@@@@@@@@@                              @@@@@@@@@@@@.
-******************************************************************************************************************/
+*******************************************************************************************************************/
 
 #include "stdafx.h"
 #include "Wrapper.h"
@@ -50,7 +31,7 @@ Wrapper::Wrapper()
 
     BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(InterfaceStatus);
     // Initiate bridge
-    if (BridgeStatus == BRG_NO_ERR)
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
     {
         Bridge = new Brg(*sTLinkInterface);
 #ifdef USING_ERRORLOG
@@ -70,8 +51,8 @@ Wrapper::~Wrapper()
 
 Wrapper::!Wrapper()
 {
-	delete deviceInfo;
-	deviceInfo = NULL;
+	//delete deviceInfo;
+	//deviceInfo = NULL;
 
 	// Disconnect
 	if (Bridge != NULL)
@@ -88,12 +69,25 @@ Wrapper::!Wrapper()
 		delete sTLinkInterface;
 		sTLinkInterface = NULL;
 	}
-
 }
 
 
-Brg_StatusT Wrapper::InitBridge()
+Brg_StatusT Wrapper::InitBridge(DeviceInfo^ device)
 {
+	Console::WriteLine("Is StLink connected?: " + Bridge->GetIsStlinkConnected().ToString());
+	BridgeStatus = OpenBridge(device);
+	Console::WriteLine(BridgeStatus.ToString());
+	Console::WriteLine("Is StLink connected?: " + Bridge->GetIsStlinkConnected().ToString());
+	Console::WriteLine("");
+
+	float result;
+	BridgeStatus = TestVoltage(result);
+	Console::WriteLine(result.ToString());
+	Console::WriteLine("");
+
+	TestGetClock();
+	Console::WriteLine(BridgeStatus.ToString());
+	Console::WriteLine("");
 
 	return BridgeStatus;
 }
@@ -159,7 +153,7 @@ STLinkIf_StatusT Wrapper::EnumerateDevices([Out] List<DeviceInfo^>^% results)
     return InterfaceStatus;
 }
 
-Brg_StatusT Wrapper::OpenBridge(String^ device)
+Brg_StatusT Wrapper::OpenBridge(DeviceInfo^ device)
 {
     if (Bridge == NULL)
     {
@@ -168,7 +162,7 @@ Brg_StatusT Wrapper::OpenBridge(String^ device)
     }
 
     // Check for errors
-    if (BridgeStatus != BRG_NO_ERR)
+    if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
     {
         return BridgeStatus;
     }
@@ -176,22 +170,25 @@ Brg_StatusT Wrapper::OpenBridge(String^ device)
     // Open the STLink connection
     Bridge->SetOpenModeExclusive(true);
 
-    BridgeStatus = Bridge->OpenStlink(deviceInfo->EnumUniqueId, true);
+	char* tempChar = (char*)(void*)Marshal::StringToHGlobalAnsi(device->EnumUniqueId);
+    BridgeStatus = Bridge->OpenStlink(tempChar, true);
+	Marshal::FreeHGlobal((IntPtr)tempChar);
 
-    if (BridgeStatus == BRG_NOT_SUPPORTED)
+
+    if (BridgeStatus == Brg_StatusT::BRG_NOT_SUPPORTED)
     {
-        BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->GetDeviceInfo2(0, deviceInfo, sizeof(*deviceInfo)));
-        Console::WriteLine(String::Format("BRIDGE not supported PID: 0X%04hx SN:%s", (unsigned short)deviceInfo->ProductId, gcnew String(deviceInfo->EnumUniqueId)));
+        //BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices();
+        //Console::WriteLine(String::Format("BRIDGE not supported PID: 0X%04hx SN:%s", (unsigned short)deviceInfo->ProductId, gcnew String(deviceInfo->EnumUniqueId)));
+		// TODO: Throw exception
     }
 
-    if (BridgeStatus == BRG_OLD_FIRMWARE_WARNING)
+    if (BridgeStatus == Brg_StatusT::BRG_OLD_FIRMWARE_WARNING)
     {
-        BridgeStatus = BRG_NO_ERR;
+        BridgeStatus = Brg_StatusT::BRG_NO_ERR;
     }
+
     return BridgeStatus;
 }
-
-
 
 Brg_StatusT Wrapper::TestVoltage([Out] float% result) 
 {
@@ -201,27 +198,54 @@ Brg_StatusT Wrapper::TestVoltage([Out] float% result)
         return BridgeStatus;
     }
     // Test Voltage command
-    if (BridgeStatus == BRG_NO_ERR)
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
     {
         float voltage = 0;
         // T_VCC pin must be connected to target voltage on debug connector
         BridgeStatus = Bridge->GetTargetVoltage(&voltage);
         result = voltage;
-        if ((BridgeStatus != BRG_NO_ERR) || (voltage == 0)) {
-            //printf("BRIDGE get voltage error (check if T_VCC pin is connected to target voltage on debug connector)\n");
-            Console::WriteLine(String::Format("BRIDGE get voltage error (check if T_VCC pin is connected to target voltage on debug connector)"));
+        if ((BridgeStatus != Brg_StatusT::BRG_NO_ERR) || (voltage == 0)) 
+		{
+            Console::WriteLine("BRIDGE get voltage error (check if T_VCC pin is connected to target voltage on debug connector)");
         }
         else {
-            Console::WriteLine(String::Format("BRIDGE get voltage: %f V", (double)voltage));
+            Console::WriteLine(String::Format("BRIDGE get voltage: {0} V", voltage));
         }
     }
 
     return BridgeStatus;
 }
 
+Brg_StatusT Wrapper::TestGetClock()
+{
+	// Test GET CLOCK command
+	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+		uint32_t StlHClkKHz, comInputClkKHz;
+		// Get the current bridge input Clk for all com:
+		BridgeStatus = Bridge->GetClk(COM_SPI, (uint32_t*)&comInputClkKHz, (uint32_t*)&StlHClkKHz);
+		Console::WriteLine("SPI input CLK: {0} kHz, ST-Link HCLK: {1} kHz", (int)comInputClkKHz, (int)StlHClkKHz);
+		if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+			BridgeStatus = Bridge->GetClk(COM_I2C, (uint32_t*)&comInputClkKHz, (uint32_t*)&StlHClkKHz);
+			Console::WriteLine("I2C input CLK: {0} kHz, ST-Link HCLK: {1} kHz", (int)comInputClkKHz, (int)StlHClkKHz);
+		}
+		if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+			BridgeStatus = Bridge->GetClk(COM_CAN, (uint32_t*)&comInputClkKHz, (uint32_t*)&StlHClkKHz);
+			Console::WriteLine("CAN input CLK: {0} kHz, ST-Link HCLK: {1} kHz", (int)comInputClkKHz, (int)StlHClkKHz);
+		}
+		if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+			BridgeStatus = Bridge->GetClk(COM_GPIO, (uint32_t*)&comInputClkKHz, (uint32_t*)&StlHClkKHz);
+			Console::WriteLine("GPIO input CLK: {0} kHz, ST-Link HCLK: {1} kHz", (int)comInputClkKHz, (int)StlHClkKHz);
+		}
+		if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
+			Console::WriteLine("Error in GetClk()");
+		}
+	}
+	return BridgeStatus;
+}
+
 Brg_StatusT Wrapper::GPIOInit()
 {
-	if (BridgeStatus == BRG_NO_ERR) 
+	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
 	{
 		uint8_t bridgeCom = COM_GPIO; //Used to tell the bridge that we want to do GPIO operations
 		Brg_GpioInitT gpioParams;
@@ -234,11 +258,11 @@ Brg_StatusT Wrapper::GPIOInit()
 		}
 		else 
 		{
-			BridgeStatus = BRG_NOT_SUPPORTED;
+			BridgeStatus = Brg_StatusT::BRG_NOT_SUPPORTED;
 		}
 
 		// Set GPIO mode
-		if (BridgeStatus == BRG_NO_ERR) 
+		if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
 		{
 			gpioMask = BRG_GPIO_ALL; // BRG_GPIO_0 1 2 3
 			gpioParams.GpioMask = gpioMask; 
@@ -253,9 +277,9 @@ Brg_StatusT Wrapper::GPIOInit()
 				gpioConf[i].OutputType = GPIO_OUTPUT_PUSHPULL;
 			}
 			BridgeStatus = Bridge->InitGPIO(&gpioParams);
-			if (BridgeStatus != BRG_NO_ERR) 
+			if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
 			{
-				Console::WriteLine(String::Format("Bridge Gpio init failed (mask=%d, gpio0: mode= %d, pull = %d, ...)\n",
+				Console::WriteLine(String::Format("Bridge Gpio init failed (mask={0}, gpio0: mode= {1}, pull = {2}, ...)\n",
 					(int)gpioParams.GpioMask, (int)gpioConf[0].Mode, (int)gpioConf[0].Pull)); // TODO: Change enums to public enum class for better readability of error messages
 			}
 		}
@@ -274,10 +298,10 @@ Brg_StatusT Wrapper::GPIOWrite()
 
 
 	// Test GPIO
-	if (BridgeStatus == BRG_NO_ERR)
+	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
 	{
 		BridgeStatus = Bridge->SetResetGPIO(gpioMask, &gpioReadVal[0], &gpioErrMsk);
-		if ((BridgeStatus != BRG_NO_ERR) || (gpioErrMsk != 0))
+		if ((BridgeStatus != Brg_StatusT::BRG_NO_ERR) || (gpioErrMsk != 0))
 		{
 			Console::WriteLine("Bridge Read error");
 		}
@@ -295,7 +319,7 @@ Brg_StatusT Wrapper::GPIOWrite()
 		}
 	}
 
-	if (BridgeStatus == BRG_NO_ERR)
+	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
 	{
 		Console::WriteLine("GPIO Test1 OK");
 	}
@@ -487,9 +511,9 @@ Brg_StatusT Wrapper::CanTest()
 
 }
 
-const char * Wrapper::StringToCharPtr(String ^ s)
-{
-    using namespace Runtime::InteropServices;
-    const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
-    return chars;
-}
+//const char * Wrapper::StringToCharPtr(String ^ s)
+//{
+//    using namespace Runtime::InteropServices;
+//    const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+//    return chars;
+//}

@@ -134,7 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="clrTest1.h" />
+    <ClInclude Include="HumanFriendlyStatusConverter.h" />
     <ClInclude Include="h\bridge.h" />
     <ClInclude Include="h\criticalsectionlock.h" />
     <ClInclude Include="h\STLinkUSBDriver.h" />
@@ -151,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="clrTest1.cpp" />
+    <ClCompile Include="HumanFriendlyStatusConverter.cpp" />
     <ClCompile Include="src\bridge.cpp" />
     <ClCompile Include="src\criticalsectionlock.cpp" />
     <ClCompile Include="src\stlink_device.cpp" />
