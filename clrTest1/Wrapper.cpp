@@ -136,7 +136,7 @@ STLinkIf_StatusT Wrapper::EnumerateDevices([Out] List<DeviceInfo^>^% results)
         InterfaceStatus = sTLinkInterface->GetDeviceInfo2(i, &tempDeviceInfo, sizeof(tempDeviceInfo));
 
         // Allocate and perform manual copy
-		DeviceInfo^ devInfo;// = gcnew DeviceInfo();
+		DeviceInfo^ devInfo = gcnew DeviceInfo();
         devInfo->DeviceUsed = tempDeviceInfo.DeviceUsed;
         devInfo->EnumUniqueId = gcnew String(tempDeviceInfo.EnumUniqueId);
         devInfo->ProductId = tempDeviceInfo.ProductId;

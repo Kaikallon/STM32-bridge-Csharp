@@ -17,9 +17,11 @@ namespace CSharpTest
         public Form1()
         {
             InitializeComponent();
+            btnEnumerate_Click(null, null);
+            
         }
         //clrTest1.Class1 Class1 = new Class1();
-        private void button1_Click(object sender, EventArgs e)
+        private void btnEnumerate_Click(object sender, EventArgs e)
         {
             //if (!Class1.IsLibraryLoaded())
             //{
@@ -38,8 +40,15 @@ namespace CSharpTest
             Wrapper wrapper = new Wrapper();
             List<DeviceInfo> devices = new List<DeviceInfo>();
             STLinkIf_StatusT status = wrapper.EnumerateDevices(out devices);
+            dgv_stLinks.DataSource = devices;
 
 
+        }
+
+        private void btn_OpenBridge_Click(object sender, EventArgs e)
+        {
+            Wrapper wrapper = new Wrapper();
+            //wrapper.OpenBridge("");
         }
     }
 }

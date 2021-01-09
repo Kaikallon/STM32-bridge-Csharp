@@ -41,12 +41,12 @@ namespace STLinkCLRWrapper
     // Structure used to contain the device info data for CLR, copied and modified from stlink_interface.h
     public ref struct DeviceInfo
     {
-        uint32_t StLinkUsbId; ///< ST-LINK-SERVER Device cookie in little endian format, to use in STLINK_TCP_CMD_OPEN_DEVICE
-        String^ EnumUniqueId; ///< Unique instance ID from system enumeration (equal to
+        property uint32_t StLinkUsbId; ///< ST-LINK-SERVER Device cookie in little endian format, to use in STLINK_TCP_CMD_OPEN_DEVICE
+        property String^ EnumUniqueId; ///< Unique instance ID from system enumeration (equal to
                                                    ///< device Serial number in some cases, but not always ...)
-        uint16_t VendorId;  ///< Vendor  ID from USB device descriptor (system enumeration)
-        uint16_t ProductId; ///< Product ID from USB device descriptor (system enumeration)
-        uint8_t DeviceUsed; ///< On windows, equal to 1 if device interface was already opened from 
+        property uint16_t VendorId;  ///< Vendor  ID from USB device descriptor (system enumeration)
+        property uint16_t ProductId; ///< Product ID from USB device descriptor (system enumeration)
+        property uint8_t DeviceUsed; ///< On windows, equal to 1 if device interface was already opened from 
                             ///< externally when enumerating or trying to open
         // NOTE: do not modify the existing fields in the structure. But for any evolution,
         // add a new field at the end in order to keep ascendant compatibility.
