@@ -42,6 +42,7 @@ namespace STLinkCLRWrapper
         Brg_StatusT BridgeStatus = Brg_StatusT::BRG_NO_ERR;
         STLinkIf_StatusT InterfaceStatus = STLinkIf_StatusT::NO_ERR;
         //const char* StringToCharPtr(String^ s);
+        Brg_StatusT CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size);
     public:
         Wrapper();
         ~Wrapper();
@@ -55,10 +56,11 @@ namespace STLinkCLRWrapper
 		STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo^>^% results);
         Brg_StatusT      OpenBridge(DeviceInfo^ device);
         Brg_StatusT      TestVoltage([Out] float% result);
-		Brg_StatusT       TestGetClock();
+		Brg_StatusT      TestGetClock();
 		Brg_StatusT		 GPIOInit();
 		Brg_StatusT		 GPIOWrite();
 		Brg_StatusT		 CanTest();
+        Brg_StatusT      CanInit(uint32_t reqBaudrate);
         
 	};
 }
