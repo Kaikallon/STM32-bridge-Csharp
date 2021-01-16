@@ -174,12 +174,12 @@ Brg_StatusT Wrapper::OpenBridge(DeviceInfo^ device)
     BridgeStatus = Bridge->OpenStlink(tempChar, true);
 	Marshal::FreeHGlobal((IntPtr)tempChar);
 
-
     if (BridgeStatus == Brg_StatusT::BRG_NOT_SUPPORTED)
     {
-        //BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices();
-        //Console::WriteLine(String::Format("BRIDGE not supported PID: 0X%04hx SN:%s", (unsigned short)deviceInfo->ProductId, gcnew String(deviceInfo->EnumUniqueId)));
-		// TODO: Throw exception
+		uint32_t numDevices;
+        BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices(&numDevices, false)); // Calling a EnumDevices seems to be a hack in order to get the lates status
+        Console::WriteLine(String::Format("BRIDGE not supported PID: 0X{0} SN:%{1}", device->ProductId, device->EnumUniqueId));
+		// TODO: Throw exception //TODO: Convert to hex
     }
 
     if (BridgeStatus == Brg_StatusT::BRG_OLD_FIRMWARE_WARNING)
@@ -328,12 +328,12 @@ Brg_StatusT Wrapper::GPIOWrite()
 
 Brg_StatusT Wrapper::CanTest()
 {
-	uint32_t currFreqKHz = 0;
-	uint8_t com = COM_CAN;
-	uint32_t StlHClkKHz, comInputClkKHz;
-	// Get the current bridge input Clk
-	BridgeStatus = Bridge->GetClk(com, &comInputClkKHz, &StlHClkKHz);
-	Console::WriteLine("CAN input CLK: {0} KHz, STLink HCLK: {1} KHz", (int)comInputClkKHz, (int)StlHClkKHz);
+	//uint32_t currFreqKHz = 0;
+	//uint8_t com = COM_CAN;
+	//uint32_t StlHClkKHz, comInputClkKHz;
+	//// Get the current bridge input Clk
+	//BridgeStatus = Bridge->GetClk(com, &comInputClkKHz, &StlHClkKHz);
+	//Console::WriteLine("CAN input CLK: {0} KHz, STLink HCLK: {1} KHz", (int)comInputClkKHz, (int)StlHClkKHz);
 	
 	// EXAMPLE FOR CAN Initialization, Brg::InitCAN(), Brg::GetCANbaudratePrescal()
 	//**********[Missing init steps] * *********
@@ -348,13 +348,16 @@ Brg_StatusT Wrapper::CanTest()
 	canParam.BitTimeConf.PhaseSeg2InTq = 6;
 	canParam.BitTimeConf.SjwInTq = 3;
 	BridgeStatus = Bridge->GetCANbaudratePrescal(&canParam.BitTimeConf, reqBaudrate, (uint32_t*)&prescal, (uint32_t*)&finalBaudrate);
-	if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_MODIFIED) {
+	if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_MODIFIED) 
+	{
 		Console::WriteLine("WARNING Bridge CAN init baudrate asked {0} bps but applied {1} bps", (int)reqBaudrate, (int)finalBaudrate);
 	}
-	else if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED) { // TODO: Throw exception
+	else if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED) 
+	{ // TODO: Throw exception
         Console::WriteLine("ERROR Bridge CAN init baudrate {0} bps not possible (invalid prescaler: {1}) change Bit Time or baudrate settings. \n", (int)reqBaudrate, (int)prescal);
 	}
-	else if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+	else if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) 
+	{
 		canParam.Prescaler = prescal;
 		canParam.Mode = CAN_MODE_LOOPBACK;
 		canParam.bIsTxfpEn = false;
@@ -362,7 +365,7 @@ Brg_StatusT Wrapper::CanTest()
 		canParam.bIsNartEn = false;
 		canParam.bIsAwumEn = false;
 		canParam.bIsAbomEn = false;
-		BridgeStatus = Bridge->InitCAN(&canParam, BRG_INIT_FULL);
+		BridgeStatus = Bridge->InitCAN(&canParam, BRG_INIT_FULL); // TODO: Check for error
 	}
 	
 	//// EXAMPLE FOR CAN loopback test, Brg::StartMsgReceptionCAN() Brg::InitFilterCAN() Brg::WriteMsgCAN() Brg::GetRxMsgNbCAN() Brg::GetRxMsgCAN()</B>\n
