@@ -12,9 +12,28 @@ using Kvaser.KvadbLib;
 
 namespace CSharpTest
 {
+    public enum SignalEncoding
+    {
+        Intel = 0,
+        Motorola = 1
+    }
+    public enum SignalType
+    {
+        Invalid = 0,
+        Signed = 1,
+        Unsigned = 2,
+        Float = 3,
+        Double = 4
+    }
+    public enum MESSAGE
+    {
+        EXT = int.MinValue,
+        J1939 = 1,
+        WAKEUP = 2
+    }
     public static class CanDBHelper
     {
-        public static List<CanMessage> OpenCanDB(string fullFilePath)
+        public static List<CanMessageType> OpenCanDB(string fullFilePath)
         {
             Kvadblib.Hnd db_handle;
             Kvadblib.Status status;
@@ -33,7 +52,7 @@ namespace CSharpTest
             }
 
 
-            List<CanMessage> Messages = new List<CanMessage>();
+            List<CanMessageType> Messages = new List<CanMessageType>();
             // Get the first message in the database
             Kvadblib.MessageHnd messageHandle;
             status = Kvadblib.GetFirstMsg(db_handle, out messageHandle);
@@ -75,11 +94,11 @@ namespace CSharpTest
                 if (status != Kvadblib.Status.OK)
                     throw new Exception("kvaDbGetMsgDlc failed: " + status.ToString()); // TODO: Handle more gracefully
 
-                CanMessage tempCanMessage = new CanMessage
+                CanMessageType tempCanMessage = new CanMessageType
                 {
                     Comment = tempMessageComment,
                     DLC = tempMessageDlc,
-                    Flags = tempFlags,
+                    Flags = (MESSAGE)tempFlags,
                     ID = tempMessageID,
                     Name = tempMessageName,
                     QualifiedName = tempMessageQualifiedName,
@@ -141,10 +160,10 @@ namespace CSharpTest
                     if (status != Kvadblib.Status.OK)
                         throw new Exception("kvaDbGetSignalValueSize failed: " + status.ToString()); // TODO: Handle more gracefully
 
-                    CanSignal tempCanSignal = new CanSignal
+                    CanSignalType tempCanSignal = new CanSignalType
                     {
                         Comment = tempSignalComment,
-                        Encoding = tempSignalEncoding,
+                        Encoding = (SignalEncoding)tempSignalEncoding,
                         Length = tempLength,
                         MaxValue = tempMaxval,
                         MinValue = tempMinval,
@@ -153,7 +172,7 @@ namespace CSharpTest
                         QualifiedName = tempSignalQualifiedName,
                         ScaleFactor = tempScaleFactor,
                         StartBit = tempStartbit,
-                        Type = tempSignalType,
+                        Type = (SignalType)tempSignalType,
                         Unit = tempSignalUnit,
                     };
                     tempCanMessage.Signals.Add(tempCanSignal);
@@ -168,26 +187,26 @@ namespace CSharpTest
             return Messages;
         }
     }
-    public class CanMessage
+    public class CanMessageType
     {
         public string Name { get; set; }
         public string QualifiedName { get; set; }
         public string Comment { get; set; }
         public int ID { get; set; }
-        public Kvadblib.MESSAGE Flags { get; set; }
+        public MESSAGE Flags { get; set; }
         public int DLC { get; set; }
 
-        public List<CanSignal> Signals { get; } = new List<CanSignal>();
+        public List<CanSignalType> Signals { get; } = new List<CanSignalType>();
     }
 
-    public class CanSignal
+    public class CanSignalType
     {
         public string Name { get; set; }
         public string QualifiedName { get; set; }
         public string Comment { get; set; }
         public string Unit { get; set; }
-        public Kvadblib.SignalEncoding Encoding { get; set; }
-        public Kvadblib.SignalType Type { get; set; }
+        public SignalEncoding Encoding { get; set; }
+        public SignalType Type { get; set; }
         public int StartBit { get; set; }
         public int Length { get; set; }
         public double MinValue { get; set; }

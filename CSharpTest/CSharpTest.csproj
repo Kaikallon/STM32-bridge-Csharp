@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Kvaser.KvaDbLib">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Kvaser\Canlib\dotnet\win32\netstandard2.0\Kvaser.KvaDbLib.dll</HintPath>
+      <HintPath>.\Kvaser.KvaDbLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
