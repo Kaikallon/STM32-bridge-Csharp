@@ -95,6 +95,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="STLinkUSBDriver.dll" />
+    <None Include="..\Dependencies\STLinkUSBDriver.dll" />
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@ START DATE : 2020-03-02
 #include "stdafx.h"
 #include "Wrapper.h"
 using namespace System;
-using namespace STLinkCLRWrapper;
+using namespace STLinkBridgeWrapper;
 
 
 Wrapper::Wrapper()
@@ -326,6 +326,8 @@ Brg_StatusT Wrapper::GPIOWrite()
 	return BridgeStatus;
 }
 
+
+// This CanTest function is similar to what ST provided as a test function, but modified to work in a CLR envirnoment.
 Brg_StatusT Wrapper::CanTest()
 {
 	//uint32_t currFreqKHz = 0;
@@ -443,45 +445,53 @@ Brg_StatusT Wrapper::CanTest()
     return BridgeStatus;
 }
 
-Brg_StatusT STLinkCLRWrapper::Wrapper::CanInit(uint32_t reqBaudrate)
+// Simple version of CanInit with only baud rate as selectable parameter.
+// See http://www.bittiming.can-wiki.info/ for clues about how to select the bit timing parameters
+Brg_StatusT Wrapper::CanInit(uint32_t RequestedBaudrate, bool loopback)
 {
-    //uint8_t com = COM_CAN;
-    //uint32_t StlHClkKHz, comInputClkKHz;
-    //
-    //// Get the current bridge input Clk
-    //BridgeStatus = Bridge->GetClk(com, &comInputClkKHz, &StlHClkKHz);
-    //Console::WriteLine("CAN input CLK: {0} KHz, STLink HCLK: {1} KHz", (int)comInputClkKHz, (int)StlHClkKHz);
-
-    // EXAMPLE FOR CAN Initialization, Brg::InitCAN(), Brg::GetCANbaudratePrescal()
-    //**********[Missing init steps] * *********
     Brg_CanInitT canParam;
     uint32_t prescal;
     uint32_t finalBaudrate = 0; // TODO: Return this
 
     // N=sync+prop+seg1+seg2= 1+2+7+6= 16, 125000 bps (-> prescal = 24 = (CanClk = 48MHz)/(16*125000))
-    canParam.BitTimeConf.PropSegInTq = 2;
+    canParam.BitTimeConf.PropSegInTq   = 2;
     canParam.BitTimeConf.PhaseSeg1InTq = 7;
     canParam.BitTimeConf.PhaseSeg2InTq = 6;
-    canParam.BitTimeConf.SjwInTq = 3;
-    BridgeStatus = Bridge->GetCANbaudratePrescal(&canParam.BitTimeConf, reqBaudrate, (uint32_t*)&prescal, (uint32_t*)&finalBaudrate);
-    if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_MODIFIED) 
-    {
-        Console::WriteLine("WARNING Bridge CAN init baudrate asked {0} bps but applied {1} bps", (int)reqBaudrate, (int)finalBaudrate);
+    canParam.BitTimeConf.SjwInTq       = 3;
+
+    canParam.Mode = loopback ? CAN_MODE_LOOPBACK : CAN_MODE_NORMAL;
+    canParam.bIsTxfpEn = false;
+    canParam.bIsRflmEn = false;
+    canParam.bIsNartEn = false;
+    canParam.bIsAwumEn = false;
+    canParam.bIsAbomEn = false;
+
+    BridgeStatus = CanInit(RequestedBaudrate, canParam);
+
+
+    return BridgeStatus;
+}
+
+// More advanced version of CanInit with all options exposed.
+Brg_StatusT Wrapper::CanInit(uint32_t RequestedBaudrate, Brg_CanInitT canParam)
+{
+    uint32_t prescal;
+    uint32_t finalBaudrate = 0; // TODO: Return this
+
+    BridgeStatus = Bridge->GetCANbaudratePrescal(&canParam.BitTimeConf, RequestedBaudrate, (uint32_t*)&prescal, (uint32_t*)&finalBaudrate);
+
+    if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED)
+    { 
+        throw gcnew Exception("ERROR: Bridge CAN init baudrate " + RequestedBaudrate + " bps not possible (invalid prescaler: " + prescal + ") change Bit Time or baudrate settings.");
     }
-    else if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED) 
-    { // TODO: Throw exception
-        Console::WriteLine("ERROR Bridge CAN init baudrate {0} bps not possible (invalid prescaler: {1}) change Bit Time or baudrate settings. \n", (int)reqBaudrate, (int)prescal);
-    }
-    else if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) 
+    else if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
     {
         canParam.Prescaler = prescal;
-        canParam.Mode = CAN_MODE_LOOPBACK;
-        canParam.bIsTxfpEn = false;
-        canParam.bIsRflmEn = false;
-        canParam.bIsNartEn = false;
-        canParam.bIsAwumEn = false;
-        canParam.bIsAbomEn = false;
-        BridgeStatus = Bridge->InitCAN(&canParam, BRG_INIT_FULL);
+        BridgeStatus = Bridge->InitCAN(&canParam, BRG_INIT_FULL); // Note: This requires a CAN tranceiver to be connected
+        if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) // TODO: Check for specific error
+        {
+            throw gcnew Exception("ERROR: No tranceiver connected."); 
+        }
     }
 
     return BridgeStatus;
@@ -503,7 +513,8 @@ Brg_StatusT Wrapper::CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx,
 	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
 		uint16_t dataSize;
 		int retry = 100;
-		while ((retry > 0) && (msgNb == 0)) {
+		while ((retry > 0) && (msgNb == 0)) 
+        {
 			BridgeStatus = Bridge->GetRxMsgNbCAN(&msgNb);
 			retry--;
 			Sleep(1);
@@ -553,3 +564,120 @@ Brg_StatusT Wrapper::CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx,
 //    const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
 //    return chars;
 //}
+
+Brg_StatusT Wrapper::CanRead([Out] List<CanBridgeMessage^>^% results)
+{
+    if (Bridge == NULL)
+    {
+        throw gcnew Exception("Error: Bridge not initialized.");
+    }
+
+    // Get the number of available messages
+    uint16_t canMsgNum;
+    BridgeStatus = Bridge->GetRxMsgNbCAN(&canMsgNum);
+    
+    // Allocate space, and get the messages
+    Brg_CanRxMsgT msg;
+    uint8_t data[8]; // Allocate enough space. Note that some might go unused, depending on how many DLCs are used.
+    uint16_t numberOfReceivedDataBytes;
+
+    for (int i = 0; i < canMsgNum; i++)
+    {
+        BridgeStatus = Bridge->GetRxMsgCAN(&msg, 1, data, 8, &numberOfReceivedDataBytes); // Fetch one message at a time
+        
+        CanBridgeMessage^ tempMessage;
+        tempMessage->CanTimeStamp  =  msg.TimeStamp;
+        tempMessage->DLC           =  msg.DLC;
+        tempMessage->ID            =  msg.ID;
+        tempMessage->Fifo          = (msg.Fifo    == CAN_MSG_RX_FIFO1    ? true : false);
+        tempMessage->IdExtended    = (msg.IDE     == CAN_ID_EXTENDED     ? true : false);
+        tempMessage->OverrunBuffer = (msg.Overrun == CAN_RX_BUFF_OVERRUN ? true : false);
+        tempMessage->OverrunFIFO   = (msg.Overrun == CAN_RX_FIFO_OVERRUN ? true : false);
+        tempMessage->RTR           = (msg.RTR     == CAN_REMOTE_FRAME    ? true : false);
+        tempMessage->TimeStamp     =  System::DateTime::Now.Ticks;
+        Marshal::Copy((IntPtr)data, tempMessage->data, 0, 8);
+        results->Add(tempMessage);
+    }
+
+    return BridgeStatus;
+}
+
+Brg_StatusT Wrapper::CanWrite(CanBridgeMessage^ message)
+{
+    Brg_CanTxMsgT tempMessage;
+    tempMessage.IDE = message->IdExtended ? CAN_ID_EXTENDED : CAN_ID_STANDARD;
+    tempMessage.ID  = message->ID;
+    tempMessage.RTR = message->RTR ? CAN_REMOTE_FRAME : CAN_DATA_FRAME;
+    tempMessage.DLC = message->data->Length;
+
+    // Allocate
+    uint8_t* data = new uint8_t[tempMessage.DLC];
+    for (int i = 0; i < tempMessage.DLC; i++)
+    {
+        data[i] = message->data[i];
+    }
+
+    BridgeStatus = Bridge->WriteMsgCAN(&tempMessage, data, tempMessage.DLC);
+
+    // Clean up
+    delete[] data;
+    data = NULL;
+    return BridgeStatus;
+}
+
+
+Brg_StatusT Wrapper::StartTransmission()
+{
+    BridgeStatus = Bridge->StartMsgReceptionCAN();
+    if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
+    {
+        throw gcnew Exception("CAN StartMsgReceptionCAN failed");
+    }
+
+    // Receive all messages (no filter) with all DLC possible size (0->8)
+    // Filter0: CAN prepare receive (no filter: ID_MASK with Id =0 & Mask = 0) receive all in FIFO0
+    Brg_CanFilterConfT filterConf;
+    int i;
+    filterConf.AssignedFifo = CAN_MSG_RX_FIFO0;
+    filterConf.bIsFilterEn = true;
+    filterConf.FilterBankNb = 0; //0 to 13
+    filterConf.FilterMode = CAN_FILTER_ID_MASK; // CAN_FILTER_ID_LIST
+    filterConf.FilterScale = CAN_FILTER_16BIT; // CAN_FILTER_32BIT
+    for (i = 0; i < 4; i++) 
+    {
+        filterConf.Id[i].ID = 0;
+        filterConf.Id[i].IDE = CAN_ID_STANDARD;
+        filterConf.Id[i].RTR = CAN_DATA_FRAME;
+    }
+    for (i = 0; i < 2; i++) 
+    {
+        filterConf.Mask[i].ID = 0;
+        filterConf.Mask[i].IDE = CAN_ID_STANDARD;
+        filterConf.Mask[i].RTR = CAN_DATA_FRAME;
+    }
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) 
+    {
+        BridgeStatus = Bridge->InitFilterCAN(&filterConf);
+        if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) 
+        {
+            throw gcnew Exception("CAN filter init failed. Check the filter configuration.");
+        }
+    }
+
+    // TODO: Start polling
+
+    return BridgeStatus;
+}
+
+Brg_StatusT Wrapper::StopTransmission()
+{
+    BridgeStatus = Bridge->StopMsgReceptionCAN();
+    if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
+    {
+        throw gcnew Exception("CAN StopMsgReceptionCAN failed"); 
+    }
+
+    // TODO: Stop polling
+    return BridgeStatus;
+}
+

@@ -17,7 +17,7 @@ using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
 
 
-namespace STLinkCLRWrapper
+namespace STLinkBridgeWrapper
 {
     // Structure used to contain the device info data for CLR, copied and modified from stlink_interface.h
     public ref struct DeviceInfo
@@ -33,25 +33,52 @@ namespace STLinkCLRWrapper
         // add a new field at the end in order to keep ascendant compatibility.
     };
 
+    //public ref struct CANMessage 
+    //{
+    //    uint32_t id;
+    //    array<Byte^>^ data = gcnew array<Byte^>(8); // bytes object
+    //    bool remote;
+    //    bool extended;
+    //};
+
+    public ref struct CanBridgeMessage
+    {
+        bool     IdExtended;       ///< Specifies if ID is standard (11-bit) or extended (29-bit) identifier.
+        uint32_t ID;               ///< Identifier of the message (11bit or 29bit according to IDE).
+        bool     RTR;              ///< Remote Frame Request or data frame message type.
+        uint8_t  DLC;              ///< Data Length Code is the number of data bytes in the received message 
+                                   ///< or number of data bytes requested by RTR.
+        bool     Fifo;             ///< Fifo in which the message was received (according to Filter initialization done
+                                   ///< with Brg::InitFilterCAN(): AssignedFifo in #Brg_CanFilterConfT)
+        bool OverrunFIFO;          ///< Indicate if overrun has occurred before this message. STLink CAN HW fifo overrun
+        bool OverrunBuffer;        ///< Indicate if overrun has occurred before this message. STLink CAN Rx buffer overrun
+        uint16_t CanTimeStamp;     ///< unused
+        int64_t TimeStamp;         // Computer time at recieval
+        array<Byte>^ data = gcnew array<Byte>(8);
+
+    } ;
+
     public ref class Wrapper
     {
     private:
         STLinkInterface* sTLinkInterface = NULL;
         Brg* Bridge = NULL;
-        //STLink_DeviceInfo2T* deviceInfo = NULL;
-        Brg_StatusT BridgeStatus = Brg_StatusT::BRG_NO_ERR;
+
+    protected:
+        Brg_StatusT      BridgeStatus = Brg_StatusT::BRG_NO_ERR;
         STLinkIf_StatusT InterfaceStatus = STLinkIf_StatusT::NO_ERR;
-        //const char* StringToCharPtr(String^ s);
-        Brg_StatusT CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size);
+        Brg_StatusT      CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size);
+        Brg_StatusT      StartTransmission();
+        Brg_StatusT      StopTransmission();
     public:
         Wrapper();
         ~Wrapper();
 		!Wrapper();
 
 
-        Brg_StatusT InitBridge(DeviceInfo^ device);
+        Brg_StatusT      InitBridge(DeviceInfo^ device);
         STLinkIf_StatusT GetInterfaceStatus();
-        Brg_StatusT GetBridgeStatus();
+        Brg_StatusT      GetBridgeStatus();
 
 		STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo^>^% results);
         Brg_StatusT      OpenBridge(DeviceInfo^ device);
@@ -60,7 +87,11 @@ namespace STLinkCLRWrapper
 		Brg_StatusT		 GPIOInit();
 		Brg_StatusT		 GPIOWrite();
 		Brg_StatusT		 CanTest();
-        Brg_StatusT      CanInit(uint32_t reqBaudrate);
-        
+        Brg_StatusT      CanInit(uint32_t RequestedBaudrate, bool loopback );
+        Brg_StatusT      CanInit(uint32_t RequestedBaudrate, Brg_CanInitT canParam);
+
+        Brg_StatusT      CanRead([Out] List<CanBridgeMessage^>^% results);
+        Brg_StatusT      CanWrite(CanBridgeMessage^ message);
+
 	};
 }

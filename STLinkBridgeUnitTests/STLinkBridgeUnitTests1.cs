@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using STLinkCLRWrapper;
+using STLinkBridgeWrapper;
 using System.Linq;
 using System.Diagnostics;
 
