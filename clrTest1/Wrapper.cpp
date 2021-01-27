@@ -13,6 +13,7 @@ START DATE : 2020-03-02
 #include "Wrapper.h"
 using namespace System;
 using namespace STLinkBridgeWrapper;
+using namespace System::Diagnostics;
 
 
 Wrapper::Wrapper()
@@ -575,7 +576,8 @@ Brg_StatusT Wrapper::CanRead([Out] List<CanBridgeMessage^>^% results)
     // Get the number of available messages
     uint16_t canMsgNum;
     BridgeStatus = Bridge->GetRxMsgNbCAN(&canMsgNum);
-    
+    Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
+
     // Allocate space, and get the messages
     Brg_CanRxMsgT msg;
     uint8_t data[8]; // Allocate enough space. Note that some might go unused, depending on how many DLCs are used.
@@ -584,8 +586,9 @@ Brg_StatusT Wrapper::CanRead([Out] List<CanBridgeMessage^>^% results)
     for (int i = 0; i < canMsgNum; i++)
     {
         BridgeStatus = Bridge->GetRxMsgCAN(&msg, 1, data, 8, &numberOfReceivedDataBytes); // Fetch one message at a time
-        
-        CanBridgeMessage^ tempMessage;
+        Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
+
+        CanBridgeMessage^ tempMessage = gcnew CanBridgeMessage();
         tempMessage->CanTimeStamp  =  msg.TimeStamp;
         tempMessage->DLC           =  msg.DLC;
         tempMessage->ID            =  msg.ID;
@@ -618,6 +621,7 @@ Brg_StatusT Wrapper::CanWrite(CanBridgeMessage^ message)
     }
 
     BridgeStatus = Bridge->WriteMsgCAN(&tempMessage, data, tempMessage.DLC);
+    Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
     // Clean up
     delete[] data;

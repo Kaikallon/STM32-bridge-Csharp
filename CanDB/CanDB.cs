@@ -185,28 +185,7 @@ namespace CanDB
             Kvadblib.Close(db_handle);
             return Messages;
         }
-        public static double ConvertFromCanToDouble(CanSignalType signalType, BitArray bitArray)
-        {
-            // Isolate relevant bits using precalculated bitmask
-            UInt64[] bits = new UInt64[1];
-            bitArray.And(signalType.BitMask).CopyTo(bits, 0);
-            double value = bits[0];
 
-            // Apply inverse transform to restore actual value
-            value -= signalType.Offset;
-            value /= signalType.ScaleFactor;
-            return value;
-        }
-
-        public static UInt64 ConvertFromDoubleToCan(CanSignalType signalType, double value)
-        {
-            // Apply transform in preparation for sending value on bus
-            value *= signalType.ScaleFactor;
-            value += signalType.Offset;
-
-
-            throw new NotImplementedException();
-        }
     }
     public class CanMessageType
     {
@@ -217,7 +196,7 @@ namespace CanDB
         public MESSAGE Flags { get; set; }
         public int DLC { get; set; }
 
-        public List<CanSignalType> Signals { get; } = new List<CanSignalType>();
+        public List<CanSignalType> Signals { get; set; } = new List<CanSignalType>();
     }
 
     public class CanSignalType
@@ -235,16 +214,17 @@ namespace CanDB
         public double ScaleFactor { get; set; }
         public double Offset { get; set; }
         public List<DataPoint> DataPoints { get; } = new List<DataPoint>();
-        public BitArray BitMask { get; private set; }
+        public UInt64 BitMask { get; private set; } = 0;
         public void CalculateBitMask()
         {
-            bool[] tempMask = new bool[64];
-            for(int i = 0; i<Length; i++)
+            for (int i = StartBit; i < StartBit + Length; i++)
             {
-                tempMask[i + StartBit] = true;
+                // Set the bits between startbit and StartBit + Length to one
+                BitMask = BitMask | ((UInt64)1 << i);
             }
-            BitMask = new BitArray(tempMask);
+
         }
+        public double WriteValue { get; set; }
     }
 
     public struct DataPoint

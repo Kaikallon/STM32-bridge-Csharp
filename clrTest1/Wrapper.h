@@ -70,6 +70,8 @@ namespace STLinkBridgeWrapper
         Brg_StatusT      CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size);
         Brg_StatusT      StartTransmission();
         Brg_StatusT      StopTransmission();
+        Brg_StatusT      CanRead([Out] List<CanBridgeMessage^>^% results);
+        Brg_StatusT      CanWrite(CanBridgeMessage^ message);
     public:
         Wrapper();
         ~Wrapper();
@@ -90,8 +92,7 @@ namespace STLinkBridgeWrapper
         Brg_StatusT      CanInit(uint32_t RequestedBaudrate, bool loopback );
         Brg_StatusT      CanInit(uint32_t RequestedBaudrate, Brg_CanInitT canParam);
 
-        Brg_StatusT      CanRead([Out] List<CanBridgeMessage^>^% results);
-        Brg_StatusT      CanWrite(CanBridgeMessage^ message);
+        
 
 	};
 }

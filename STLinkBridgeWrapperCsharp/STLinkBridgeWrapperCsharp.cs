@@ -18,9 +18,9 @@ namespace STLinkBridgeWrapper
     {
         public delegate void CanMessageReceivedHandler(object sender, CanMessageReceivedEventArgs e);
         public event CanMessageReceivedHandler CanMessageReceived;
-        protected Timer CanPollingTimer;
+        protected Timer CanPollingTimer = new Timer();
 
-        SortedList<uint, CanMessageType> canMessageTypes;
+        public SortedList<uint, CanMessageType> canMessageTypes;
 
         public STLinkBridgeWrapperCsharp()
         {
@@ -44,8 +44,7 @@ namespace STLinkBridgeWrapper
 
         private void CanPollingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // TODO: Perform polling
-            List<CanBridgeMessage> receivedMessages;
+            List<CanBridgeMessage> receivedMessages = new List<CanBridgeMessage>(); ;
             base.CanRead(out receivedMessages);
 
             foreach(var message in receivedMessages)
@@ -57,13 +56,25 @@ namespace STLinkBridgeWrapper
                 }
                 if (message.OverrunBuffer || message.Fifo) 
                 {
-                    CanPollingTimer.Interval /= 1.2; // Polling too slow. Poll faster
+                    CanPollingTimer.Interval /= 1.2; // Polling was too slow. Poll faster
                 }
 
-                BitArray bitArray = new BitArray(message.data);
                 foreach (var signalType in canMessage.Signals)
                 {
-                    double tempValue = CanDB.CanDB.ConvertFromCanToDouble(signalType, bitArray);
+                    // TODO: Check if the bitmask has been calculated
+                    // Isolate relevant bits using precalculated bitmask
+                    UInt64 bits = BitConverter.ToUInt64(message.data, 0);
+                    bits &= signalType.BitMask;
+
+                    // Shift back to original state according to specification
+                    bits >>= signalType.StartBit;
+
+
+                    double tempValue = (double)bits;
+
+                    // Apply inverse transform to restore actual value
+                    tempValue -= signalType.Offset;
+                    tempValue /= signalType.ScaleFactor;
                     signalType.DataPoints.Add(new DataPoint
                     {
                         Ticks = message.TimeStamp,
@@ -72,8 +83,71 @@ namespace STLinkBridgeWrapper
                     });
                 }
             }
+
+            if (receivedMessages.Count > 0)
+            {
+                CanMessageReceived?.BeginInvoke(this, new CanMessageReceivedEventArgs(), CanMessageReceivedEndAsyncEvent, null);
+            }
         }
-    } 
-    
-    
+
+        public List<CanBridgeMessage> CanRead()
+        {
+            List<CanBridgeMessage> receivedMessages = new List<CanBridgeMessage>(); ;
+            base.CanRead(out receivedMessages);
+            return receivedMessages;
+        }
+
+        public Brg_StatusT CanWrite(CanMessageType canMessageType)
+        {
+            CanBridgeMessage message = new CanBridgeMessage
+            {
+                ID = (uint)canMessageType.ID,
+                IdExtended = canMessageType.Flags == MESSAGE.EXT,
+                RTR = false,                
+            };
+
+            UInt64 payload = 0;
+            foreach(var signal in canMessageType.Signals)
+            {
+                // Scale and offset value according to signal secification
+                double tranformedValue = signal.WriteValue * signal.ScaleFactor;
+                tranformedValue += signal.Offset;
+
+                // Cast to integer. The scaling should have been chosen such that this casting is okay.
+                var intValue = (UInt64)tranformedValue;
+
+                // Get the bits, trim and shift according to specification
+                UInt64 bits = intValue;
+                UInt64 trimmingMask = 0;
+                for (int i = 0; i<signal.Length; i++)
+                {
+                    trimmingMask |= ((UInt64)1 << i);
+                }
+                bits &= trimmingMask; // Trim
+                bits <<= signal.StartBit;
+
+                // Add to payload
+                payload |= bits;
+            }
+            message.data = BitConverter.GetBytes(payload);
+            return base.CanWrite(message);
+        }
+
+        private void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
+        {
+            var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
+            var invokedMethod = (CanMessageReceivedHandler)ar.AsyncDelegate;
+
+            try
+            {
+                invokedMethod.EndInvoke(iar);
+            }
+            catch (Exception e)
+            {
+                // Handle any exceptions that were thrown by the invoked method
+                // Console.WriteLine("An event listener went kaboom!");
+                // TODO: Handle this?
+            }
+        }
+    }
 }

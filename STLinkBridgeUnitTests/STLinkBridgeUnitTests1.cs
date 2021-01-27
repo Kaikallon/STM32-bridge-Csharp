@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using STLinkBridgeWrapper;
 using System.Linq;
 using System.Diagnostics;
-
+using CanDB;
 
 namespace STLinkBridgeUnitTests
 {
@@ -17,9 +17,6 @@ namespace STLinkBridgeUnitTests
             Wrapper wrapper = new Wrapper();
             var devices = new List<DeviceInfo>();
             STLinkIf_StatusT linkStatus = wrapper.EnumerateDevices(out devices);
-            Console.WriteLine("test1");
-            Debug.WriteLine("test2");
-            Trace.WriteLine("test3");
 
 
             DeviceInfo selectedDevice = devices.FirstOrDefault();
@@ -28,6 +25,7 @@ namespace STLinkBridgeUnitTests
 
             Brg_StatusT bridgeStatus = wrapper.OpenBridge(selectedDevice);
             bridgeStatus = wrapper.CanTest();
+
         }
     }
 }
