@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "STLinkBridgeCLRWrapper", "clrTest1\clrTest1.vcxproj", "{1765041A-710B-4085-8ABA-E1F618901390}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "STLinkBridgeCLRWrapper", "STLinkBridgeCLRWrapper\STLinkBridgeCLRWrapper.vcxproj", "{1765041A-710B-4085-8ABA-E1F618901390}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTest", "CSharpTest\CSharpTest.csproj", "{D89F3AAA-B2D2-4F51-AD40-E727FB817769}"
 EndProject

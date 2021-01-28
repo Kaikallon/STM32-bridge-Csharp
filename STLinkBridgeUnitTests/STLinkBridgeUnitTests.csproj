@@ -62,7 +62,7 @@
       <Project>{fee5cb1f-cc58-42b1-8665-f407cbd5843a}</Project>
       <Name>CanDB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\clrTest1\clrTest1.vcxproj">
+    <ProjectReference Include="..\STLinkBridgeCLRWrapper\STLinkBridgeCLRWrapper.vcxproj">
       <Project>{1765041a-710b-4085-8aba-e1f618901390}</Project>
       <Name>STLinkBridgeCLRWrapper</Name>
     </ProjectReference>
