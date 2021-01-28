@@ -87,6 +87,10 @@
       <Project>{1765041a-710b-4085-8aba-e1f618901390}</Project>
       <Name>STLinkBridgeCLRWrapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\STLinkBridgeWrapperCsharp\STLinkBridgeWrapperCsharp.csproj">
+      <Project>{5fa49743-1bc1-4aa4-87b4-c2cec8f7ab3c}</Project>
+      <Name>STLinkBridgeWrapperCsharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

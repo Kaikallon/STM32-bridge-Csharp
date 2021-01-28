@@ -27,7 +27,7 @@ namespace CSharpTest
             STLinkIf_StatusT status = wrapper.EnumerateDevices(out devices);
             dgv_stLinks.DataSource = devices;
         }
-        Wrapper wrapper = new Wrapper();
+        STLinkBridgeWrapper.STLinkBridgeWrapper wrapper = new STLinkBridgeWrapper.STLinkBridgeWrapper();
 
         private void btn_OpenBridge_Click(object sender, EventArgs e)
         {

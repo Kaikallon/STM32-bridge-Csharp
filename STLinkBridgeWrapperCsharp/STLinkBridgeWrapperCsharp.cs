@@ -14,15 +14,15 @@ namespace STLinkBridgeWrapper
         
     }
 
-    public class STLinkBridgeWrapperCsharp : Wrapper
+    public class STLinkBridgeWrapper : STLinkBridgeWrapperCpp
     {
         public delegate void CanMessageReceivedHandler(object sender, CanMessageReceivedEventArgs e);
         public event CanMessageReceivedHandler CanMessageReceived;
         protected Timer CanPollingTimer = new Timer();
-
+        
         public SortedList<uint, CanMessageType> canMessageTypes;
 
-        public STLinkBridgeWrapperCsharp()
+        public STLinkBridgeWrapper()
         {
             CanPollingTimer.Elapsed += CanPollingTimer_Elapsed;
 
@@ -44,8 +44,8 @@ namespace STLinkBridgeWrapper
 
         private void CanPollingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            List<CanBridgeMessage> receivedMessages = new List<CanBridgeMessage>(); ;
-            base.CanRead(out receivedMessages);
+            List<CanBridgeMessageRx> receivedMessages = new List<CanBridgeMessageRx>(); ;
+            base.CanReadLL(out receivedMessages);
 
             foreach(var message in receivedMessages)
             {
@@ -57,13 +57,15 @@ namespace STLinkBridgeWrapper
                 if (message.OverrunBuffer || message.Fifo) 
                 {
                     CanPollingTimer.Interval /= 1.2; // Polling was too slow. Poll faster
+                    // TODO: Raise event maybe?
                 }
 
                 foreach (var signalType in canMessage.Signals)
                 {
                     // TODO: Check if the bitmask has been calculated
                     // Isolate relevant bits using precalculated bitmask
-                    UInt64 bits = BitConverter.ToUInt64(message.data, 0);
+                    //UInt64 bits = BitConverter.ToUInt64(message.data, 0);
+                    UInt64 bits = message.data;
                     bits &= signalType.BitMask;
 
                     // Shift back to original state according to specification
@@ -90,20 +92,21 @@ namespace STLinkBridgeWrapper
             }
         }
 
-        public List<CanBridgeMessage> CanRead()
+        public List<CanBridgeMessageRx> CanRead()
         {
-            List<CanBridgeMessage> receivedMessages = new List<CanBridgeMessage>(); ;
-            base.CanRead(out receivedMessages);
+            List<CanBridgeMessageRx> receivedMessages = new List<CanBridgeMessageRx>(); ;
+            base.CanReadLL(out receivedMessages);
             return receivedMessages;
         }
 
         public Brg_StatusT CanWrite(CanMessageType canMessageType)
         {
-            CanBridgeMessage message = new CanBridgeMessage
+            CanBridgeMessageTx message = new CanBridgeMessageTx
             {
                 ID = (uint)canMessageType.ID,
                 IdExtended = canMessageType.Flags == MESSAGE.EXT,
-                RTR = false,                
+                RTR = false,
+                DLC = (byte)canMessageType.DLC,
             };
 
             UInt64 payload = 0;
@@ -114,23 +117,18 @@ namespace STLinkBridgeWrapper
                 tranformedValue += signal.Offset;
 
                 // Cast to integer. The scaling should have been chosen such that this casting is okay.
-                var intValue = (UInt64)tranformedValue;
+                var bits = (UInt64)tranformedValue;
 
                 // Get the bits, trim and shift according to specification
-                UInt64 bits = intValue;
-                UInt64 trimmingMask = 0;
-                for (int i = 0; i<signal.Length; i++)
-                {
-                    trimmingMask |= ((UInt64)1 << i);
-                }
-                bits &= trimmingMask; // Trim
                 bits <<= signal.StartBit;
+                bits &= signal.BitMask; // Trim
 
                 // Add to payload
                 payload |= bits;
             }
-            message.data = BitConverter.GetBytes(payload);
-            return base.CanWrite(message);
+            message.data = payload;
+
+            return base.CanWriteLL(message);
         }
 
         private void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)

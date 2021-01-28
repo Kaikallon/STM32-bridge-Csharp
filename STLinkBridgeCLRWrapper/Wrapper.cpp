@@ -16,7 +16,7 @@ using namespace STLinkBridgeWrapper;
 using namespace System::Diagnostics;
 
 
-Wrapper::Wrapper()
+STLinkBridgeWrapperCpp::STLinkBridgeWrapperCpp()
 {
     // Create USB BRIDGE interface
 	this->sTLinkInterface = new STLinkInterface(STLINK_BRIDGE);
@@ -45,12 +45,12 @@ Wrapper::Wrapper()
     }
 }
 
-Wrapper::~Wrapper()
+STLinkBridgeWrapperCpp::~STLinkBridgeWrapperCpp()
 {
-	this->!Wrapper();
+	this->!STLinkBridgeWrapperCpp();
 }
 
-Wrapper::!Wrapper()
+STLinkBridgeWrapperCpp::!STLinkBridgeWrapperCpp()
 {
 	//delete deviceInfo;
 	//deviceInfo = NULL;
@@ -73,7 +73,7 @@ Wrapper::!Wrapper()
 }
 
 
-Brg_StatusT Wrapper::InitBridge(DeviceInfo^ device)
+Brg_StatusT STLinkBridgeWrapperCpp::InitBridge(DeviceInfo^ device)
 {
 	Console::WriteLine("Is StLink connected?: " + Bridge->GetIsStlinkConnected().ToString());
 	BridgeStatus = OpenBridge(device);
@@ -93,17 +93,17 @@ Brg_StatusT Wrapper::InitBridge(DeviceInfo^ device)
 	return BridgeStatus;
 }
 
-STLinkIf_StatusT Wrapper::GetInterfaceStatus()
+STLinkIf_StatusT STLinkBridgeWrapperCpp::GetInterfaceStatus()
 {
     return this->InterfaceStatus;
 }
 
-Brg_StatusT Wrapper::GetBridgeStatus()
+Brg_StatusT STLinkBridgeWrapperCpp::GetBridgeStatus()
 {
     return this->BridgeStatus;
 }
 
-STLinkIf_StatusT Wrapper::EnumerateDevices([Out] List<DeviceInfo^>^% results)
+STLinkIf_StatusT STLinkBridgeWrapperCpp::EnumerateDevices([Out] List<DeviceInfo^>^% results)
 {
     uint32_t numDevices;
     // Safety check
@@ -154,7 +154,7 @@ STLinkIf_StatusT Wrapper::EnumerateDevices([Out] List<DeviceInfo^>^% results)
     return InterfaceStatus;
 }
 
-Brg_StatusT Wrapper::OpenBridge(DeviceInfo^ device)
+Brg_StatusT STLinkBridgeWrapperCpp::OpenBridge(DeviceInfo^ device)
 {
     if (Bridge == NULL)
     {
@@ -191,7 +191,7 @@ Brg_StatusT Wrapper::OpenBridge(DeviceInfo^ device)
     return BridgeStatus;
 }
 
-Brg_StatusT Wrapper::TestVoltage([Out] float% result) 
+Brg_StatusT STLinkBridgeWrapperCpp::TestVoltage([Out] float% result) 
 {
     if (Bridge == NULL)
     {
@@ -217,7 +217,7 @@ Brg_StatusT Wrapper::TestVoltage([Out] float% result)
     return BridgeStatus;
 }
 
-Brg_StatusT Wrapper::TestGetClock()
+Brg_StatusT STLinkBridgeWrapperCpp::TestGetClock()
 {
 	// Test GET CLOCK command
 	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
@@ -244,7 +244,7 @@ Brg_StatusT Wrapper::TestGetClock()
 	return BridgeStatus;
 }
 
-Brg_StatusT Wrapper::GPIOInit()
+Brg_StatusT STLinkBridgeWrapperCpp::GPIOInit()
 {
 	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
 	{
@@ -291,7 +291,7 @@ Brg_StatusT Wrapper::GPIOInit()
 
 }
 
-Brg_StatusT Wrapper::GPIOWrite()
+Brg_StatusT STLinkBridgeWrapperCpp::GPIOWrite()
 {
 	Brg_GpioValT gpioReadVal[BRG_GPIO_MAX_NB] = { GPIO_RESET , GPIO_SET , GPIO_RESET , GPIO_SET };
 	uint8_t gpioMask = BRG_GPIO_ALL;
@@ -328,127 +328,10 @@ Brg_StatusT Wrapper::GPIOWrite()
 }
 
 
-// This CanTest function is similar to what ST provided as a test function, but modified to work in a CLR envirnoment.
-Brg_StatusT Wrapper::CanTest()
-{
-	//uint32_t currFreqKHz = 0;
-	//uint8_t com = COM_CAN;
-	//uint32_t StlHClkKHz, comInputClkKHz;
-	//// Get the current bridge input Clk
-	//BridgeStatus = Bridge->GetClk(com, &comInputClkKHz, &StlHClkKHz);
-	//Console::WriteLine("CAN input CLK: {0} KHz, STLink HCLK: {1} KHz", (int)comInputClkKHz, (int)StlHClkKHz);
-	
-	// EXAMPLE FOR CAN Initialization, Brg::InitCAN(), Brg::GetCANbaudratePrescal()
-	//**********[Missing init steps] * *********
-	Brg_CanInitT canParam;
-	uint32_t prescal;
-	uint32_t reqBaudrate = 125000; //125kbps
-	uint32_t finalBaudrate = 0;
-	
-	// N=sync+prop+seg1+seg2= 1+2+7+6= 16, 125000 bps (-> prescal = 24 = (CanClk = 48MHz)/(16*125000))
-	canParam.BitTimeConf.PropSegInTq = 2;
-	canParam.BitTimeConf.PhaseSeg1InTq = 7;
-	canParam.BitTimeConf.PhaseSeg2InTq = 6;
-	canParam.BitTimeConf.SjwInTq = 3;
-	BridgeStatus = Bridge->GetCANbaudratePrescal(&canParam.BitTimeConf, reqBaudrate, (uint32_t*)&prescal, (uint32_t*)&finalBaudrate);
-	if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_MODIFIED) 
-	{
-		Console::WriteLine("WARNING Bridge CAN init baudrate asked {0} bps but applied {1} bps", (int)reqBaudrate, (int)finalBaudrate);
-	}
-	else if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED) 
-	{ // TODO: Throw exception
-        Console::WriteLine("ERROR Bridge CAN init baudrate {0} bps not possible (invalid prescaler: {1}) change Bit Time or baudrate settings. \n", (int)reqBaudrate, (int)prescal);
-	}
-	else if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) 
-	{
-		canParam.Prescaler = prescal;
-		canParam.Mode = CAN_MODE_LOOPBACK;
-		canParam.bIsTxfpEn = false;
-		canParam.bIsRflmEn = false;
-		canParam.bIsNartEn = false;
-		canParam.bIsAwumEn = false;
-		canParam.bIsAbomEn = false;
-		BridgeStatus = Bridge->InitCAN(&canParam, BRG_INIT_FULL); // TODO: Check for error
-	}
-	
-	//// EXAMPLE FOR CAN loopback test, Brg::StartMsgReceptionCAN() Brg::InitFilterCAN() Brg::WriteMsgCAN() Brg::GetRxMsgNbCAN() Brg::GetRxMsgCAN()</B>\n
-	uint8_t dataRx[8], dataTx[8];
-	int i, nb;
-	Brg_CanFilterConfT filterConf;
-	Brg_CanRxMsgT canRxMsg;
-	Brg_CanTxMsgT canTxMsg;
-	uint8_t size = 0;
-	uint16_t msgNb = 0;
-	
-	BridgeStatus = Bridge->StartMsgReceptionCAN();
-	if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
-		Console::WriteLine("CAN StartMsgReceptionCAN failed"); // TODO: Throw exception
-	}
-	
-	// Loopback_test
-	// Receive all messages (no filter) with all DLC possible size (0->8)
-	// Filter0: CAN prepare receive (no filter: ID_MASK with Id =0 & Mask = 0) receive all in FIFO0
-	filterConf.AssignedFifo = CAN_MSG_RX_FIFO0;
-	filterConf.bIsFilterEn = true;
-	filterConf.FilterBankNb = 0; //0 to 13
-	filterConf.FilterMode = CAN_FILTER_ID_MASK; // CAN_FILTER_ID_LIST
-	filterConf.FilterScale = CAN_FILTER_16BIT; // CAN_FILTER_32BIT
-	for (i = 0; i < 4; i++) {
-		filterConf.Id[i].ID = 0;
-		filterConf.Id[i].IDE = CAN_ID_STANDARD;
-		filterConf.Id[i].RTR = CAN_DATA_FRAME;
-	}
-	for (i = 0; i < 2; i++) {
-		filterConf.Mask[i].ID = 0;
-		filterConf.Mask[i].IDE = CAN_ID_STANDARD;
-		filterConf.Mask[i].RTR = CAN_DATA_FRAME;
-	}
-	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
-		BridgeStatus = Bridge->InitFilterCAN(&filterConf);
-		if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
-			Console::WriteLine("CAN filter0 init failed"); // TODO: Throw exception
-		}
-	}
-	
-	canRxMsg.ID = 0;
-	canRxMsg.IDE = CAN_ID_EXTENDED; // must be = canTxMsg.IDE for the test
-	canRxMsg.RTR = CAN_DATA_FRAME; // must be = canTxMsg.RTR for the test
-	canRxMsg.DLC = 0;
-	
-	canTxMsg.ID = 0x12345678; // must be <=0x7FF for CAN_ID_STANDARD, <=0x1FFFFFFF
-	canTxMsg.IDE = CAN_ID_EXTENDED;
-	canTxMsg.RTR = CAN_DATA_FRAME;
-	canTxMsg.DLC = 0;
-	
-	nb = 0;
-	while ((BridgeStatus == Brg_StatusT::BRG_NO_ERR) && (nb < 255)) {
-	
-		for (i = 0; i < 8; i++) {
-			dataRx[i] = 0;
-			dataTx[i] = (uint8_t)(nb + i);
-		}
-		canRxMsg.DLC = 0;
-		canTxMsg.DLC = 2; // unused in CAN_DATA_FRAME
-		size = (uint8_t)(nb % 9); // try 0 to 8 DLC size
-	
-		if (nb == 200) { // do it only once
-			// REINIT command with same settings must be transparent and  must not break filter configuration
-			BridgeStatus = Bridge->InitCAN(&canParam, BRG_REINIT);
-		}
-		if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
-			BridgeStatus = CanMsgTxRxVerif(&canTxMsg, dataTx, &canRxMsg, dataRx, CAN_MSG_RX_FIFO0, size);
-		}
-		nb++;
-	}
-	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
-		Console::WriteLine(" Loopback_test1 OK");
-	}
-    return BridgeStatus;
-}
 
 // Simple version of CanInit with only baud rate as selectable parameter.
 // See http://www.bittiming.can-wiki.info/ for clues about how to select the bit timing parameters
-Brg_StatusT Wrapper::CanInit(uint32_t RequestedBaudrate, bool loopback)
+Brg_StatusT STLinkBridgeWrapperCpp::CanInit(uint32_t RequestedBaudrate, bool loopback)
 {
     Brg_CanInitT canParam;
     uint32_t prescal;
@@ -474,7 +357,7 @@ Brg_StatusT Wrapper::CanInit(uint32_t RequestedBaudrate, bool loopback)
 }
 
 // More advanced version of CanInit with all options exposed.
-Brg_StatusT Wrapper::CanInit(uint32_t RequestedBaudrate, Brg_CanInitT canParam)
+Brg_StatusT STLinkBridgeWrapperCpp::CanInit(uint32_t RequestedBaudrate, Brg_CanInitT canParam)
 {
     uint32_t prescal;
     uint32_t finalBaudrate = 0; // TODO: Return this
@@ -489,84 +372,20 @@ Brg_StatusT Wrapper::CanInit(uint32_t RequestedBaudrate, Brg_CanInitT canParam)
     {
         canParam.Prescaler = prescal;
         BridgeStatus = Bridge->InitCAN(&canParam, BRG_INIT_FULL); // Note: This requires a CAN tranceiver to be connected
-        if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) // TODO: Check for specific error
+        if (BridgeStatus == Brg_StatusT::BRG_CAN_ERR)
         {
             throw gcnew Exception("ERROR: No tranceiver connected."); 
+        }
+        else if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
+        {
+            throw gcnew Exception("ERROR: " + BridgeStatus.ToString());
         }
     }
 
     return BridgeStatus;
 }
 
-
-// send a message and verify it is received and that TX = Rx
-Brg_StatusT Wrapper::CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size)
-{
-	uint16_t msgNb = 0;
-	// Send message
-	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
-		BridgeStatus = Bridge->WriteMsgCAN(pCanTxMsg, pDataTx, size);
-		if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
-			Console::WriteLine("CAN Write Message error (Tx ID: 0x{0})", (unsigned int)pCanTxMsg->ID); // TODO: Throw exception // TODO: Convert to hex
-		}
-	}
-	// Receive message
-	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
-		uint16_t dataSize;
-		int retry = 100;
-		while ((retry > 0) && (msgNb == 0)) 
-        {
-			BridgeStatus = Bridge->GetRxMsgNbCAN(&msgNb);
-			retry--;
-			Sleep(1);
-		}
-		if (msgNb == 0) { // check if enough messages available
-			BridgeStatus = Brg_StatusT::BRG_TARGET_CMD_TIMEOUT;
-            Console::WriteLine("CAN Rx error (not enough msg available: 0/1)");// TODO: Throw exception
-		}
-		if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) { // read only 1 msg even if more available
-			BridgeStatus = Bridge->GetRxMsgCAN(pCanRxMsg, 1, pDataRx, 8, &dataSize);
-		}
-		if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
-            Console::WriteLine("CAN Read Message error (Tx ID: 0x{0}, nb of Rx msg available: {1})", (unsigned int)pCanTxMsg->ID, (int)msgNb);// TODO: Throw exception // TODO: Convert to hex
-		}
-		else {
-			if (pCanRxMsg->Fifo != rxFifo) {
-                Console::WriteLine("CAN Read Message FIFO error (Tx ID: 0x{0} in FIFO%d instead of {1})", (unsigned int)pCanTxMsg->ID, (int)pCanRxMsg->Fifo, (int)rxFifo);// TODO: Throw exception // TODO: Convert to hex
-				BridgeStatus = Brg_StatusT::BRG_VERIF_ERR;
-			}
-		}
-	}
-	// verif Rx = Tx
-	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
-		if ((pCanRxMsg->ID != pCanTxMsg->ID) || (pCanRxMsg->IDE != pCanTxMsg->IDE) || (pCanRxMsg->DLC != size) ||
-			(pCanRxMsg->Overrun != CAN_RX_NO_OVERRUN)) {
-			BridgeStatus = Brg_StatusT::BRG_CAN_ERR;
-            Console::WriteLine("CAN ERROR ID Rx: 0x%08X Tx 0x%08X, IDE Rx {2} Tx {3}, DLC Rx {4} size Tx {5}", (unsigned int)pCanRxMsg->ID, (unsigned int)pCanTxMsg->ID, (int)pCanRxMsg->IDE, (int)pCanTxMsg->IDE, (int)pCanRxMsg->DLC, (int)size);// TODO: Throw exception // TODO: Convert to hex
-		}
-		else {
-			for (int i = 0; i < size; i++) {
-				if (pDataRx[i] != pDataTx[i]) {
-                    Console::WriteLine("CAN ERROR data[{0}] Rx: 0x%02hX Tx 0x%02hX", (int)i, (unsigned short)(unsigned char)pDataRx[i], (unsigned short)(unsigned char)pDataTx[i]);// TODO: Throw exception // TODO: Convert to hex
-					BridgeStatus = Brg_StatusT::BRG_VERIF_ERR;
-				}
-			}
-		}
-		if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
-            Console::WriteLine("CAN ERROR Read/Write verification");
-		}
-	}
-	return BridgeStatus;
-}
-
-//const char * Wrapper::StringToCharPtr(String ^ s)
-//{
-//    using namespace Runtime::InteropServices;
-//    const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
-//    return chars;
-//}
-
-Brg_StatusT Wrapper::CanRead([Out] List<CanBridgeMessage^>^% results)
+Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanBridgeMessageRx^>^% results)
 {
     if (Bridge == NULL)
     {
@@ -588,7 +407,7 @@ Brg_StatusT Wrapper::CanRead([Out] List<CanBridgeMessage^>^% results)
         BridgeStatus = Bridge->GetRxMsgCAN(&msg, 1, data, 8, &numberOfReceivedDataBytes); // Fetch one message at a time
         Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
-        CanBridgeMessage^ tempMessage = gcnew CanBridgeMessage();
+        CanBridgeMessageRx^ tempMessage = gcnew CanBridgeMessageRx();
         tempMessage->CanTimeStamp  =  msg.TimeStamp;
         tempMessage->DLC           =  msg.DLC;
         tempMessage->ID            =  msg.ID;
@@ -598,39 +417,44 @@ Brg_StatusT Wrapper::CanRead([Out] List<CanBridgeMessage^>^% results)
         tempMessage->OverrunFIFO   = (msg.Overrun == CAN_RX_FIFO_OVERRUN ? true : false);
         tempMessage->RTR           = (msg.RTR     == CAN_REMOTE_FRAME    ? true : false);
         tempMessage->TimeStamp     =  System::DateTime::Now.Ticks;
-        Marshal::Copy((IntPtr)data, tempMessage->data, 0, 8);
+
+        // Copy data using a temporary holder
+        uint64_t tempData;
+        memcpy((uint8_t*)&(tempData), data, msg.DLC);
+        tempMessage->data = tempData;
+
         results->Add(tempMessage);
     }
 
     return BridgeStatus;
 }
 
-Brg_StatusT Wrapper::CanWrite(CanBridgeMessage^ message)
+Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanBridgeMessageTx^ message)
 {
     Brg_CanTxMsgT tempMessage;
     tempMessage.IDE = message->IdExtended ? CAN_ID_EXTENDED : CAN_ID_STANDARD;
     tempMessage.ID  = message->ID;
     tempMessage.RTR = message->RTR ? CAN_REMOTE_FRAME : CAN_DATA_FRAME;
-    tempMessage.DLC = message->data->Length;
+    tempMessage.DLC = message->DLC;
 
     // Allocate
-    uint8_t* data = new uint8_t[tempMessage.DLC];
-    for (int i = 0; i < tempMessage.DLC; i++)
-    {
-        data[i] = message->data[i];
-    }
+    uint8_t* dataArray = new uint8_t[tempMessage.DLC];
 
-    BridgeStatus = Bridge->WriteMsgCAN(&tempMessage, data, tempMessage.DLC);
+    // Copy data to array
+    uint64_t tempData = message->data;
+    memcpy(dataArray, (uint8_t*)&tempData, tempMessage.DLC);
+
+    // Write message
+    BridgeStatus = Bridge->WriteMsgCAN(&tempMessage, dataArray, tempMessage.DLC);
     Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
     // Clean up
-    delete[] data;
-    data = NULL;
+    delete[] dataArray;
+    dataArray = NULL;
     return BridgeStatus;
 }
 
-
-Brg_StatusT Wrapper::StartTransmission()
+Brg_StatusT STLinkBridgeWrapperCpp::StartTransmission()
 {
     BridgeStatus = Bridge->StartMsgReceptionCAN();
     if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
@@ -668,12 +492,12 @@ Brg_StatusT Wrapper::StartTransmission()
         }
     }
 
-    // TODO: Start polling
+    TransmissionRunning = true;
 
     return BridgeStatus;
 }
 
-Brg_StatusT Wrapper::StopTransmission()
+Brg_StatusT STLinkBridgeWrapperCpp::StopTransmission()
 {
     BridgeStatus = Bridge->StopMsgReceptionCAN();
     if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
@@ -681,7 +505,186 @@ Brg_StatusT Wrapper::StopTransmission()
         throw gcnew Exception("CAN StopMsgReceptionCAN failed"); 
     }
 
-    // TODO: Stop polling
+    TransmissionRunning = false;
+
     return BridgeStatus;
 }
 
+// This CanTest function is similar to what ST provided as a test function, but modified to work in a CLR envirnoment.
+Brg_StatusT STLinkBridgeWrapperCpp::CanTest()
+{
+    //uint32_t currFreqKHz = 0;
+    //uint8_t com = COM_CAN;
+    //uint32_t StlHClkKHz, comInputClkKHz;
+    //// Get the current bridge input Clk
+    //BridgeStatus = Bridge->GetClk(com, &comInputClkKHz, &StlHClkKHz);
+    //Console::WriteLine("CAN input CLK: {0} KHz, STLink HCLK: {1} KHz", (int)comInputClkKHz, (int)StlHClkKHz);
+
+    // EXAMPLE FOR CAN Initialization, Brg::InitCAN(), Brg::GetCANbaudratePrescal()
+    //**********[Missing init steps] * *********
+    Brg_CanInitT canParam;
+    uint32_t prescal;
+    uint32_t reqBaudrate = 125000; //125kbps
+    uint32_t finalBaudrate = 0;
+
+    // N=sync+prop+seg1+seg2= 1+2+7+6= 16, 125000 bps (-> prescal = 24 = (CanClk = 48MHz)/(16*125000))
+    canParam.BitTimeConf.PropSegInTq = 2;
+    canParam.BitTimeConf.PhaseSeg1InTq = 7;
+    canParam.BitTimeConf.PhaseSeg2InTq = 6;
+    canParam.BitTimeConf.SjwInTq = 3;
+    BridgeStatus = Bridge->GetCANbaudratePrescal(&canParam.BitTimeConf, reqBaudrate, (uint32_t*)&prescal, (uint32_t*)&finalBaudrate);
+    if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_MODIFIED)
+    {
+        Console::WriteLine("WARNING Bridge CAN init baudrate asked {0} bps but applied {1} bps", (int)reqBaudrate, (int)finalBaudrate);
+    }
+    else if (BridgeStatus == Brg_StatusT::BRG_COM_FREQ_NOT_SUPPORTED)
+    { // TODO: Throw exception
+        Console::WriteLine("ERROR Bridge CAN init baudrate {0} bps not possible (invalid prescaler: {1}) change Bit Time or baudrate settings. \n", (int)reqBaudrate, (int)prescal);
+    }
+    else if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
+    {
+        canParam.Prescaler = prescal;
+        canParam.Mode = CAN_MODE_LOOPBACK;
+        canParam.bIsTxfpEn = false;
+        canParam.bIsRflmEn = false;
+        canParam.bIsNartEn = false;
+        canParam.bIsAwumEn = false;
+        canParam.bIsAbomEn = false;
+        BridgeStatus = Bridge->InitCAN(&canParam, BRG_INIT_FULL); // TODO: Check for error
+    }
+
+    //// EXAMPLE FOR CAN loopback test, Brg::StartMsgReceptionCAN() Brg::InitFilterCAN() Brg::WriteMsgCAN() Brg::GetRxMsgNbCAN() Brg::GetRxMsgCAN()</B>\n
+    uint8_t dataRx[8], dataTx[8];
+    int i, nb;
+    Brg_CanFilterConfT filterConf;
+    Brg_CanRxMsgT canRxMsg;
+    Brg_CanTxMsgT canTxMsg;
+    uint8_t size = 0;
+    uint16_t msgNb = 0;
+
+    BridgeStatus = Bridge->StartMsgReceptionCAN();
+    if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
+        Console::WriteLine("CAN StartMsgReceptionCAN failed"); // TODO: Throw exception
+    }
+
+    // Loopback_test
+    // Receive all messages (no filter) with all DLC possible size (0->8)
+    // Filter0: CAN prepare receive (no filter: ID_MASK with Id =0 & Mask = 0) receive all in FIFO0
+    filterConf.AssignedFifo = CAN_MSG_RX_FIFO0;
+    filterConf.bIsFilterEn = true;
+    filterConf.FilterBankNb = 0; //0 to 13
+    filterConf.FilterMode = CAN_FILTER_ID_MASK; // CAN_FILTER_ID_LIST
+    filterConf.FilterScale = CAN_FILTER_16BIT; // CAN_FILTER_32BIT
+    for (i = 0; i < 4; i++) {
+        filterConf.Id[i].ID = 0;
+        filterConf.Id[i].IDE = CAN_ID_STANDARD;
+        filterConf.Id[i].RTR = CAN_DATA_FRAME;
+    }
+    for (i = 0; i < 2; i++) {
+        filterConf.Mask[i].ID = 0;
+        filterConf.Mask[i].IDE = CAN_ID_STANDARD;
+        filterConf.Mask[i].RTR = CAN_DATA_FRAME;
+    }
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+        BridgeStatus = Bridge->InitFilterCAN(&filterConf);
+        if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
+            Console::WriteLine("CAN filter0 init failed"); // TODO: Throw exception
+        }
+    }
+
+    canRxMsg.ID = 0;
+    canRxMsg.IDE = CAN_ID_EXTENDED; // must be = canTxMsg.IDE for the test
+    canRxMsg.RTR = CAN_DATA_FRAME; // must be = canTxMsg.RTR for the test
+    canRxMsg.DLC = 0;
+
+    canTxMsg.ID = 0x12345678; // must be <=0x7FF for CAN_ID_STANDARD, <=0x1FFFFFFF
+    canTxMsg.IDE = CAN_ID_EXTENDED;
+    canTxMsg.RTR = CAN_DATA_FRAME;
+    canTxMsg.DLC = 0;
+
+    nb = 0;
+    while ((BridgeStatus == Brg_StatusT::BRG_NO_ERR) && (nb < 255)) {
+
+        for (i = 0; i < 8; i++) {
+            dataRx[i] = 0;
+            dataTx[i] = (uint8_t)(nb + i);
+        }
+        canRxMsg.DLC = 0;
+        canTxMsg.DLC = 2; // unused in CAN_DATA_FRAME
+        size = (uint8_t)(nb % 9); // try 0 to 8 DLC size
+
+        if (nb == 200) { // do it only once
+            // REINIT command with same settings must be transparent and  must not break filter configuration
+            BridgeStatus = Bridge->InitCAN(&canParam, BRG_REINIT);
+        }
+        if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+            BridgeStatus = CanMsgTxRxVerif(&canTxMsg, dataTx, &canRxMsg, dataRx, CAN_MSG_RX_FIFO0, size);
+        }
+        nb++;
+    }
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+        Console::WriteLine(" Loopback_test1 OK");
+    }
+    return BridgeStatus;
+}
+
+// This CanTest function is similar to what ST provided as a test function, but modified to work in a CLR envirnoment.
+// send a message and verify it is received and that TX = Rx
+Brg_StatusT STLinkBridgeWrapperCpp::CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size)
+{
+    uint16_t msgNb = 0;
+    // Send message
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+        BridgeStatus = Bridge->WriteMsgCAN(pCanTxMsg, pDataTx, size);
+        if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
+            Console::WriteLine("CAN Write Message error (Tx ID: 0x{0})", (unsigned int)pCanTxMsg->ID); // TODO: Throw exception // TODO: Convert to hex
+        }
+    }
+    // Receive message
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+        uint16_t dataSize;
+        int retry = 100;
+        while ((retry > 0) && (msgNb == 0))
+        {
+            BridgeStatus = Bridge->GetRxMsgNbCAN(&msgNb);
+            retry--;
+            Sleep(1);
+        }
+        if (msgNb == 0) { // check if enough messages available
+            BridgeStatus = Brg_StatusT::BRG_TARGET_CMD_TIMEOUT;
+            Console::WriteLine("CAN Rx error (not enough msg available: 0/1)");// TODO: Throw exception
+        }
+        if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) { // read only 1 msg even if more available
+            BridgeStatus = Bridge->GetRxMsgCAN(pCanRxMsg, 1, pDataRx, 8, &dataSize);
+        }
+        if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
+            Console::WriteLine("CAN Read Message error (Tx ID: 0x{0}, nb of Rx msg available: {1})", (unsigned int)pCanTxMsg->ID, (int)msgNb);// TODO: Throw exception // TODO: Convert to hex
+        }
+        else {
+            if (pCanRxMsg->Fifo != rxFifo) {
+                Console::WriteLine("CAN Read Message FIFO error (Tx ID: 0x{0} in FIFO%d instead of {1})", (unsigned int)pCanTxMsg->ID, (int)pCanRxMsg->Fifo, (int)rxFifo);// TODO: Throw exception // TODO: Convert to hex
+                BridgeStatus = Brg_StatusT::BRG_VERIF_ERR;
+            }
+        }
+    }
+    // verif Rx = Tx
+    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+        if ((pCanRxMsg->ID != pCanTxMsg->ID) || (pCanRxMsg->IDE != pCanTxMsg->IDE) || (pCanRxMsg->DLC != size) ||
+            (pCanRxMsg->Overrun != CAN_RX_NO_OVERRUN)) {
+            BridgeStatus = Brg_StatusT::BRG_CAN_ERR;
+            Console::WriteLine("CAN ERROR ID Rx: 0x%08X Tx 0x%08X, IDE Rx {2} Tx {3}, DLC Rx {4} size Tx {5}", (unsigned int)pCanRxMsg->ID, (unsigned int)pCanTxMsg->ID, (int)pCanRxMsg->IDE, (int)pCanTxMsg->IDE, (int)pCanRxMsg->DLC, (int)size);// TODO: Throw exception // TODO: Convert to hex
+        }
+        else {
+            for (int i = 0; i < size; i++) {
+                if (pDataRx[i] != pDataTx[i]) {
+                    Console::WriteLine("CAN ERROR data[{0}] Rx: 0x%02hX Tx 0x%02hX", (int)i, (unsigned short)(unsigned char)pDataRx[i], (unsigned short)(unsigned char)pDataTx[i]);// TODO: Throw exception // TODO: Convert to hex
+                    BridgeStatus = Brg_StatusT::BRG_VERIF_ERR;
+                }
+            }
+        }
+        if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
+            Console::WriteLine("CAN ERROR Read/Write verification");
+        }
+    }
+    return BridgeStatus;
+}

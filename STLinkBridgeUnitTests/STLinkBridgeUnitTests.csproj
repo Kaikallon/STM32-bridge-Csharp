@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="CanDbUnitTests.cs" />
     <Compile Include="CanWrapperTests.cs" />
-    <Compile Include="STLinkBridgeUnitTests1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

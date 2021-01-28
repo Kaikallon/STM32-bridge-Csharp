@@ -33,15 +33,7 @@ namespace STLinkBridgeWrapper
         // add a new field at the end in order to keep ascendant compatibility.
     };
 
-    //public ref struct CANMessage 
-    //{
-    //    uint32_t id;
-    //    array<Byte^>^ data = gcnew array<Byte^>(8); // bytes object
-    //    bool remote;
-    //    bool extended;
-    //};
-
-    public ref struct CanBridgeMessage
+    public ref struct CanBridgeMessageRx
     {
         bool     IdExtended;       ///< Specifies if ID is standard (11-bit) or extended (29-bit) identifier.
         uint32_t ID;               ///< Identifier of the message (11bit or 29bit according to IDE).
@@ -54,28 +46,41 @@ namespace STLinkBridgeWrapper
         bool OverrunBuffer;        ///< Indicate if overrun has occurred before this message. STLink CAN Rx buffer overrun
         uint16_t CanTimeStamp;     ///< unused
         int64_t TimeStamp;         // Computer time at recieval
-        array<Byte>^ data = gcnew array<Byte>(8);
-
+        uint64_t data;
     } ;
 
-    public ref class Wrapper
+    public ref struct CanBridgeMessageTx 
+    {
+        bool     IdExtended; ///< Specifies if ID is standard (11-bit) or extended (29-bit) identifier.
+        uint32_t ID;         ///< Identifier of the message (11bit or 29bit according to IDE).
+                             ///< DLC: max 8. Data Length Code of requested data bytes when sending RTR .
+        bool     RTR;        ///< RTR: Specifies if Remote Transmission Request should be sent (DLC is used for
+                             ///< number of requested bytes), otherwise the data message will be sent.
+        uint8_t  DLC;        ///< Data Length Code, max 8. Number of requested data for RTR, unused for data Frame. 
+                             ///< (for data frame Size parameter of Brg::WriteMsgCAN() is used as DLC)
+        uint64_t data;
+    } ;
+
+    public  ref class STLinkBridgeWrapperCpp abstract
     {
     private:
         STLinkInterface* sTLinkInterface = NULL;
         Brg* Bridge = NULL;
 
     protected:
+        bool             TransmissionRunning = false;
+
         Brg_StatusT      BridgeStatus = Brg_StatusT::BRG_NO_ERR;
         STLinkIf_StatusT InterfaceStatus = STLinkIf_StatusT::NO_ERR;
+        Brg_StatusT		 CanTest();
         Brg_StatusT      CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size);
         Brg_StatusT      StartTransmission();
         Brg_StatusT      StopTransmission();
-        Brg_StatusT      CanRead([Out] List<CanBridgeMessage^>^% results);
-        Brg_StatusT      CanWrite(CanBridgeMessage^ message);
+
     public:
-        Wrapper();
-        ~Wrapper();
-		!Wrapper();
+        STLinkBridgeWrapperCpp();
+        ~STLinkBridgeWrapperCpp();
+		!STLinkBridgeWrapperCpp();
 
 
         Brg_StatusT      InitBridge(DeviceInfo^ device);
@@ -88,11 +93,9 @@ namespace STLinkBridgeWrapper
 		Brg_StatusT      TestGetClock();
 		Brg_StatusT		 GPIOInit();
 		Brg_StatusT		 GPIOWrite();
-		Brg_StatusT		 CanTest();
         Brg_StatusT      CanInit(uint32_t RequestedBaudrate, bool loopback );
         Brg_StatusT      CanInit(uint32_t RequestedBaudrate, Brg_CanInitT canParam);
-
-        
-
+        Brg_StatusT      CanWriteLL(CanBridgeMessageTx^ message);
+        Brg_StatusT      CanReadLL([Out] List<CanBridgeMessageRx^>^% results);
 	};
 }

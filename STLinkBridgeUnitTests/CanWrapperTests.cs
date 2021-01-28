@@ -14,7 +14,7 @@ namespace STLinkBridgeUnitTests
         [TestMethod]
         public void CANLoopBackTest()
         {
-            STLinkBridgeWrapperCsharp wrapper = new STLinkBridgeWrapperCsharp();
+            STLinkBridgeWrapper.STLinkBridgeWrapper wrapper = new STLinkBridgeWrapper.STLinkBridgeWrapper();
             var devices = new List<DeviceInfo>();
             STLinkIf_StatusT linkStatus = wrapper.EnumerateDevices(out devices);
 
@@ -54,6 +54,10 @@ namespace STLinkBridgeUnitTests
             Assert.IsTrue(signal1.DataPoints.Count > 0);
             Assert.IsTrue(signal2.DataPoints.Count > 0);
             Assert.IsTrue(signal3.DataPoints.Count > 0);
+
+            Assert.AreEqual(signal1.DataPoints.First().data, signal1.WriteValue);
+            Assert.AreEqual(signal2.DataPoints.First().data, signal2.WriteValue);
+            Assert.AreEqual(signal3.DataPoints.First().data, signal3.WriteValue);
 
             wrapper.StopTransmission();
         }

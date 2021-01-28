@@ -26,7 +26,7 @@ namespace CanDB
     {
         EXT = int.MinValue,
         J1939 = 1,
-        WAKEUP = 2
+        //WAKEUP = 2
     }
 
     public class CanDB
@@ -222,7 +222,6 @@ namespace CanDB
                 // Set the bits between startbit and StartBit + Length to one
                 BitMask = BitMask | ((UInt64)1 << i);
             }
-
         }
         public double WriteValue { get; set; }
     }

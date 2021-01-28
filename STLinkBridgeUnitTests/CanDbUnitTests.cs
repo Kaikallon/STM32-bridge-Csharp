@@ -17,5 +17,12 @@ namespace STLinkBridgeUnitTests
 
             // TODO: Make comparison
         }
+
+        [TestMethod]
+        public void VerifyDlcTest()
+        {
+            throw new NotImplementedException(); // TODO: Make test 
+        }
+
     }
 }
