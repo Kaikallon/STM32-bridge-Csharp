@@ -28,7 +28,7 @@ namespace STLinkBridgeUnitTests
             Assert.IsTrue(wrapper.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
             wrapper.CanInit(125000, true);
             Assert.IsTrue(wrapper.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
-            wrapper.StartTransmission(100);
+            wrapper.StartTransmission(null);
             Assert.IsTrue(wrapper.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
 
 
@@ -36,34 +36,55 @@ namespace STLinkBridgeUnitTests
             var signal1 = canMessage.Signals[0];
             var signal2 = canMessage.Signals[1];
             var signal3 = canMessage.Signals[2];
-            signal1.WriteValue = -1.3;
-            signal2.WriteValue =  1.4;
-            signal3.WriteValue =  5;
+
             signal1.CalculateBitMask();
             signal2.CalculateBitMask();
             signal3.CalculateBitMask();
 
-            wrapper.canMessageTypes = new SortedList<uint, CanMessageType>();
-            wrapper.canMessageTypes.Add((uint)canMessage.ID, canMessage);
+            //wrapper.canMessageTypes = new SortedList<uint, CanMessageType>();
+            //wrapper.canMessageTypes.Add((uint)canMessage.ID, canMessage);
 
-            wrapper.CanWrite(canMessage);
+            double value1 = -1.3;
+            double value2 =  1.4;
+            double value3 =  5;
+            var message = canMessage.GenerateCanMessageTx((signal1, value1), (signal2, value2), (signal3, value3));
+
+
+            wrapper.CanWriteLL(message);
             Assert.IsTrue(wrapper.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
 
             System.Threading.Thread.Sleep(1000);
 
-            Assert.IsTrue(signal1.DataPoints.Count > 0);
-            Assert.IsTrue(signal2.DataPoints.Count > 0);
-            Assert.IsTrue(signal3.DataPoints.Count > 0);
+            var ReceivedMessages = wrapper.CanRead();
+            var listOfMessages = new SortedList<uint, CanMessageType>();
+            listOfMessages.Add((uint)canMessage.ID, canMessage);
+            var dataPoints = CanDB.CanDB.ParseReceivedCanMessagesRx(ReceivedMessages, listOfMessages);
 
-            Assert.AreEqual(signal1.DataPoints.First().data, signal1.WriteValue);
-            Assert.AreEqual(signal2.DataPoints.First().data, signal2.WriteValue);
-            Assert.AreEqual(signal3.DataPoints.First().data, signal3.WriteValue);
+            Assert.AreEqual(3, dataPoints.Count);
+
+            Assert.AreEqual(value1, dataPoints[0].data);
+            Assert.AreEqual(value2, dataPoints[1].data);
+            Assert.AreEqual(value3, dataPoints[2].data);
+
 
             wrapper.StopTransmission();
         }
 
         private void Wrapper_CanMessageReceived(object sender, CanMessageReceivedEventArgs e)
         {
+            //var canMessage = GenerateSimpleCanMessageType();
+            //var listOfMessages = new SortedList<uint, CanMessageType>();
+            //listOfMessages.Add((uint)canMessage.ID, canMessage);
+
+            //var dataPoints = CanDB.CanDB.ParseReceivedCanMessagesRx(e.ReceivedMessages, listOfMessages);
+
+            //Assert.AreEqual(3, dataPoints.Count);
+            //double value1 = -1.3;
+            //double value2 = 1.4;
+            //double value3 = 5;
+            //Assert.AreEqual(value1, dataPoints[0].data);
+            //Assert.AreEqual(value2, dataPoints[1].data);
+            //Assert.AreEqual(value3, dataPoints[2].data);
         }
 
         public CanMessageType GenerateSimpleCanMessageType()
@@ -71,8 +92,8 @@ namespace STLinkBridgeUnitTests
             return new CanMessageType
             {
                 ID = 305419896,
-                DLC = 8,
-                Flags = MESSAGE.EXT,
+                DLC = 4,
+                //Flags = MESSAGE.EXT,
                 Name = "TestMessage1",
                 Signals = new List<CanSignalType>
                 {

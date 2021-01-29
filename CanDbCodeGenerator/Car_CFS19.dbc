@@ -1,0 +1,761 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: Tire_Temp IVT AMS_Client AMS PE_FR PE_FL PE_RR Front_Node PE_RL Rear_Node
+
+
+BO_ 1207 TireTemp_FR4: 8 Tire_Temp
+ SG_ TireTemp_FR16 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR15 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR14 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR13 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1206 TireTemp_FR3: 8 Tire_Temp
+ SG_ TireTemp_FR12 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR11 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR10 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR9 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1205 TireTemp_FR2: 8 Tire_Temp
+ SG_ TireTemp_FR8 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR7 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR6 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR5 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1204 TireTemp_FR1: 8 Tire_Temp
+ SG_ TireTemp_FR4 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR3 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR2 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FR1 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1203 TireTemp_FL4: 8 Tire_Temp
+ SG_ TireTemp_FL16 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL15 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL14 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL13 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1202 TireTemp_FL3: 8 Tire_Temp
+ SG_ TireTemp_FL12 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL11 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL10 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL9 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1201 TireTemp_FL2: 8 Tire_Temp
+ SG_ TireTemp_FL5 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL6 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL7 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL8 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1200 TireTemp_FL1: 8 Tire_Temp
+ SG_ TireTemp_FL4 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL3 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL2 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_FL1 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1215 TireTemp_RR4: 8 Tire_Temp
+ SG_ TireTemp_RR16 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR15 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR14 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR13 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1214 TireTemp_RR3: 8 Tire_Temp
+ SG_ TireTemp_RR12 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR11 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR10 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR9 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1213 TireTemp_RR2: 8 Tire_Temp
+ SG_ TireTemp_RR8 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR7 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR6 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR5 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1212 TireTemp_RR1: 8 Tire_Temp
+ SG_ TireTemp_RR4 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR3 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR2 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RR1 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1211 TireTemp_RL4: 8 Tire_Temp
+ SG_ TireTemp_RL16 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL15 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL14 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL13 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1210 TireTemp_RL3: 8 Tire_Temp
+ SG_ TireTemp_RL12 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL11 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL10 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL9 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1209 TireTemp_RL2: 8 Tire_Temp
+ SG_ TireTemp_RL8 : 55|16@0+ (0.1,-100) [-100|6453.5] "" Vector__XXX
+ SG_ TireTemp_RL7 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL6 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL5 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 1208 TireTemp_RL1: 8 Tire_Temp
+ SG_ TireTemp_RL4 : 55|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL3 : 39|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL2 : 23|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+ SG_ TireTemp_RL1 : 7|16@0+ (0.1,-100) [-100|6453.5] ""  Front_Node
+
+BO_ 181 RN_Temperatures2: 4 Rear_Node
+ SG_ RN_Gearbox_Temp_RR : 24|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+ SG_ RN_Gearbox_Temp_RL : 16|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+ SG_ RN_Ambient_Outside : 8|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+ SG_ RN_Ambient_Inside : 0|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+
+BO_ 197 FN_GPS_Pos: 5 Front_Node
+ SG_ FN_GPS_Flags : 32|8@1+ (1,0) [0|0] ""  Rear_Node
+ SG_ FN_GPS_yPos : 16|16@1- (0.5,0) [-16384|16383.5] ""  Rear_Node
+ SG_ FN_GPS_xPos : 0|16@1- (0.5,0) [-16384|16383.5] ""  Rear_Node
+
+BO_ 206 FN_TV: 5 Front_Node
+ SG_ FN_TV_Knob : 8|8@1+ (0.1,0) [0|25.5] ""  Front_Node
+ SG_ FN_TC_Knob : 16|8@1+ (0.01,0) [0|2.55] ""  Front_Node
+ SG_ FN_Regen_Neutral : 32|8@1+ (0.01,0) [0|2.55] ""  Front_Node
+ SG_ FN_Regen_Knob : 0|8@1+ (0.01,0) [0|2.55] ""  Front_Node
+ SG_ FN_Regen_Div : 24|8@1+ (0.01,0) [0|2.55] ""  Front_Node
+
+BO_ 199 FN_Gyro: 6 Front_Node
+ SG_ FN_GyroZ : 32|16@1- (1,0) [0|0] ""  Front_Node
+ SG_ FN_GyroY : 16|16@1- (1,0) [0|0] ""  Front_Node
+ SG_ FN_GyroX : 0|16@1- (1,0) [0|0] ""  Front_Node
+
+BO_ 198 FN_Accelerometer: 6 Front_Node
+ SG_ FN_AccZ : 32|16@1- (1,0) [0|0] ""  Front_Node
+ SG_ FN_AccY : 16|16@1- (1,0) [0|0] ""  Front_Node
+ SG_ FN_AccX : 0|16@1- (1,0) [0|0] ""  Front_Node
+
+BO_ 1801 PE_RR_NMT: 1 PE_RR
+ SG_ PE_RR_NMT : 0|8@1+ (1,0) [0|255] ""  Rear_Node
+
+BO_ 1799 PE_RL_NMT: 1 PE_RL
+ SG_ PE_RL_NMT : 0|8@1+ (1,0) [0|255] ""  Rear_Node
+
+BO_ 1805 PE_FR_NMT: 1 PE_FR
+ SG_ PE_FR_NMT : 0|8@1+ (1,0) [0|255] ""  Rear_Node
+
+BO_ 1798 PE_FL_NMT: 1 PE_FL
+ SG_ PE_FL_NMT : 0|8@1+ (1,0) [0|255] ""  Rear_Node
+
+BO_ 196 FN_Sensor_Status: 4 Front_Node
+ SG_ FN_Sensor_Status : 0|32@1+ (1,0) [0|0] ""  Front_Node,Rear_Node
+
+BO_ 161 AMS_Stack_Errors: 6 AMS
+ SG_ AMS_Errors_Stack6 : 40|8@1+ (1,0) [0|0] ""  Front_Node
+ SG_ AMS_Errors_Stack5 : 32|8@1+ (1,0) [0|0] ""  Front_Node
+ SG_ AMS_Errors_Stack4 : 24|8@1+ (1,0) [0|0] ""  Front_Node
+ SG_ AMS_Errors_Stack3 : 16|8@1+ (1,0) [0|0] ""  Front_Node
+ SG_ AMS_Errors_Stack2 : 8|8@1+ (1,0) [0|0] ""  Front_Node
+ SG_ AMS_Errors_Stack1 : 0|8@1+ (1,0) [0|0] ""  Front_Node
+
+BO_ 1320 IVT_Msg_Result_Wh: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_Wh : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_Wh : 16|32@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_MuxID_Wh : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 1318 IVT_Msg_Result_W: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_W : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_W : 16|32@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_MuxID_W : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 1316 IVT_Msg_Result_U3: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_U3 : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_U3 : 16|32@1- (0.001,0) [-2147483.648|2147483.647] ""  AMS
+ SG_ IVT_MuxID_U3 : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 1315 IVT_Msg_Result_U2: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_U2 : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_U2 : 16|32@1- (0.001,0) [-2147483.648|2147483.647] ""  AMS
+ SG_ IVT_MuxID_U2 : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 1314 IVT_Msg_Result_U1: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_U1 : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_U1 : 16|32@1- (0.001,0) [-2147483.648|2147483.647] ""  AMS
+ SG_ IVT_MuxID_U1 : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 1317 IVT_Msg_Result_T: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_T : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_T : 16|32@1- (0.1,0) [-214748364.8|214748364.7] ""  AMS
+ SG_ IVT_MuxID_T : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 1313 IVT_Msg_Result_I: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_I : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_I : 16|32@1- (0.001,0) [-2147483.648|2147483.647] ""  AMS
+ SG_ IVT_MuxID_I : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 1319 IVT_Msg_Result_As: 6 IVT
+ SG_ IVT_ResultState_And_MsgCount_As : 8|8@1- (1,0) [0|0] ""  AMS
+ SG_ IVT_Result_As : 16|32@1- (0.001,0) [-2147483.648|2147483.647] ""  AMS
+ SG_ IVT_MuxID_As : 0|8@1+ (1,0) [0|0] ""  AMS
+
+BO_ 241 AMSClient_Status: 5 AMS_Client
+ SG_ AMS_Client_Trigger_AMS : 32|8@1+ (1,0) [0|0] ""  AMS
+ SG_ AMS_Client_Start_TS : 24|8@1+ (1,0) [0|255] ""  AMS
+ SG_ AMS_Client_FN_Buttons : 16|8@1+ (1,0) [0|0] ""  AMS
+ SG_ AMS_Client_Front_Node_Status : 8|8@1+ (1,0) [0|0] ""  AMS
+ SG_ AMS_Client_Enable_Communication : 0|8@1+ (1,0) [0|255] ""  AMS
+
+BO_ 168 AMS_Counters: 6 AMS
+ SG_ AMS_RestartCounter : 32|16@1+ (1,0) [0|65535] ""  Front_Node
+ SG_ AMS_PrechargeCounter : 16|16@1+ (1,0) [0|65535] ""  Front_Node
+ SG_ AMS_TSCounter : 0|16@1+ (1,0) [0|65535] ""  Front_Node
+
+BO_ 175 AMS_Status: 5 AMS
+ SG_ AMS_Watchdog : 32|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ AMS_Precharge_Time : 16|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ AMS_Accumulator_Errors : 8|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ AMS_Accumulator_SoC : 24|8@1+ (1,0) [0|255] ""  Front_Node
+ SG_ AMS_Status : 0|8@1+ (1,0) [0|255] ""  Front_Node
+
+BO_ 167 AMS_MaxMinTemperatures: 8 AMS
+ SG_ AMS_AvgTemp : 8|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ AMS_MinTemp : 48|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+ SG_ AMS_MinTemp_Pos_Stack : 32|8@1+ (1,0) [0|255] ""  Front_Node
+ SG_ AMS_MaxTemp : 16|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+ SG_ AMS_MaxTemp_Pos_Stack : 0|8@1+ (1,0) [0|255] ""  Front_Node
+
+BO_ 166 AMS_MaxMinVoltages: 7 AMS
+ SG_ AMS_AvgVoltage : 0|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ AMS_MinVoltage : 40|16@1+ (0.001,0) [0|65.535] ""  Front_Node
+ SG_ AMS_MinVoltage_Pos_Stack : 32|8@1+ (1,0) [0|255] ""  Front_Node
+ SG_ AMS_MaxVoltage : 16|16@1+ (0.001,0) [0|65.535] ""  Front_Node
+ SG_ AMS_MaxVoltage_Pos_Stack : 8|8@1+ (1,0) [0|255] ""  Front_Node
+
+BO_ 163 AMS_Cell_Voltages: 8 AMS
+ SG_ AMS_Voltage3 : 48|16@1+ (0.001,0) [0|65.535] ""  AMS_Client
+ SG_ AMS_Voltage2 : 32|16@1+ (0.001,0) [0|65.535] ""  AMS_Client
+ SG_ AMS_Voltage1 : 16|16@1+ (0.001,0) [0|65.535] ""  AMS_Client
+ SG_ AMS_UV_OV_Flags : 8|8@1+ (1,0) [0|255] ""  AMS_Client
+ SG_ AMS_Voltage_Pos_Stack : 0|8@1+ (1,0) [0|255] ""  AMS_Client
+
+BO_ 162 AMS_Cell_Temperatures: 8 AMS
+ SG_ AMS_Temp3 : 48|16@1+ (0.01,0) [0|655.35] ""  AMS_Client
+ SG_ AMS_Temp2 : 32|16@1+ (0.01,0) [0|655.35] ""  AMS_Client
+ SG_ AMS_Temp1 : 16|16@1+ (0.01,0) [0|655.35] ""  AMS_Client
+ SG_ AMS_UT_OT_Flags : 8|8@1+ (1,0) [0|255] ""  AMS_Client
+ SG_ AMS_Temp_Pos_Stack : 0|8@1+ (1,0) [0|255] ""  AMS_Client
+
+BO_ 180 RN_Sensor_Status: 4 Rear_Node
+ SG_ RN_Sensor_Status : 0|32@1+ (1,0) [0|0] ""  Front_Node
+
+BO_ 195 FN_Sensors: 6 Front_Node
+ SG_ FN_Rotor_Object_temp_FL : 32|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+ SG_ FN_Rotor_Object_temp_FR : 40|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+ SG_ FN_Damper_FR : 16|16@1+ (0.01,0) [0|655.35] ""  Front_Node,Rear_Node
+ SG_ FN_Damper_FL : 0|16@1+ (0.01,0) [0|655.35] ""  Front_Node,Rear_Node
+
+BO_ 194 FN_Temperatures: 6 Front_Node
+ SG_ FN_WaterR : 40|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+ SG_ FN_WaterL : 32|8@1+ (0.5,5) [5|132.5] "" Vector__XXX
+ SG_ FN_Gearbox_temp_FR : 24|8@1+ (0.5,5) [5|132.5] ""  Front_Node,Rear_Node
+ SG_ FN_Gearbox_temp_FL : 16|8@1+ (0.5,5) [5|132.5] ""  Front_Node,Rear_Node
+ SG_ FN_Brake_temp_FR : 8|8@1+ (4,0) [0|0] ""  Front_Node,Rear_Node
+ SG_ FN_Brake_temp_FL : 0|8@1+ (4,0) [0|1020] ""  Front_Node,Rear_Node
+
+BO_ 193 FN_Driver_Controls: 6 Front_Node
+ SG_ FN_Throttle : 40|8@1+ (0.5,0) [0|0] ""  Front_Node,Rear_Node
+ SG_ FN_Steering_Angle : 32|8@1- (2,0) [-256|254] ""  Front_Node,Rear_Node
+ SG_ FN_Brake_System : 24|8@1+ (0.5,0) [0|0] ""  Front_Node,Rear_Node
+ SG_ FN_Brake_Pedal : 16|8@1+ (0.5,0) [0|0] ""  Front_Node,Rear_Node
+ SG_ FN_APPS2 : 8|8@1+ (0.5,0) [0|127.5] ""  Front_Node,Rear_Node
+ SG_ FN_APPS1 : 0|8@1+ (0.5,0) [0|127.5] ""  Front_Node,Rear_Node
+
+BO_ 178 RN_Sensors: 6 Rear_Node
+ SG_ RN_Rotor_Object_Temp_RR : 8|8@1+ (0.5,5) [5|132.5] ""  Front_Node
+ SG_ RN_Rotor_Object_Temp_RL : 0|8@1+ (0.5,5) [5|132.5] ""  Front_Node
+ SG_ RN_Damper_RR : 32|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+ SG_ RN_Damper_RL : 16|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+
+BO_ 179 RN_Errors_PE: 8 Rear_Node
+ SG_ RN_Error_PE_RR : 48|16@1- (1,0) [0|0] ""  Front_Node
+ SG_ RN_Error_PE_RL : 32|16@1- (1,0) [0|0] ""  Front_Node
+ SG_ RN_Error_PE_FR : 16|16@1- (1,0) [0|0] ""  Front_Node
+ SG_ RN_Error_PE_FL : 0|16@1- (1,0) [0|0] ""  Front_Node
+
+BO_ 177 RN_Temperatures: 8 Rear_Node
+ SG_ RN_Water_Motor_RR : 48|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+ SG_ RN_Water_Motor_RL : 32|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+ SG_ RN_Water_Motor_Radiator : 16|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+ SG_ RN_Water_Motor_PE : 0|16@1+ (0.01,0) [0|655.35] ""  Front_Node
+
+BO_ 207 FN_Status: 8 Front_Node
+ SG_ FN_DiffRear : 56|8@1+ (0.5,0) [0|127.5] ""  Rear_Node
+ SG_ FN_DiffFront : 48|8@1+ (0.5,0) [0|127.5] ""  Rear_Node
+ SG_ FN_Front_Torque_Scale : 40|8@1+ (0.4,0) [0|102] ""  Front_Node
+ SG_ FN_Speed_Limit : 32|8@1+ (100,0) [0|25500] ""  Front_Node
+ SG_ FN_Max_Torque : 24|8@1+ (0.4,0) [0|102] ""  Front_Node
+ SG_ FN_Watchdog_Status : 16|8@1+ (1,0) [0|0] ""  Front_Node,Rear_Node
+ SG_ FN_Status : 0|16@1+ (1,0) [0|0] ""  Front_Node,AMS,Rear_Node
+
+BO_ 909 PE_FR_PDO_3_TX: 8 PE_FR
+ SG_ PE_FR_Iq : 48|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_FR_Id : 32|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_FR_Uq : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_FR_Ud : 0|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+
+BO_ 653 PE_FR_PDO_2_TX: 8 PE_FR
+ SG_ PE_FR_Temp_Stator : 32|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_FR_Measured_Udc : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_FR_Temp_Inverter : 48|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_FR_Power_Estimate : 0|16@1- (10,0) [-327680|327670] "DW"  Rear_Node
+
+BO_ 397 PE_FR_PDO_1_TX: 7 PE_FR
+ SG_ PE_FR_Errors : 40|16@1+ (1,0) [0|0] ""  Rear_Node
+ SG_ PE_FR_Speed_Estimate : 24|16@1- (1,0) [0|0] "RPM"  Rear_Node
+ SG_ PE_FR_Torque_Estimate : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  Rear_Node
+ SG_ PE_FR_Drive_Engaged : 0|8@1+ (1,0) [0|0] ""  Rear_Node
+
+BO_ 902 PE_FL_PDO_3_TX: 8 PE_FL
+ SG_ PE_FL_Iq : 48|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_FL_Id : 32|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_FL_Uq : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_FL_Ud : 0|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+
+BO_ 646 PE_FL_PDO_2_TX: 8 PE_FL
+ SG_ PE_FL_Temp_Stator : 32|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_FL_Measured_Udc : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_FL_Temp_Inverter : 48|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_FL_Power_Estimate : 0|16@1- (10,0) [-327680|327670] "DW"  Rear_Node
+
+BO_ 390 PE_FL_PDO_1_TX: 7 PE_FL
+ SG_ PE_FL_Errors : 40|16@1+ (1,0) [0|0] ""  Rear_Node
+ SG_ PE_FL_Speed_Estimate : 24|16@1- (1,0) [0|0] "RPM"  Rear_Node
+ SG_ PE_FL_Torque_Estimate : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  Rear_Node
+ SG_ PE_FL_Drive_Engaged : 0|8@1+ (1,0) [0|0] ""  Rear_Node
+
+BO_ 905 PE_RR_PDO_3_TX: 8 PE_RR
+ SG_ PE_RR_Iq : 48|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_RR_Id : 32|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_RR_Uq : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_RR_Ud : 0|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+
+BO_ 649 PE_RR_PDO_2_TX: 8 PE_RR
+ SG_ PE_RR_Temp_Stator : 32|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_RR_Measured_Udc : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_RR_Temp_Inverter : 48|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_RR_Power_Estimate : 0|16@1- (10,0) [-327680|327670] "DW"  Rear_Node
+
+BO_ 393 PE_RR_PDO_1_TX: 7 PE_RR
+ SG_ PE_RR_Errors : 40|16@1+ (1,0) [0|0] ""  Rear_Node
+ SG_ PE_RR_Speed_Estimate : 24|16@1- (1,0) [0|0] "RPM"  Rear_Node
+ SG_ PE_RR_Torque_Estimate : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  Rear_Node
+ SG_ PE_RR_Drive_Engaged : 0|8@1+ (1,0) [0|0] ""  Rear_Node
+
+BO_ 1037 RN_PE_FR_PDO_3_RX: 7 Rear_Node
+ SG_ RN_PE_FR_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_FR
+ SG_ RN_PE_FR_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_FR
+ SG_ RN_PE_FR_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_FR
+ SG_ RN_PE_FR_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_FR
+
+BO_ 781 RN_PE_FR_PDO_2_RX: 7 Rear_Node
+ SG_ RN_PE_FR_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_FR
+ SG_ RN_PE_FR_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_FR
+ SG_ RN_PE_FR_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_FR
+ SG_ RN_PE_FR_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_FR
+
+BO_ 525 RN_PE_FR_PDO_1_RX: 7 Rear_Node
+ SG_ RN_PE_FR_Error_Reset : 40|16@1+ (1,0) [0|0] ""  PE_FR
+ SG_ RN_PE_FR_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_FR
+ SG_ RN_PE_FR_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_FR
+ SG_ RN_PE_FR_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_FR
+
+BO_ 1030 RN_PE_FL_PDO_3_RX: 7 Rear_Node
+ SG_ RN_PE_FL_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_FL
+ SG_ RN_PE_FL_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_FL
+ SG_ RN_PE_FL_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_FL
+ SG_ RN_PE_FL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_FL
+
+BO_ 774 RN_PE_FL_PDO_2_RX: 7 Rear_Node
+ SG_ RN_PE_FL_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_FL
+ SG_ RN_PE_FL_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_FL
+ SG_ RN_PE_FL_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_FL
+ SG_ RN_PE_FL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_FL
+
+BO_ 518 RN_PE_FL_PDO_1_RX: 7 Rear_Node
+ SG_ RN_PE_FL_Error_Reset : 40|16@1+ (1,0) [0|0] ""  PE_FL
+ SG_ RN_PE_FL_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_FL
+ SG_ RN_PE_FL_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_FL
+ SG_ RN_PE_FL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_FL
+
+BO_ 1033 RN_PE_RR_PDO_3_RX: 7 Rear_Node
+ SG_ RN_PE_RR_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_RR
+ SG_ RN_PE_RR_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_RR
+ SG_ RN_PE_RR_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_RR
+ SG_ RN_PE_RR_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RR
+
+BO_ 777 RN_PE_RR_PDO_2_RX: 7 Rear_Node
+ SG_ RN_PE_RR_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_RR
+ SG_ RN_PE_RR_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_RR
+ SG_ RN_PE_RR_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_RR
+ SG_ RN_PE_RR_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RR
+
+BO_ 521 RN_PE_RR_PDO_1_RX: 7 Rear_Node
+ SG_ RN_PE_RR_Error_Reset : 40|16@1+ (1,0) [0|0] ""  PE_RR
+ SG_ RN_PE_RR_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_RR
+ SG_ RN_PE_RR_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_RR
+ SG_ RN_PE_RR_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RR
+
+BO_ 191 RN_Status: 4 Rear_Node
+ SG_ RN_AMS_Safestate : 8|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ RN_Status : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ RN_Watchdog_Status : 16|16@1+ (1,0) [0|0] ""  AMS,Front_Node
+
+BO_ 903 PE_RL_PDO_3_TX: 8 PE_RL
+ SG_ PE_RL_Iq : 48|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_RL_Id : 32|16@1- (0.1,0) [-3276.8|3276.7] "dA"  Rear_Node
+ SG_ PE_RL_Uq : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_RL_Ud : 0|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+
+BO_ 647 PE_RL_PDO_2_TX: 8 PE_RL
+ SG_ PE_RL_Temp_Stator : 32|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_RL_Measured_Udc : 16|16@1- (0.1,0) [0|0] "dV"  Rear_Node
+ SG_ PE_RL_Temp_Inverter : 48|16@1- (1,0) [0|0] "degC"  Rear_Node
+ SG_ PE_RL_Power_Estimate : 0|16@1- (10,0) [-327680|327670] "DW"  Rear_Node
+
+BO_ 391 PE_RL_PDO_1_TX: 7 PE_RL
+ SG_ PE_RL_Errors : 40|16@1+ (1,0) [0|0] ""  Rear_Node
+ SG_ PE_RL_Speed_Estimate : 24|16@1- (1,0) [0|0] "RPM"  Rear_Node
+ SG_ PE_RL_Torque_Estimate : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  Rear_Node
+ SG_ PE_RL_Drive_Engaged : 0|8@1+ (1,0) [0|0] ""  Rear_Node
+
+BO_ 1031 RN_PE_RL_PDO_3_RX: 7 Rear_Node
+ SG_ RN_PE_RL_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_RL
+ SG_ RN_PE_RL_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_RL
+ SG_ RN_PE_RL_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_RL
+ SG_ RN_PE_RL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RL
+
+BO_ 775 RN_PE_RL_PDO_2_RX: 7 Rear_Node
+ SG_ RN_PE_RL_Max_Power : 40|16@1+ (10,0) [0|655350] "DW"  PE_RL
+ SG_ RN_PE_RL_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_RL
+ SG_ RN_PE_RL_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_RL
+ SG_ RN_PE_RL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RL
+
+BO_ 519 RN_PE_RL_PDO_1_RX: 7 Rear_Node
+ SG_ RN_PE_RL_Error_Reset : 40|16@1+ (1,0) [0|0] ""  PE_RL
+ SG_ RN_PE_RL_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_RL
+ SG_ RN_PE_RL_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_RL
+ SG_ RN_PE_RL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RL
+
+
+
+CM_ SG_ 175 AMS_Status "TS_On, Precharging, PreChargeNotReady, PreChargeFailed, IMD_Closed, BSPD_Closed,";
+CM_ SG_ 163 AMS_UV_OV_Flags "LSB UV1,OV1,UV2 etc.";
+CM_ SG_ 163 AMS_Voltage_Pos_Stack "4MSB stack, 4LSB position";
+CM_ SG_ 162 AMS_UT_OT_Flags "LSB UT1,OT1,UT2 etc";
+CM_ SG_ 162 AMS_Temp_Pos_Stack "4MSB stack, 4LSB position";
+CM_ SG_ 207 FN_Status "TS_Start,R2D,Fan, Pumps, DRS_Driver_Activate, APPS_Implausibility, Brake_APPS_Implausibility";
+CM_ SG_ 1037 RN_PE_FR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 781 RN_PE_FR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 525 RN_PE_FR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 1030 RN_PE_FL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 774 RN_PE_FL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 518 RN_PE_FL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 1033 RN_PE_RR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 777 RN_PE_RR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 521 RN_PE_RR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 191 RN_Status "DRS, Enable_Drive";
+CM_ SG_ 1031 RN_PE_RL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 775 RN_PE_RL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 519 RN_PE_RL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+BA_DEF_ BO_  "Bus" ENUM  "CAN1","CAN2";
+BA_DEF_ SG_  "InternalType" ENUM  "int","float";
+BA_DEF_ EV_  "GenEnvIsGeneratedDsp" ENUM  "No","Yes";
+BA_DEF_ EV_  "GenEnvMsgName" STRING ;
+BA_DEF_ EV_  "GenEnvMsgOffset" INT 0 2147483647;
+BA_DEF_ EV_  "GenEnvAutoGenCtrl" ENUM  "No","Yes";
+BA_DEF_ EV_  "GenEnvIsGeneratedSnd" ENUM  "No","Yes";
+BA_DEF_ EV_  "GenEnvControlType" ENUM  "NoControl","SliderHoriz","SliderVert","PushButton","Edit","BitmapSwitch";
+BA_DEF_ SG_  "GenSigEVName" STRING ;
+BA_DEF_ SG_  "GenSigEnvVarType" ENUM  "int","float","undef";
+BA_DEF_ SG_  "GenSigStartValue" FLOAT -100000000000 100000000000;
+BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition";
+BA_DEF_ SG_  "GenSigAutoGenSnd" ENUM  "No","Yes";
+BA_DEF_ SG_  "GenSigInactiveValue" INT 0 100000;
+BA_DEF_ SG_  "GenSigAutoGenDsp" ENUM  "No","Yes";
+BA_DEF_ SG_  "GenSigReceiveSetting" STRING ;
+BA_DEF_ SG_  "GenSigPreSetting" STRING ;
+BA_DEF_ SG_  "GenSigPostSetting" STRING ;
+BA_DEF_ SG_  "GenSigAssignSetting" STRING ;
+BA_DEF_ SG_  "GenSigConditionalSend" STRING ;
+BA_DEF_ SG_  "GenSigPreIfSetting" STRING ;
+BA_DEF_ SG_  "GenSigPostIfSetting" STRING ;
+BA_DEF_ SG_  "GenSigAltSetting" STRING ;
+BA_DEF_ SG_  "NWM-WakeupAllowed" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 2 2000;
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","not_used","not_used","not_used","not_used","Cyclic","not_used","IfActive";
+BA_DEF_ BO_  "NmMessage" ENUM  "no","yes";
+BA_DEF_ BO_  "DiagResponse" ENUM  "no","yes";
+BA_DEF_ BO_  "DiagRequest" ENUM  "no","yes";
+BA_DEF_ BO_  "GenMsgDelayTime" INT 1 1000;
+BA_DEF_ BO_  "GenMsgAutoGenSnd" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgAutoGenDsp" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgEVName" STRING ;
+BA_DEF_ BO_  "GenMsgPreSetting" STRING ;
+BA_DEF_ BO_  "GenMsgPostSetting" STRING ;
+BA_DEF_ BO_  "GenMsgConditionalSend" STRING ;
+BA_DEF_ BO_  "GenMsgPreIfSetting" STRING ;
+BA_DEF_ BO_  "GenMsgPostIfSetting" STRING ;
+BA_DEF_ BO_  "GenMsgAltSetting" STRING ;
+BA_DEF_ BO_  "GenMsgNrOfRepetition" INT 0 999999;
+BA_DEF_ BO_  "GenMsgCycleTimeFast" INT 2 50000;
+BA_DEF_ BO_  "GenMsgILSupport" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgFastOnStart" INT 0 100000;
+BA_DEF_ BO_  "GenMsgStartDelayTime" INT 0 100000;
+BA_DEF_ BU_  "TpTxIdentifier" HEX 1536 1791;
+BA_DEF_ BU_  "TpRxIdentifier" HEX 1536 1791;
+BA_DEF_ BU_  "Diagnose-Stationsadresse" HEX 0 255;
+BA_DEF_ BU_  "TpRxMask" HEX 0 255;
+BA_DEF_ BU_  "TpCanBus" INT 0 2;
+BA_DEF_ BU_  "TpUseFC" INT 0 1;
+BA_DEF_ BU_  "TpNodeBaseAddress" HEX 0 33554431;
+BA_DEF_ BU_  "NmStationAddress" INT 0 63;
+BA_DEF_ BU_  "NmNode" ENUM  "no","yes";
+BA_DEF_ BU_  "GenNodSleepTime" INT 0 1000000;
+BA_DEF_ BU_  "GenNodAutoGenSnd" ENUM  "No","Yes";
+BA_DEF_ BU_  "GenNodAutoGenDsp" ENUM  "No","Yes";
+BA_DEF_ BU_  "ILUsed" ENUM  "Yes","No";
+BA_DEF_ BU_  "TpAddressingMode" INT 0 3;
+BA_DEF_  "GenEnvVarEndingDsp" STRING ;
+BA_DEF_  "GenEnvVarEndingSnd" STRING ;
+BA_DEF_  "GenEnvVarPrefix" STRING ;
+BA_DEF_  "GenNWMTalkNM" STRING ;
+BA_DEF_  "GenNWMSleepTime" INT 0 1000000;
+BA_DEF_  "GenNWMGotoMode_BusSleep" STRING ;
+BA_DEF_  "GenNWMGotoMode_Awake" STRING ;
+BA_DEF_  "GenNWMApCanSleep" STRING ;
+BA_DEF_  "GenNWMApCanOn" STRING ;
+BA_DEF_  "GenNWMApCanOff" STRING ;
+BA_DEF_  "NmBaseAddress" HEX 1280 1311;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_ BU_  "NodeLayerModules" STRING ;
+BA_DEF_ BU_  "ECU" STRING ;
+BA_DEF_ BU_  "CANoeJitterMax" INT 0 0;
+BA_DEF_ BU_  "CANoeJitterMin" INT 0 0;
+BA_DEF_ BU_  "CANoeDrift" INT 0 0;
+BA_DEF_ BU_  "CANoeStartDelay" INT 0 0;
+BA_DEF_DEF_  "Bus" "CAN1";
+BA_DEF_DEF_  "InternalType" "int";
+BA_DEF_DEF_  "GenEnvIsGeneratedDsp" "No";
+BA_DEF_DEF_  "GenEnvMsgName" "";
+BA_DEF_DEF_  "GenEnvMsgOffset" 0;
+BA_DEF_DEF_  "GenEnvAutoGenCtrl" "No";
+BA_DEF_DEF_  "GenEnvIsGeneratedSnd" "No";
+BA_DEF_DEF_  "GenEnvControlType" "";
+BA_DEF_DEF_  "GenSigEVName" "";
+BA_DEF_DEF_  "GenSigEnvVarType" "undef";
+BA_DEF_DEF_  "GenSigStartValue" 0;
+BA_DEF_DEF_  "GenSigSendType" "Cyclic";
+BA_DEF_DEF_  "GenSigAutoGenSnd" "";
+BA_DEF_DEF_  "GenSigInactiveValue" 0;
+BA_DEF_DEF_  "GenSigAutoGenDsp" "";
+BA_DEF_DEF_  "GenSigReceiveSetting" "";
+BA_DEF_DEF_  "GenSigPreSetting" "";
+BA_DEF_DEF_  "GenSigPostSetting" "";
+BA_DEF_DEF_  "GenSigAssignSetting" "";
+BA_DEF_DEF_  "GenSigConditionalSend" "";
+BA_DEF_DEF_  "GenSigPreIfSetting" "";
+BA_DEF_DEF_  "GenSigPostIfSetting" "";
+BA_DEF_DEF_  "GenSigAltSetting" "";
+BA_DEF_DEF_  "NWM-WakeupAllowed" "";
+BA_DEF_DEF_  "GenMsgCycleTime" 10;
+BA_DEF_DEF_  "GenMsgSendType" "Cyclic";
+BA_DEF_DEF_  "NmMessage" "no";
+BA_DEF_DEF_  "DiagResponse" "no";
+BA_DEF_DEF_  "DiagRequest" "no";
+BA_DEF_DEF_  "GenMsgDelayTime" 1;
+BA_DEF_DEF_  "GenMsgAutoGenSnd" "";
+BA_DEF_DEF_  "GenMsgAutoGenDsp" "";
+BA_DEF_DEF_  "GenMsgEVName" "";
+BA_DEF_DEF_  "GenMsgPreSetting" "";
+BA_DEF_DEF_  "GenMsgPostSetting" "";
+BA_DEF_DEF_  "GenMsgConditionalSend" "";
+BA_DEF_DEF_  "GenMsgPreIfSetting" "";
+BA_DEF_DEF_  "GenMsgPostIfSetting" "";
+BA_DEF_DEF_  "GenMsgAltSetting" "";
+BA_DEF_DEF_  "GenMsgNrOfRepetition" 0;
+BA_DEF_DEF_  "GenMsgCycleTimeFast" 5;
+BA_DEF_DEF_  "GenMsgILSupport" "Yes";
+BA_DEF_DEF_  "GenMsgFastOnStart" 0;
+BA_DEF_DEF_  "GenMsgStartDelayTime" 0;
+BA_DEF_DEF_  "TpTxIdentifier" 1536;
+BA_DEF_DEF_  "TpRxIdentifier" 1536;
+BA_DEF_DEF_  "Diagnose-Stationsadresse" 0;
+BA_DEF_DEF_  "TpRxMask" 255;
+BA_DEF_DEF_  "TpCanBus" 1;
+BA_DEF_DEF_  "TpUseFC" 1;
+BA_DEF_DEF_  "TpNodeBaseAddress" 1536;
+BA_DEF_DEF_  "NmStationAddress" 0;
+BA_DEF_DEF_  "NmNode" "no";
+BA_DEF_DEF_  "GenNodSleepTime" 0;
+BA_DEF_DEF_  "GenNodAutoGenSnd" "";
+BA_DEF_DEF_  "GenNodAutoGenDsp" "";
+BA_DEF_DEF_  "ILUsed" "No";
+BA_DEF_DEF_  "TpAddressingMode" 0;
+BA_DEF_DEF_  "GenEnvVarEndingDsp" "Dsp_";
+BA_DEF_DEF_  "GenEnvVarEndingSnd" "_";
+BA_DEF_DEF_  "GenEnvVarPrefix" "Env";
+BA_DEF_DEF_  "GenNWMTalkNM" "TalkNM()";
+BA_DEF_DEF_  "GenNWMSleepTime" 0;
+BA_DEF_DEF_  "GenNWMGotoMode_BusSleep" "GotoMode_BusSleep()";
+BA_DEF_DEF_  "GenNWMGotoMode_Awake" "GotoMode_Awake()";
+BA_DEF_DEF_  "GenNWMApCanSleep" "apCanSleep()";
+BA_DEF_DEF_  "GenNWMApCanOn" "apCanOn()";
+BA_DEF_DEF_  "GenNWMApCanOff" "apCanOff()";
+BA_DEF_DEF_  "NmBaseAddress" 1280;
+BA_DEF_DEF_  "BusType" "";
+BA_DEF_DEF_  "NodeLayerModules" "";
+BA_DEF_DEF_  "ECU" "";
+BA_DEF_DEF_  "CANoeJitterMax" 0;
+BA_DEF_DEF_  "CANoeJitterMin" 0;
+BA_DEF_DEF_  "CANoeDrift" 0;
+BA_DEF_DEF_  "CANoeStartDelay" 0;
+BA_ "BusType" "CAN";
+BA_ "Bus" BO_ 1801 1;
+BA_ "Bus" BO_ 1799 1;
+BA_ "Bus" BO_ 1805 1;
+BA_ "Bus" BO_ 1798 1;
+BA_ "Bus" BO_ 1037 1;
+BA_ "Bus" BO_ 781 1;
+BA_ "Bus" BO_ 525 1;
+BA_ "Bus" BO_ 1030 1;
+BA_ "Bus" BO_ 774 1;
+BA_ "Bus" BO_ 518 1;
+BA_ "Bus" BO_ 1033 1;
+BA_ "Bus" BO_ 777 1;
+BA_ "Bus" BO_ 521 1;
+BA_ "Bus" BO_ 1031 1;
+BA_ "Bus" BO_ 775 1;
+BA_ "Bus" BO_ 519 1;
+BA_ "InternalType" SG_ 181 RN_Gearbox_Temp_RR 1;
+BA_ "GenSigStartValue" SG_ 181 RN_Gearbox_Temp_RL 5;
+BA_ "InternalType" SG_ 181 RN_Gearbox_Temp_RL 1;
+BA_ "InternalType" SG_ 181 RN_Ambient_Outside 1;
+BA_ "GenSigStartValue" SG_ 181 RN_Ambient_Outside 0;
+BA_ "InternalType" SG_ 181 RN_Ambient_Inside 1;
+BA_ "GenSigStartValue" SG_ 181 RN_Ambient_Inside 0;
+BA_ "InternalType" SG_ 197 FN_GPS_yPos 1;
+BA_ "InternalType" SG_ 197 FN_GPS_xPos 1;
+BA_ "InternalType" SG_ 206 FN_TV_Knob 1;
+BA_ "InternalType" SG_ 206 FN_TC_Knob 1;
+BA_ "InternalType" SG_ 206 FN_Regen_Neutral 1;
+BA_ "InternalType" SG_ 206 FN_Regen_Knob 1;
+BA_ "InternalType" SG_ 206 FN_Regen_Div 1;
+BA_ "InternalType" SG_ 1316 IVT_Result_U3 1;
+BA_ "InternalType" SG_ 1315 IVT_Result_U2 1;
+BA_ "InternalType" SG_ 1314 IVT_Result_U1 1;
+BA_ "InternalType" SG_ 1317 IVT_Result_T 1;
+BA_ "InternalType" SG_ 1313 IVT_Result_I 1;
+BA_ "InternalType" SG_ 1319 IVT_Result_As 1;
+BA_ "InternalType" SG_ 167 AMS_AvgTemp 1;
+BA_ "InternalType" SG_ 167 AMS_MinTemp 1;
+BA_ "InternalType" SG_ 167 AMS_MaxTemp 1;
+BA_ "InternalType" SG_ 166 AMS_AvgVoltage 1;
+BA_ "InternalType" SG_ 166 AMS_MinVoltage 1;
+BA_ "InternalType" SG_ 166 AMS_MaxVoltage 1;
+BA_ "InternalType" SG_ 163 AMS_Voltage3 1;
+BA_ "InternalType" SG_ 163 AMS_Voltage2 1;
+BA_ "InternalType" SG_ 163 AMS_Voltage1 1;
+BA_ "InternalType" SG_ 162 AMS_Temp3 1;
+BA_ "InternalType" SG_ 162 AMS_Temp2 1;
+BA_ "InternalType" SG_ 162 AMS_Temp1 1;
+BA_ "InternalType" SG_ 195 FN_Rotor_Object_temp_FL 1;
+BA_ "InternalType" SG_ 195 FN_Rotor_Object_temp_FR 1;
+BA_ "InternalType" SG_ 195 FN_Damper_FR 1;
+BA_ "InternalType" SG_ 195 FN_Damper_FL 1;
+BA_ "InternalType" SG_ 194 FN_WaterR 1;
+BA_ "InternalType" SG_ 194 FN_WaterL 1;
+BA_ "InternalType" SG_ 194 FN_Gearbox_temp_FR 1;
+BA_ "InternalType" SG_ 194 FN_Gearbox_temp_FL 1;
+BA_ "InternalType" SG_ 194 FN_Brake_temp_FR 1;
+BA_ "InternalType" SG_ 194 FN_Brake_temp_FL 1;
+BA_ "InternalType" SG_ 193 FN_Throttle 1;
+BA_ "InternalType" SG_ 193 FN_Steering_Angle 1;
+BA_ "InternalType" SG_ 193 FN_Brake_System 1;
+BA_ "InternalType" SG_ 193 FN_Brake_Pedal 1;
+BA_ "InternalType" SG_ 193 FN_APPS2 1;
+BA_ "InternalType" SG_ 193 FN_APPS1 1;
+BA_ "InternalType" SG_ 178 RN_Rotor_Object_Temp_RR 1;
+BA_ "InternalType" SG_ 178 RN_Rotor_Object_Temp_RL 1;
+BA_ "InternalType" SG_ 178 RN_Damper_RR 1;
+BA_ "InternalType" SG_ 178 RN_Damper_RL 1;
+BA_ "InternalType" SG_ 177 RN_Water_Motor_RR 1;
+BA_ "InternalType" SG_ 177 RN_Water_Motor_RL 1;
+BA_ "InternalType" SG_ 177 RN_Water_Motor_Radiator 1;
+BA_ "InternalType" SG_ 177 RN_Water_Motor_PE 1;
+BA_ "InternalType" SG_ 207 FN_DiffRear 1;
+BA_ "InternalType" SG_ 207 FN_DiffFront 1;
+BA_ "InternalType" SG_ 207 FN_Front_Torque_Scale 1;
+BA_ "InternalType" SG_ 207 FN_Speed_Limit 1;
+BA_ "InternalType" SG_ 207 FN_Max_Torque 1;
+BA_ "InternalType" SG_ 909 PE_FR_Iq 1;
+BA_ "InternalType" SG_ 909 PE_FR_Id 1;
+BA_ "InternalType" SG_ 909 PE_FR_Uq 1;
+BA_ "InternalType" SG_ 909 PE_FR_Ud 1;
+BA_ "InternalType" SG_ 653 PE_FR_Measured_Udc 1;
+BA_ "InternalType" SG_ 397 PE_FR_Torque_Estimate 1;
+BA_ "InternalType" SG_ 902 PE_FL_Iq 1;
+BA_ "InternalType" SG_ 902 PE_FL_Id 1;
+BA_ "InternalType" SG_ 902 PE_FL_Uq 1;
+BA_ "InternalType" SG_ 902 PE_FL_Ud 1;
+BA_ "InternalType" SG_ 646 PE_FL_Measured_Udc 1;
+BA_ "InternalType" SG_ 390 PE_FL_Torque_Estimate 1;
+BA_ "InternalType" SG_ 905 PE_RR_Iq 1;
+BA_ "InternalType" SG_ 905 PE_RR_Id 1;
+BA_ "InternalType" SG_ 905 PE_RR_Uq 1;
+BA_ "InternalType" SG_ 905 PE_RR_Ud 1;
+BA_ "InternalType" SG_ 649 PE_RR_Measured_Udc 1;
+BA_ "InternalType" SG_ 393 PE_RR_Torque_Estimate 1;
+BA_ "InternalType" SG_ 1037 RN_PE_FR_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 781 RN_PE_FR_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 525 RN_PE_FR_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 1030 RN_PE_FL_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 774 RN_PE_FL_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 518 RN_PE_FL_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 1033 RN_PE_RR_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 777 RN_PE_RR_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 521 RN_PE_RR_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 903 PE_RL_Iq 1;
+BA_ "InternalType" SG_ 903 PE_RL_Id 1;
+BA_ "InternalType" SG_ 903 PE_RL_Uq 1;
+BA_ "InternalType" SG_ 903 PE_RL_Ud 1;
+BA_ "InternalType" SG_ 647 PE_RL_Measured_Udc 1;
+BA_ "InternalType" SG_ 391 PE_RL_Torque_Estimate 1;
+BA_ "InternalType" SG_ 1031 RN_PE_RL_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 775 RN_PE_RL_Torque_Set_Point 1;
+BA_ "InternalType" SG_ 519 RN_PE_RL_Torque_Set_Point 1;
+

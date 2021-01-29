@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kvaser.KvadbLib;
+using STLinkBridgeWrapper;
 
 namespace CanDB
 {
@@ -35,7 +37,6 @@ namespace CanDB
         {
             Kvadblib.Hnd db_handle;
             Kvadblib.Status status;
-
 
             status = Kvadblib.Open(out db_handle);
             status = Kvadblib.Create(db_handle, "MyTestDB", fullFilePath);
@@ -96,7 +97,7 @@ namespace CanDB
                 {
                     Comment = tempMessageComment,
                     DLC = tempMessageDlc,
-                    Flags = (MESSAGE)tempFlags,
+                    //Flags = (MESSAGE)tempFlags,
                     ID = tempMessageID,
                     Name = tempMessageName,
                     QualifiedName = tempMessageQualifiedName,
@@ -186,6 +187,58 @@ namespace CanDB
             return Messages;
         }
 
+        public static List<DataPoint> ParseReceivedCanMessagesRx(List<CanBridgeMessageRx> receivedMessages, SortedList<uint, CanMessageType> canMessageTypes)
+        {
+            List<DataPoint> values = new List<DataPoint>();
+
+            foreach (var message in receivedMessages)
+            {
+                CanMessageType canMessage = canMessageTypes[message.ID];
+                if (canMessage == null)
+                {
+                    continue;
+                }
+
+                if (canMessage.DLC != message.DLC)
+                {
+                    throw new Exception("Error: DLC of received message did not match expected DLC from database."); // TODO: Handle more gracefully
+                }
+
+                foreach (var signalType in canMessage.Signals)
+                {
+                    if (signalType.Encoding == SignalEncoding.Motorola)
+                    {
+                        throw new Exception("Motorola byte order not supported");
+                    }
+                    // TODO: Check if the bitmask has been calculated
+                    // Isolate relevant bits using precalculated bitmask
+                    UInt64 bits = message.data;
+                    bits &= signalType.BitMask;
+
+                    // Shift back to original state according to specification
+                    bits >>= signalType.StartBit;
+
+
+                    double tempValue = (double)bits;
+
+                    // Apply inverse transform to restore actual value
+                    tempValue -= signalType.Offset;
+                    tempValue /= signalType.ScaleFactor;
+
+                    values.Add(new DataPoint
+                    {
+                        Ticks = message.TimeStamp,
+                        CanTimeStamp = message.CanTimeStamp,
+                        data = tempValue,
+                        SignalType = signalType,
+                    });
+
+                }
+            }
+
+            return values;
+        }
+
     }
     public class CanMessageType
     {
@@ -193,10 +246,58 @@ namespace CanDB
         public string QualifiedName { get; set; }
         public string Comment { get; set; }
         public int ID { get; set; }
-        public MESSAGE Flags { get; set; }
+        //public MESSAGE Flags { get; set; }
         public int DLC { get; set; }
 
         public List<CanSignalType> Signals { get; set; } = new List<CanSignalType>();
+
+        public CanBridgeMessageTx GenerateCanMessageTx(params (CanSignalType, double)[] signalsAndData )
+        {
+            if ( signalsAndData.Length != Signals.Count)
+            {
+                throw new Exception("Wrong number of paramteres in parameter list.");
+            }
+
+            foreach (var signal in Signals)
+            {
+                if (!signalsAndData.Any((x=>x.Item1==signal)))
+                {
+                    throw new Exception("Parameter list must contain exatcly the same signals as in this can message.");
+                }
+            }
+
+            CanBridgeMessageTx message = new CanBridgeMessageTx
+            {
+                ID = (uint)this.ID,
+                //IdExtended = this.Flags == MESSAGE.EXT,
+                IdExtended = true, // TODO: Figure out how this works!
+                RTR = false,
+                DLC = (byte)this.DLC,
+            };
+
+            UInt64 payload = 0;
+            foreach (var tuple in signalsAndData)
+            {
+                var signal = tuple.Item1;
+                var data   = tuple.Item2;
+                // Scale and offset value according to signal secification
+                double tranformedValue = data * signal.ScaleFactor;
+                tranformedValue += signal.Offset;
+
+                // Cast to integer. The scaling should have been chosen such that this casting is okay.
+                var bits = (UInt64)tranformedValue;
+
+                // Get the bits, trim and shift according to specification
+                bits <<= signal.StartBit;
+                bits &= signal.BitMask; // Trim
+
+                // Add to payload
+                payload |= bits;
+            }
+            message.data = payload;
+
+            return message;
+        }
     }
 
     public class CanSignalType
@@ -213,7 +314,6 @@ namespace CanDB
         public double MaxValue { get; set; }
         public double ScaleFactor { get; set; }
         public double Offset { get; set; }
-        public List<DataPoint> DataPoints { get; } = new List<DataPoint>();
         public UInt64 BitMask { get; private set; } = 0;
         public void CalculateBitMask()
         {
@@ -223,14 +323,19 @@ namespace CanDB
                 BitMask = BitMask | ((UInt64)1 << i);
             }
         }
-        public double WriteValue { get; set; }
     }
 
     public struct DataPoint
     {
-        public double data         {get;set;}
-        public UInt16 CanTimeStamp {get;set;}
-        public Int64  Ticks        {get;set;}
+        public double data               {get;set;}
+        public UInt16 CanTimeStamp       {get;set;}
+        public Int64  Ticks              {get;set;}
+        public CanSignalType SignalType  {get;set;}
     }
 
+    //public struct CanMessageTx
+    //{
+    //    public UInt64 data { get; set; }
+    //    public CanMessageType CanMessageType { get; set; }
+    //}
 }
