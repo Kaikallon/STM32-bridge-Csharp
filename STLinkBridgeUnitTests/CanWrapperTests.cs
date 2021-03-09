@@ -31,15 +31,15 @@ namespace STLinkBridgeUnitTests
             wrapper.StartTransmission(null);
             Assert.IsTrue(wrapper.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
 
-
+            throw new NotImplementedException();
             var canMessage = GenerateSimpleCanMessageType();
-            var signal1 = canMessage.Signals[0];
-            var signal2 = canMessage.Signals[1];
-            var signal3 = canMessage.Signals[2];
+            //var signal1 = canMessage.Signals[0];
+            //var signal2 = canMessage.Signals[1];
+            //var signal3 = canMessage.Signals[2];
 
-            signal1.CalculateBitMask();
-            signal2.CalculateBitMask();
-            signal3.CalculateBitMask();
+            //signal1.CalculateBitMask();
+            //signal2.CalculateBitMask();
+            //signal3.CalculateBitMask();
 
             //wrapper.canMessageTypes = new SortedList<uint, CanMessageType>();
             //wrapper.canMessageTypes.Add((uint)canMessage.ID, canMessage);
@@ -47,7 +47,8 @@ namespace STLinkBridgeUnitTests
             double value1 = -1.3;
             double value2 =  1.4;
             double value3 =  5;
-            var message = canMessage.GenerateCanMessageTx((signal1, value1), (signal2, value2), (signal3, value3));
+            //var message = canMessage.GenerateCanMessageTx((signal1, value1), (signal2, value2), (signal3, value3));
+            var message = new CanBridgeMessageTx();
 
 
             wrapper.CanWriteLL(message);
@@ -95,33 +96,33 @@ namespace STLinkBridgeUnitTests
                 DLC = 4,
                 //Flags = MESSAGE.EXT,
                 Name = "TestMessage1",
-                Signals = new List<CanSignalType>
-                {
-                    new CanSignalType
-                    {
-                        StartBit = 0,
-                        Length = 8,
-                        Offset = 50,
-                        ScaleFactor = 10,
-                        Name = "TestSignal1",
-                    },
-                    new CanSignalType
-                    {
-                        StartBit = 8,
-                        Length = 16,
-                        Offset = 50,
-                        ScaleFactor = 10,
-                        Name = "TestSignal2",
-                    },
-                    new CanSignalType
-                    {
-                        StartBit = 24,
-                        Length = 8,
-                        Offset = 50,
-                        ScaleFactor = 10,
-                        Name = "TestSignal3",
-                    },
-                }
+                //Signals = new List<CanSignalType>
+                //{
+                //    new CanSignalType
+                //    {
+                //        StartBit = 0,
+                //        Length = 8,
+                //        Offset = 50,
+                //        ScaleFactor = 10,
+                //        Name = "TestSignal1",
+                //    },
+                //    new CanSignalType
+                //    {
+                //        StartBit = 8,
+                //        Length = 16,
+                //        Offset = 50,
+                //        ScaleFactor = 10,
+                //        Name = "TestSignal2",
+                //    },
+                //    new CanSignalType
+                //    {
+                //        StartBit = 24,
+                //        Length = 8,
+                //        Offset = 50,
+                //        ScaleFactor = 10,
+                //        Name = "TestSignal3",
+                //    },
+                //}
             };
         }
     }

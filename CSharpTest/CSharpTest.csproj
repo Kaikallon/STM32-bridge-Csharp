@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Kvaser.KvaDbLib">
-      <HintPath>.\Kvaser.KvaDbLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -98,6 +95,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /d  "$(SolutionDir)\Dependencies\STLinkUSBDriver.dll" "$(ProjectDir)$(OutDir)"
-xcopy /y /d  "$(SolutionDir)\Dependencies\kvaDbLib.dll" "$(ProjectDir)$(OutDir)"</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

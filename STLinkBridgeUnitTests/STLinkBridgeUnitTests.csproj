@@ -82,7 +82,7 @@
   <Import Project="..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets')" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /d  "$(SolutionDir)\Dependencies\STLinkUSBDriver.dll" "$(ProjectDir)$(OutDir)"
-xcopy /y /d  "$(SolutionDir)\Dependencies\kvaDbLib.dll" "$(ProjectDir)$(OutDir)"
+
 
 </PostBuildEvent>
   </PropertyGroup>

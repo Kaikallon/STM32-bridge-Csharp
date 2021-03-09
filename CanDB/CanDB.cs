@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kvaser.KvadbLib;
 using STLinkBridgeWrapper;
+using System.Diagnostics;
 
 namespace CanDB
 {
@@ -24,167 +24,345 @@ namespace CanDB
         Float = 3,
         Double = 4
     }
-    public enum MESSAGE
-    {
-        EXT = int.MinValue,
-        J1939 = 1,
-        //WAKEUP = 2
-    }
+
+    // Note: This library does not support signal multiplexing
 
     public class CanDB
     {
-        public static HashSet<CanMessageType> OpenCanDB(string fullFilePath)
+
+        /// <summary>
+        /// Use this function to read a .dbc CAN database file.
+        /// </summary>
+        /// <param name="fullFilePath">Fulle path to the .dbc file</param>
+        /// <returns>CanDataBasType object with all the relevant information from the .dbc file</returns>
+        public static CanDatabaseType OpenCanDB(string fullFilePath)
         {
-            Kvadblib.Hnd db_handle;
-            Kvadblib.Status status;
 
-            status = Kvadblib.Open(out db_handle);
-            status = Kvadblib.Create(db_handle, "MyTestDB", fullFilePath);
+            CanDatabaseType canDatabaseType = new CanDatabaseType();
+            canDatabaseType.Name = Path.GetFileNameWithoutExtension(fullFilePath);
 
-            if (status == Kvadblib.Status.Err_DbFileOpen)
-                throw new Exception("Could not open CAN database file"); // TODO: Handle more gracefully
-            if (status == Kvadblib.Status.Err_DbFileParse)
+            // Read the file line by line.  
+            //System.IO.StreamReader file = new System.IO.StreamReader(fullFilePath);
+            var canDbFile = File.ReadAllLines(fullFilePath).ToList();
+            List<String>.Enumerator enumerator = canDbFile.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                string errorMessage;
-                status = Kvadblib.GetLastParseError(out errorMessage);
-                throw new Exception("Could not parse file. Error: \n" + errorMessage);
-            }
-
-
-            HashSet<CanMessageType> Messages = new HashSet<CanMessageType>();
-            // Get the first message in the database
-            Kvadblib.MessageHnd messageHandle;
-            status = Kvadblib.GetFirstMsg(db_handle, out messageHandle);
-            if (status != Kvadblib.Status.OK)
-                throw new Exception("kvaDbGetFirstMsg failed: " + status.ToString()); // TODO: Handle more gracefully
-
-            // Go through all messages in the database
-            while (status == Kvadblib.Status.OK)
-            {
-                string tempMessageName;
-                string tempMessageQualifiedName;
-                string tempMessageComment;
-                int tempMessageID;
-                Kvadblib.MESSAGE tempFlags;
-                int tempMessageDlc;
-
-                // Get the properties for each message
-                status = Kvadblib.GetMsgName(messageHandle, out tempMessageName);
-                if (status != Kvadblib.Status.OK)
-                    throw new Exception("kvaDbGetMsgName failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                status = Kvadblib.GetMsgQualifiedName(messageHandle, out tempMessageQualifiedName);
-                if (status != Kvadblib.Status.OK)
-                    throw new Exception("kvaDbGetMsgQualifiedName failed: " + status.ToString());
-
-                status = Kvadblib.GetMsgComment(messageHandle, out tempMessageComment);
-                if (status != Kvadblib.Status.OK)
-                    throw new Exception("kvaDbGetMsgComment failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                status = Kvadblib.GetMsgIdEx(messageHandle, out tempMessageID);
-                if (status != Kvadblib.Status.OK)
-                    throw new Exception("kvaDbGetMsgId failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                status = Kvadblib.GetMsgFlags(messageHandle, out tempFlags);
-                if (status != Kvadblib.Status.OK)
-                    throw new Exception("GetMsgFlags failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                status = Kvadblib.GetMsgDlc(messageHandle, out tempMessageDlc);
-                if (status != Kvadblib.Status.OK)
-                    throw new Exception("kvaDbGetMsgDlc failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                CanMessageType tempCanMessage = new CanMessageType
+                if (enumerator.Current.StartsWith("BU_"))
                 {
-                    Comment = tempMessageComment,
-                    DLC = tempMessageDlc,
-                    //Flags = (MESSAGE)tempFlags,
-                    ID = tempMessageID,
-                    Name = tempMessageName,
-                    QualifiedName = tempMessageQualifiedName,
-                };
-                Messages.Add(tempCanMessage);
-
-                // Go through all signals for this message
-                Kvadblib.SignalHnd signalHandle;
-                status = Kvadblib.GetFirstSignal(messageHandle, out signalHandle);
-                while (status == Kvadblib.Status.OK)
-                {
-                    string tempSignalName;
-                    string tempSignalQualifiedName;
-                    string tempSignalComment;
-                    string tempSignalUnit;
-                    Kvadblib.SignalEncoding tempSignalEncoding;
-                    Kvadblib.SignalType tempSignalType;
-                    int tempStartbit = 0;
-                    int tempLength = 0;
-                    double tempMinval = 0;
-                    double tempMaxval = 0;
-                    double tempScaleFactor = 0;
-                    double tempOffset = 0;
-
-                    // Get the properties for each signal.
-                    status = Kvadblib.GetSignalName(signalHandle, out tempSignalName);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalName failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalQualifiedName(signalHandle, out tempSignalQualifiedName);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalQualifiedName failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalComment(signalHandle, out tempSignalComment);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalComment failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalUnit(signalHandle, out tempSignalUnit);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalUnit failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalEncoding(signalHandle, out tempSignalEncoding);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalEncoding failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalRepresentationType(signalHandle, out tempSignalType);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalRepresentationType failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalValueLimits(signalHandle, out tempMinval, out tempMaxval);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalValueLimits failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalValueScaling(signalHandle, out tempScaleFactor, out tempOffset);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalValueScaling failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    status = Kvadblib.GetSignalValueSize(signalHandle, out tempStartbit, out tempLength);
-                    if (status != Kvadblib.Status.OK)
-                        throw new Exception("kvaDbGetSignalValueSize failed: " + status.ToString()); // TODO: Handle more gracefully
-
-                    CanSignalType tempCanSignal = new CanSignalType
+                    var nodes = ParseDbcNodeDefinition(enumerator.Current);
+                    foreach (var node in nodes)
                     {
-                        Comment = tempSignalComment,
-                        Encoding = (SignalEncoding)tempSignalEncoding,
-                        Length = tempLength,
-                        MaxValue = tempMaxval,
-                        MinValue = tempMinval,
-                        Name = tempSignalName,
-                        Offset = tempOffset,
-                        QualifiedName = tempSignalQualifiedName,
-                        ScaleFactor = tempScaleFactor,
-                        StartBit = tempStartbit,
-                        Type = (SignalType)tempSignalType,
-                        Unit = tempSignalUnit,
-                    };
-                    tempCanSignal.CalculateBitMask();
-                    tempCanMessage.Signals.Add(tempCanSignal);
-
-                    status = Kvadblib.GetNextSignal(messageHandle, out signalHandle);
+                        canDatabaseType.Nodes.Add(node);
+                    }
                 }
-                status = Kvadblib.GetNextMsg(db_handle, out messageHandle);
+
+                if (enumerator.Current.StartsWith("BO_"))
+                {
+                    CanMessageType temp = ParseDbcMessageDefinition(enumerator);
+                    canDatabaseType.CanMessageTypes.Add(temp.ID, temp);
+                }
+                if (enumerator.Current.StartsWith("CM_"))
+                    ParseDbcCommentField(enumerator.Current, canDatabaseType.CanMessageTypes);
+                if (enumerator.Current.StartsWith("BA_DEF_"))
+                    ParseDbcAttributeDefinition(enumerator.Current, canDatabaseType.CanMessageTypes);
+                if (enumerator.Current.StartsWith("SIG_VALTYPE_"))
+                    ParseDbcTypeDefinition(enumerator.Current, canDatabaseType.CanMessageTypes);
+
             }
 
-            // All done; close database
-            Kvadblib.Close(db_handle);
-            return Messages;
+            foreach( var message in canDatabaseType.CanMessageTypes)
+            {
+                message.Value.QualifiedName = canDatabaseType.Name + "." + message.Value.Name;
+                foreach(var signal in message.Value.Signals)
+                {
+                    signal.Value.QualifiedName = canDatabaseType.Name + "." + signal.Value.QualifiedName;
+                }
+            }
+            
+            return canDatabaseType;
+        }
+
+        /// <summary>
+        /// This function will parse the a line that starts with "BU_" and return a list of 
+        /// all node names in the database file
+        /// </summary>
+        /// <param name="line">One line from the .dbc file that starts with "BU_"</param>
+        /// <returns>List of all nodes in .dbc file</returns>
+        protected static IEnumerable<string> ParseDbcNodeDefinition(string line)
+        {
+            var segments = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            return segments.Skip(1); 
+        }
+
+        /// <summary>
+        /// Handles one CAN message definitioni line from a .dbc file and recursively 
+        /// calls ParseDbcMessageDefinition to handle CAN signal definition, which will 
+        /// cause the enumerator to advance.
+        /// </summary>
+        /// <param name="enumerator">An enumerators that is used to step through the 
+        /// .dbc file line by line.</param>
+        /// <returns>A new CanMessageType object with most fields and all signals populated.</returns>
+        protected static CanMessageType ParseDbcMessageDefinition(List<String>.Enumerator enumerator)
+        {
+            // Field to be populated and returned
+            CanMessageType canMessageType = new CanMessageType();
+
+            string line = enumerator.Current;
+            var segments = line.Split(' ');
+            Debug.Assert(segments.Length == 5);
+
+            int id;
+            if (Int32.TryParse(segments[1], out id))
+                canMessageType.ID = id;
+            // TODO: Handle the else-part. What should we do if the parsing fails?
+
+            string name = segments[2].TrimEnd(':');
+            canMessageType.Name = name;
+
+            int DLC;
+            if (Int32.TryParse(segments[3], out DLC))
+                canMessageType.DLC = DLC;
+            // TODO: Handle the else-part. What should we do if the parsing fails?
+
+            string SendingNode = segments[4];
+            canMessageType.SendingNode = SendingNode;
+
+            while(enumerator.MoveNext())
+            {
+                if (!enumerator.Current.TrimStart(' ').StartsWith("SG_"))
+                    break;
+                CanSignalType temp = HandleDcbSignalDefinition(enumerator.Current);
+                canMessageType.Signals.Add(temp.Name, temp);
+            }
+
+            foreach(var signal in canMessageType.Signals)
+            {
+                signal.Value.QualifiedName = canMessageType.Name + "." + signal.Value.Name;
+            }
+            
+            return canMessageType;
+        }
+
+        /// <summary>
+        /// Handles one signal definition line from a .dbc file and returns a new CanSignalType 
+        /// object with multiple fields populated. Not all information if available in one line, 
+        /// which is why not all fields are populated at once.
+        /// </summary>
+        /// <param name="line">The line from a .dbc file to be parsed.</param>
+        /// <returns>CanSignalType object with multiple fields populated.</returns>
+        protected static CanSignalType HandleDcbSignalDefinition(string line)
+        {
+            // Field to be populated and returned
+            CanSignalType canSignalType = new CanSignalType();
+
+            // Split at white space
+            var segments = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            Debug.Assert(segments.Length == 8 || segments.Length == 9);
+
+            string name = segments[1];
+            canSignalType.Name = name;
+
+            // Skip signal multiplexing definition, if any
+            var elementsAfterColon = segments.SkipWhile(word => !word.Equals(":"));
+
+            // This enumerator is used to handle the different 
+            var signalDefinitionEnumerator = elementsAfterColon.GetEnumerator();
+            // Skip first element sing it contains the colon character
+            signalDefinitionEnumerator.MoveNext();
+            signalDefinitionEnumerator.MoveNext();
+
+            // Parse bit definition
+            // <StartBit>|<Length>@<Endianness><Signed>
+            // Example: 40|8@1+
+            {
+                var bitDefinition = signalDefinitionEnumerator.Current;
+                var segments2 = bitDefinition.Split(new char[] { '|', '@' });
+                Debug.Assert(segments2.Length == 3);
+
+                int startBit;
+                if (Int32.TryParse(segments2[0], out startBit))
+                    canSignalType.StartBit = startBit;
+
+                int numberOfBits;
+                if (Int32.TryParse(segments2[1], out numberOfBits))
+                    canSignalType.Length = numberOfBits;
+
+                bool littleEndian = true;
+                bool signed = false;
+                switch(segments2[2])
+                {
+                    case "0-":
+                        littleEndian = false; // aka Motorola
+                        signed = true;
+                        break;
+
+                    case "0+":
+                        littleEndian = false; // aka Motorola
+                        signed = false;
+                        break;
+
+                    case "1-":
+                        littleEndian = true; // aka Intel
+                        signed = true;
+                        break;
+
+                    case "1+":
+                        littleEndian = true; // aka Intel
+                        signed = false;
+                        break;
+                }
+                canSignalType.Encoding = littleEndian ? SignalEncoding.Intel : SignalEncoding.Motorola;
+                canSignalType.Type = signed ? SignalType.Signed : SignalType.Unsigned;
+            }
+
+            signalDefinitionEnumerator.MoveNext();
+            // Parse scale factor and offset
+            // Format: (<Factor>,<Offset>)
+            // Example: (0.5,5)
+            {
+                var scaleOffset = signalDefinitionEnumerator.Current
+                    .TrimStart('(')
+                    .TrimEnd(')')
+                    .Split(',');
+                Debug.Assert(scaleOffset.Length == 2);
+
+                double scale;
+                if (Double.TryParse(scaleOffset[0], out scale))
+                    canSignalType.ScaleFactor = scale;
+                // TODO: Handle the else-part. What should we do if the parsing fails?
+
+                double offset;
+                if (Double.TryParse(scaleOffset[1], out offset))
+                    canSignalType.Offset = offset;
+                // TODO: Handle the else-part. What should we do if the parsing fails?
+
+            }
+
+            signalDefinitionEnumerator.MoveNext();
+            // Parse minimum and maximum value
+            // Format: [<Min>|<Max>]
+            // Example: [5|132.5]
+            {
+                var minMax = signalDefinitionEnumerator.Current
+                    .TrimStart('[')
+                    .TrimEnd(']')
+                    .Split('|');
+                Debug.Assert(minMax.Length == 2);
+
+                double minimum;
+                if (Double.TryParse(minMax[0], out minimum))
+                    canSignalType.MinValue = minimum;
+                // TODO: Handle the else-part. What should we do if the parsing fails?
+
+                double maximum;
+                if (Double.TryParse(minMax[1], out maximum))
+                    canSignalType.MaxValue = maximum;
+                // TODO: Handle the else-part. What should we do if the parsing fails?
+            }
+
+            signalDefinitionEnumerator.MoveNext();
+            // Parse unit
+            // Format: "<Unit>"
+            // Example: "degC"
+            {
+                string unit = signalDefinitionEnumerator.Current
+                    .Trim('\"');
+                canSignalType.Unit = unit;
+            }
+
+            signalDefinitionEnumerator.MoveNext();
+            // Parse receiving nodes
+            // Format: [ReceivingNodes]
+            // Example: Front_Node,AMS,Rear_Node
+            {
+                var nodes = signalDefinitionEnumerator.Current.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                canSignalType.ReceivingNodes.AddRange(nodes);
+            }
+
+            canSignalType.CalculateBitMask();
+            return canSignalType;
+        }
+
+        protected static void ParseDbcCommentField(string line, Dictionary<int, CanMessageType> canMessageTypes)
+        {
+            // Format: CM_ [<BU_|BO_|SG_> [CAN-ID] [SignalName]] "<CommentText>";
+            var segments = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string comment;
+            int messageId;
+            switch (segments[1])
+            {
+                case "BU_":
+                    string node = segments[2];
+                    comment = segments[3];
+                    // TODO: Implement node collection and add this information
+                    break;
+                case "BO_":
+                    comment = segments[3];
+                    if (Int32.TryParse(segments[2], out messageId))
+                    {
+                        CanMessageType canMessage = canMessageTypes[messageId];
+                        canMessage.Comment = comment;
+                    }
+                    break;
+                case "SG_":
+                    string signalName = segments[3];
+                    comment = segments[4];
+                    if (Int32.TryParse(segments[2], out messageId))
+                    {
+                        CanMessageType canMessage = canMessageTypes[messageId];
+                        CanSignalType canSignal = canMessage.Signals[signalName];
+                        canSignal.Comment = comment;
+                    }
+                    break;
+            }
+
+        }
+
+        protected static void ParseDbcAttributeDefinition(string line, Dictionary<int, CanMessageType> canMessageTypes)
+        {
+            var segments = line.Split(new char[] { ' ' }, StringSplitOptions.None);
+            switch (segments[1])
+            {
+                case "BU_":
+                    break;
+                case "BO_":
+                    break;
+                case "SG_":
+                    break;
+                case "EV_":
+                    break;
+                case "":
+                    break;
+            }
+        }
+
+        protected static void ParseDbcTypeDefinition(string line, Dictionary<int, CanMessageType> canMessageTypes)
+        {
+            // Format: SIG_VALTYPE_ <MessageID> <SignalName> : [1,2];
+            // where 1 means float and 2 means double
+            // Example: SIG_VALTYPE_ 519 RN_PE_RL_Error_Reset : 2;  
+
+            var segments = line.Split(new char[] { ' ' }, StringSplitOptions.None);
+            int id;
+
+            if (Int32.TryParse(segments[1], out id))
+            {
+                var message = canMessageTypes[id];
+                var signal = message.Signals[segments[2]];
+                switch (segments[4])
+                {
+                    case "2;":
+                        signal.Type = SignalType.Double;
+                        break;
+                    case "1;":
+                        signal.Type = SignalType.Float;
+                        break;
+                    default:
+                        // TODO: Notify user of unexpected input
+                        break;
+                }
+                
+            }
         }
 
         public static List<DataPoint> ParseReceivedCanMessagesRx(List<CanBridgeMessageRx> receivedMessages, SortedList<uint, CanMessageType> canMessageTypes)
@@ -206,31 +384,31 @@ namespace CanDB
 
                 foreach (var signalType in canMessage.Signals)
                 {
-                    if (signalType.Encoding == SignalEncoding.Motorola)
+                    if (signalType.Value.Encoding == SignalEncoding.Motorola)
                     {
                         throw new Exception("Motorola byte order not supported");
                     }
                     // TODO: Check if the bitmask has been calculated
                     // Isolate relevant bits using precalculated bitmask
                     UInt64 bits = message.data;
-                    bits &= signalType.BitMask;
+                    bits &= signalType.Value.BitMask;
 
                     // Shift back to original state according to specification
-                    bits >>= signalType.StartBit;
+                    bits >>= signalType.Value.StartBit;
 
 
                     double tempValue = (double)bits;
 
                     // Apply inverse transform to restore actual value
-                    tempValue -= signalType.Offset;
-                    tempValue /= signalType.ScaleFactor;
+                    tempValue -= signalType.Value.Offset;
+                    tempValue /= signalType.Value.ScaleFactor;
 
                     values.Add(new DataPoint
                     {
                         Ticks = message.TimeStamp,
                         CanTimeStamp = message.CanTimeStamp,
                         data = tempValue,
-                        SignalType = signalType,
+                        SignalType = signalType.Value,
                     });
 
                 }
@@ -240,16 +418,26 @@ namespace CanDB
         }
 
     }
+
+    public class CanDatabaseType
+    {
+        public string Name { get; set; } = "";
+        public Dictionary<int, CanMessageType> CanMessageTypes { get; private set; } = new Dictionary<int, CanMessageType>();
+        public HashSet<string> Nodes { get; private set; } = new HashSet<string>();
+        //public HashSet<string> Buses { get; private set; } = new HashSet<string>();
+    }
     public class CanMessageType
     {
-        public string Name { get; set; }
-        public string QualifiedName { get; set; }
-        public string Comment { get; set; }
+        public string Name { get; set; } = "";
+        public string QualifiedName { get; set; } = "";
+        public string Comment { get; set; } = "";
         public int ID { get; set; }
         //public MESSAGE Flags { get; set; }
         public int DLC { get; set; }
 
-        public List<CanSignalType> Signals { get; set; } = new List<CanSignalType>();
+        public string SendingNode { get; set; } = "";
+
+        public Dictionary<string, CanSignalType> Signals { get; private set; } = new Dictionary<string, CanSignalType>();
 
         public CanBridgeMessageTx GenerateCanMessageTx(params (CanSignalType, double)[] signalsAndData )
         {
@@ -260,7 +448,7 @@ namespace CanDB
 
             foreach (var signal in Signals)
             {
-                if (!signalsAndData.Any((x=>x.Item1==signal)))
+                if (!signalsAndData.Any((x=>x.Item1==signal.Value)))
                 {
                     throw new Exception("Parameter list must contain exatcly the same signals as in this can message.");
                 }
@@ -302,10 +490,10 @@ namespace CanDB
 
     public class CanSignalType
     {
-        public string Name { get; set; }
-        public string QualifiedName { get; set; }
-        public string Comment { get; set; }
-        public string Unit { get; set; }
+        public string Name { get; set; } = "";
+        public string QualifiedName { get; set; } = "";
+        public string Comment { get; set; } = "";
+        public string Unit { get; set; } = "";
         public SignalEncoding Encoding { get; set; }
         public SignalType Type { get; set; }
         public int StartBit { get; set; }
@@ -314,12 +502,13 @@ namespace CanDB
         public double MaxValue { get; set; }
         public double ScaleFactor { get; set; }
         public double Offset { get; set; }
+        public List<string> ReceivingNodes { get; private set; } = new List<string>();
         public UInt64 BitMask { get; private set; } = 0;
         public void CalculateBitMask()
         {
             for (int i = StartBit; i < StartBit + Length; i++)
             {
-                // Set the bits between startbit and StartBit + Length to one
+                // Set the bits between StartBit and StartBit+Length to one
                 BitMask = BitMask | ((UInt64)1 << i);
             }
         }
