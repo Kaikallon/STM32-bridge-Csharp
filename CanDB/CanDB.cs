@@ -10,7 +10,6 @@ using System.Diagnostics;
 
 namespace CanDB
 {
-
     public enum SignalEncoding
     {
         Intel = 0,
@@ -70,15 +69,16 @@ namespace CanDB
 
             }
 
-            foreach( var message in canDatabaseType.CanMessageTypes)
+            foreach (var message in canDatabaseType.CanMessageTypes.Values)
             {
-                message.Value.QualifiedName = canDatabaseType.Name + "." + message.Value.Name;
-                foreach(var signal in message.Value.Signals)
+                message.QualifiedName = message.Name;
+                //message.QualifiedName = canDatabaseType.Name + "." + message.Name;
+                foreach (var signal in message.Signals.Values)
                 {
-                    signal.Value.QualifiedName = canDatabaseType.Name + "." + signal.Value.QualifiedName;
+                    //signal.QualifiedName = canDatabaseType.Name + "." + signal.QualifiedName;
                 }
             }
-            
+
             return canDatabaseType;
         }
 
@@ -91,7 +91,7 @@ namespace CanDB
         protected static IEnumerable<string> ParseDbcNodeDefinition(string line)
         {
             var segments = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            return segments.Skip(1); 
+            return segments.Skip(1);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace CanDB
             string SendingNode = segments[4];
             canMessageType.SendingNode = SendingNode;
 
-            while(enumerator.MoveNext())
+            while (enumerator.MoveNext())
             {
                 if (!enumerator.Current.TrimStart(' ').StartsWith("SG_"))
                     break;
@@ -135,11 +135,11 @@ namespace CanDB
                 canMessageType.Signals.Add(temp.Name, temp);
             }
 
-            foreach(var signal in canMessageType.Signals)
+            foreach (var signal in canMessageType.Signals.Values)
             {
-                signal.Value.QualifiedName = canMessageType.Name + "." + signal.Value.Name;
+                signal.QualifiedName = canMessageType.Name + "." + signal.Name;
             }
-            
+
             return canMessageType;
         }
 
@@ -189,7 +189,7 @@ namespace CanDB
 
                 bool littleEndian = true;
                 bool signed = false;
-                switch(segments2[2])
+                switch (segments2[2])
                 {
                     case "0-":
                         littleEndian = false; // aka Motorola
@@ -293,11 +293,11 @@ namespace CanDB
             {
                 case "BU_":
                     string node = segments[2];
-                    comment = segments[3];
+                    comment = segments[3].TrimEnd(';').Trim('\"');
                     // TODO: Implement node collection and add this information
                     break;
                 case "BO_":
-                    comment = segments[3];
+                    comment = segments[3].TrimEnd(';').Trim('\"');
                     if (Int32.TryParse(segments[2], out messageId))
                     {
                         CanMessageType canMessage = canMessageTypes[messageId];
@@ -306,7 +306,7 @@ namespace CanDB
                     break;
                 case "SG_":
                     string signalName = segments[3];
-                    comment = segments[4];
+                    comment = segments[4].TrimEnd(';').Trim('\"');
                     if (Int32.TryParse(segments[2], out messageId))
                     {
                         CanMessageType canMessage = canMessageTypes[messageId];
@@ -361,7 +361,7 @@ namespace CanDB
                         // TODO: Notify user of unexpected input
                         break;
                 }
-                
+
             }
         }
 
@@ -382,33 +382,33 @@ namespace CanDB
                     throw new Exception("Error: DLC of received message did not match expected DLC from database."); // TODO: Handle more gracefully
                 }
 
-                foreach (var signalType in canMessage.Signals)
+                foreach (var signalType in canMessage.Signals.Values)
                 {
-                    if (signalType.Value.Encoding == SignalEncoding.Motorola)
+                    if (signalType.Encoding == SignalEncoding.Motorola)
                     {
                         throw new Exception("Motorola byte order not supported");
                     }
                     // TODO: Check if the bitmask has been calculated
                     // Isolate relevant bits using precalculated bitmask
                     UInt64 bits = message.data;
-                    bits &= signalType.Value.BitMask;
+                    bits &= signalType.BitMask;
 
                     // Shift back to original state according to specification
-                    bits >>= signalType.Value.StartBit;
+                    bits >>= signalType.StartBit;
 
 
                     double tempValue = (double)bits;
 
                     // Apply inverse transform to restore actual value
-                    tempValue -= signalType.Value.Offset;
-                    tempValue /= signalType.Value.ScaleFactor;
+                    tempValue -= signalType.Offset;
+                    tempValue /= signalType.ScaleFactor;
 
                     values.Add(new DataPoint
                     {
                         Ticks = message.TimeStamp,
                         CanTimeStamp = message.CanTimeStamp,
                         data = tempValue,
-                        SignalType = signalType.Value,
+                        SignalType = signalType,
                     });
 
                 }
@@ -428,6 +428,17 @@ namespace CanDB
     }
     public class CanMessageType
     {
+        public CanMessageType()
+        {
+
+        }
+        public CanMessageType(List<CanSignalType> canSignals)
+        {
+            foreach (var canSignal in canSignals)
+            {
+                this.Signals.Add(canSignal.Name, canSignal);
+            }
+        }
         public string Name { get; set; } = "";
         public string QualifiedName { get; set; } = "";
         public string Comment { get; set; } = "";
@@ -439,16 +450,16 @@ namespace CanDB
 
         public Dictionary<string, CanSignalType> Signals { get; private set; } = new Dictionary<string, CanSignalType>();
 
-        public CanBridgeMessageTx GenerateCanMessageTx(params (CanSignalType, double)[] signalsAndData )
+        public CanBridgeMessageTx GenerateCanMessageTx(params (CanSignalType, double)[] signalsAndData)
         {
-            if ( signalsAndData.Length != Signals.Count)
+            if (signalsAndData.Length != Signals.Count)
             {
                 throw new Exception("Wrong number of paramteres in parameter list.");
             }
 
-            foreach (var signal in Signals)
+            foreach (var signal in Signals.Values)
             {
-                if (!signalsAndData.Any((x=>x.Item1==signal.Value)))
+                if (!signalsAndData.Any((x => x.Item1 == signal)))
                 {
                     throw new Exception("Parameter list must contain exatcly the same signals as in this can message.");
                 }
@@ -467,7 +478,7 @@ namespace CanDB
             foreach (var tuple in signalsAndData)
             {
                 var signal = tuple.Item1;
-                var data   = tuple.Item2;
+                var data = tuple.Item2;
                 // Scale and offset value according to signal secification
                 double tranformedValue = data * signal.ScaleFactor;
                 tranformedValue += signal.Offset;
@@ -521,10 +532,100 @@ namespace CanDB
         public Int64  Ticks              {get;set;}
         public CanSignalType SignalType  {get;set;}
     }
-
-    //public struct CanMessageTx
-    //{
-    //    public UInt64 data { get; set; }
-    //    public CanMessageType CanMessageType { get; set; }
-    //}
 }
+
+
+
+
+
+
+
+
+/// <summary>
+/// In this namespace are a number of extensions methods that are useful for 
+/// generating code.
+/// </summary>
+namespace CanDB.CodeGenerationExtensions
+{
+    public static class CanSignalCodeGenerationExtensionMethods
+    {
+        public static string GetTypeName(this CanSignalType canSignalType)
+        {
+            int numberOfBits = canSignalType.Length;
+
+            switch (canSignalType.Type)
+            {
+                case SignalType.Invalid:
+                    throw new NotImplementedException();
+                    break;
+
+                case SignalType.Signed:
+                    if (numberOfBits <= 8)
+                        return "byte";
+                    else if (numberOfBits <= 16)
+                        return "Int16";
+                    else if (numberOfBits <= 32)
+                        return "Int32";
+                    else if (numberOfBits <= 64)
+                        return "Int64";
+                    throw new Exception($"Too many bits in {canSignalType.QualifiedName}: {canSignalType.ToString()}");
+                    break;
+
+                case SignalType.Unsigned:
+                    if (numberOfBits <= 8)
+                        return "sbyte";
+                    else if (numberOfBits <= 16)
+                        return "UInt16";
+                    else if (numberOfBits <= 32)
+                        return "UInt32";
+                    else if (numberOfBits <= 64)
+                        return "UInt64";
+                    throw new Exception($"Too many bits in {canSignalType.QualifiedName}: {canSignalType.ToString()}");
+                    break;
+                case SignalType.Float:
+                    return "float";
+                    break;
+                case SignalType.Double:
+                    return "double";
+                    break;
+            }
+
+            throw new Exception($"Type not identifyable in {canSignalType.QualifiedName}");
+        }
+
+
+
+
+        public static string GetMultiplierOperator(this CanSignalType canSignalType)
+        {
+            if (canSignalType.ScaleFactor < 1)
+                return "/= " + (1 / canSignalType.ScaleFactor).ToString();
+
+            return "*= " + canSignalType.ScaleFactor.ToString();
+        }
+
+        public static string GetDivisionOperator(this CanSignalType canSignalType)
+        {
+            if (canSignalType.ScaleFactor < 1)
+                return "*= " + (1 / canSignalType.ScaleFactor).ToString();
+
+            return "/= " + canSignalType.ScaleFactor.ToString();
+        }
+
+        public static string GetAdditionOperator(this CanSignalType canSignalType)
+        {
+            if (canSignalType.ScaleFactor < 1)
+                return "-= " + (-canSignalType.Offset).ToString();
+
+            return "+= " + canSignalType.Offset.ToString();
+        }
+        public static string GetSubtractionOperator(this CanSignalType canSignalType)
+        {
+            if (canSignalType.ScaleFactor < 1)
+                return "+= " + (-canSignalType.Offset).ToString();
+
+            return "-= " + canSignalType.Offset.ToString();
+        }
+    }
+}
+

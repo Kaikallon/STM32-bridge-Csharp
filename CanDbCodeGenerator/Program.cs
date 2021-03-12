@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CanDB;
+using CanDB.CodeGenerationExtensions;
 
 namespace CanDbCodeGenerator
 {
@@ -15,9 +16,9 @@ namespace CanDbCodeGenerator
             if (args.Length < 3)
                 throw new Exception("Not enough arguments!");
 
-            string canDbcLocation  = args[0];
+            string canDbcLocation = args[0];
             string fileNameAndPath = args[1];
-            string nameSpace       = args[2];
+            string nameSpace = args[2];
 
             System.IO.FileInfo fileInfo = null;
             try
@@ -35,16 +36,16 @@ namespace CanDbCodeGenerator
             // Set culture info to invariant. This is important for handling decimal separators as dots
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-            var canMessageTypes = CanDB.CanDB.OpenCanDB(canDbcLocation);
+            var canDatabase = CanDB.CanDB.OpenCanDB(canDbcLocation);
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileNameAndPath))
             {
-                string code = GenerateCode(canMessageTypes, nameSpace);
+                string code = GenerateCanMessageTypesCode(canDatabase.CanMessageTypes, nameSpace);
                 file.Write(code);
             }
         }
 
-        private static string GenerateCode(HashSet<CanMessageType> canMessageTypes, string nameSpace)
+        private static string GenerateCanMessageTypesCode(Dictionary<int, CanMessageType> canMessageTypes, string nameSpace)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append($@"using System;
@@ -61,8 +62,9 @@ namespace {nameSpace}
     {{
         static CanMessageTypes()
         {{
+{new Func<string>(() => { return "hello"; })()}
 ");
-            foreach (var canMessageType in canMessageTypes)
+            foreach (var canMessageType in canMessageTypes.Values)
             {
                 stringBuilder.Append($@"
             AllCanMessageTypes.Add({canMessageType.Name}); ");
@@ -72,41 +74,30 @@ namespace {nameSpace}
         }
         static List<CanMessageType> AllCanMessageTypes = new List<CanMessageType>();
 ");
-            foreach (var canMessageType in canMessageTypes)
+            foreach (var canMessageType in canMessageTypes.Values)
             {
                 stringBuilder.AppendLine($@"
-        static CanMessageType {canMessageType.Name} = new CanMessageType
+        public static CanMessageType {canMessageType.Name} = new CanMessageType
+        (
+            new List<CanSignalType>
+            {{");
+
+                foreach (var signal in canMessageType.Signals.Values)
+                {
+                    stringBuilder.Append($@"
+                CanSignalTypes.{signal.QualifiedName.Replace(".", "__")},");
+                }
+                stringBuilder.Append($@"
+            }}
+        )
         {{
             Comment       = ""{canMessageType.Comment         }"",
             DLC           = {canMessageType.DLC.ToString()  },
             ID            = {canMessageType.ID.ToString()   },
             Name          = ""{canMessageType.Name            }"",
             QualifiedName = ""{canMessageType.QualifiedName   }"",
-            Signals       = new List<CanSignalType>
-            {{");
-            
-                foreach (var signal in canMessageType.Signals)
-                {
-                    stringBuilder.Append($@"
-                new CanSignalType
-                {{
-                    Encoding      = SignalEncoding.{signal.Encoding},
-                    Type          = SignalType.{signal.Type        },
-                    Length        = {signal.Length                 },
-                    MaxValue      = {signal.MaxValue               },
-                    MinValue      = {signal.MinValue               },
-                    Offset        = {signal.Offset                 },
-                    ScaleFactor   = {signal.ScaleFactor            },
-                    StartBit      = {signal.StartBit               },
-                    Comment       = ""{signal.Comment              }"",
-                    Name          = ""{signal.Name                 }"",
-                    QualifiedName = ""{signal.QualifiedName        }"",
-                    Unit          = ""{signal.Unit                 }"",
-                }},");
-                }
-                stringBuilder.Append(@"
-            }
-        };");
+            SendingNode   = ""{canMessageType.SendingNode}"",
+        }};");
 
             }
 
@@ -125,13 +116,13 @@ namespace {nameSpace}
         static CanSignalTypes()
         {
 ");
-            IEnumerable<CanSignalType> allSignals = canMessageTypes.SelectMany(x => x.Signals);
-            foreach(var signal in allSignals)
+            IEnumerable<CanSignalType> allSignals = canMessageTypes.Values.SelectMany(x => x.Signals.Values);
+            foreach (var signal in allSignals)
             {
                 stringBuilder.Append($@"
             AllCanSignalTypes.Add({signal.QualifiedName.Replace(".", "__")}); ");
             }
-                stringBuilder.Append(@"
+            stringBuilder.Append(@"
 
         }
         static List<CanSignalType> AllCanSignalTypes = new List<CanSignalType>();
@@ -139,7 +130,7 @@ namespace {nameSpace}
             foreach (var signal in allSignals)
             {
                 stringBuilder.Append($@"
-        static CanSignalType {signal.QualifiedName.Replace(".", "__")} = new CanSignalType
+        public static CanSignalType {signal.QualifiedName.Replace(".", "__")} = new CanSignalType
         {{
             Encoding      = SignalEncoding.{signal.Encoding},
             Type          = SignalType.{signal.Type        },
@@ -155,12 +146,67 @@ namespace {nameSpace}
             Unit          = ""{signal.Unit                 }"",
         }};");
             }
-                stringBuilder.Append(@"
-    }
-}");
-
+            stringBuilder.Append($@"
+    }}
+    {GenerateCanExtractionAndInsertionCode(canMessageTypes)}
+}}");
+            
             return stringBuilder.ToString();
 
         }
+
+        private static string GenerateCanExtractionAndInsertionCode(Dictionary<int, CanMessageType> canMessageTypes)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (var CanMessageType in canMessageTypes.Values)
+            {
+
+
+                stringBuilder.Append(
+                $@"
+    public class {CanMessageType.Name }Message : CanMessage
+    {{
+        
+        public {CanMessageType.Name }Message()
+        {{
+            MessageType = CanMessageTypes.{CanMessageType.Name};
+        }}");
+                foreach (var CanSignalType in CanMessageType.Signals.Values)
+                {
+                    stringBuilder.Append($@"
+
+        public static readonly CanSignalType {CanSignalType.Name} = CanSignalTypes.{CanSignalType.QualifiedName.Replace(".", "__")};
+
+        public {CanSignalType.GetTypeName()} Get{CanSignalType.Name}()
+        {{
+            // Get bits from raw data storage and cast
+            {CanSignalType.GetTypeName()} tempValue = ({CanSignalType.GetTypeName()})ExtractBits({CanSignalType.Name});
+
+            // Apply inverse transform to restore actual value
+             
+            tempValue  {CanSignalType.GetSubtractionOperator()};
+            tempValue  {CanSignalType.GetDivisionOperator()};
+            return tempValue;
+        }}
+        public void Set{CanSignalType.Name}({CanSignalType.GetTypeName()} value)
+        {{
+            // Scale and offset value according to signal secification
+            value {CanSignalType.GetMultiplierOperator()};
+            value {CanSignalType.GetSubtractionOperator()};
+
+            // Cats to integer and prepare for sending
+            this.InsertBits({CanSignalType.Name}, (UInt64)value);
+
+        }}"
+                    );
+                }
+                stringBuilder.Append("\n    }");
+
+            }
+            //stringBuilder.Append("\n}");
+            string test = new Func<string>(() => { return "hello"; })();
+            return stringBuilder.ToString();
+        }
     }
+
 }

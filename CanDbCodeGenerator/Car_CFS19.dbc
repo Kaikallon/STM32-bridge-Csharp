@@ -316,9 +316,9 @@ BO_ 177 RN_Temperatures: 8 Rear_Node
 BO_ 207 FN_Status: 8 Front_Node
  SG_ FN_DiffRear : 56|8@1+ (0.5,0) [0|127.5] ""  Rear_Node
  SG_ FN_DiffFront : 48|8@1+ (0.5,0) [0|127.5] ""  Rear_Node
- SG_ FN_Front_Torque_Scale : 40|8@1+ (0.4,0) [0|102] ""  Front_Node
+ SG_ FN_Front_Torque_Scale : 40|8@1+ (0.5,0) [0|102] ""  Front_Node
  SG_ FN_Speed_Limit : 32|8@1+ (100,0) [0|25500] ""  Front_Node
- SG_ FN_Max_Torque : 24|8@1+ (0.4,0) [0|102] ""  Front_Node
+ SG_ FN_Max_Torque : 24|8@1+ (0.5,0) [0|102] ""  Front_Node
  SG_ FN_Watchdog_Status : 16|8@1+ (1,0) [0|0] ""  Front_Node,Rear_Node
  SG_ FN_Status : 0|16@1+ (1,0) [0|0] ""  Front_Node,AMS,Rear_Node
 
@@ -466,13 +466,16 @@ BO_ 775 RN_PE_RL_PDO_2_RX: 7 Rear_Node
  SG_ RN_PE_RL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RL
 
 BO_ 519 RN_PE_RL_PDO_1_RX: 7 Rear_Node
- SG_ RN_PE_RL_Error_Reset : 40|16@1+ (1,0) [0|0] ""  PE_RL
+ SG_ RN_PE_RL_Error_Reset : 40|16@1- (1,0) [0|0] ""  PE_RL
  SG_ RN_PE_RL_Speed_Limit : 24|16@1- (1,0) [0|0] "RPM"  PE_RL
  SG_ RN_PE_RL_Torque_Set_Point : 8|16@1- (0.001,0) [-32.768|32.767] "mNm"  PE_RL
- SG_ RN_PE_RL_Enable_Drive : 0|8@1+ (1,0) [0|0] ""  PE_RL
+ SG_ RN_PE_RL_Enable_Drive : 0|8@1- (1,0) [0|0] ""  PE_RL
 
 
 
+CM_ BU_ Tire_Temp "test1";
+CM_ BO_ 1207 "test2";
+CM_ SG_ 1207 TireTemp_FR16 "test3";
 CM_ SG_ 175 AMS_Status "TS_On, Precharging, PreChargeNotReady, PreChargeFailed, IMD_Closed, BSPD_Closed,";
 CM_ SG_ 163 AMS_UV_OV_Flags "LSB UV1,OV1,UV2 etc.";
 CM_ SG_ 163 AMS_Voltage_Pos_Stack "4MSB stack, 4LSB position";
@@ -502,7 +505,7 @@ BA_DEF_ EV_  "GenEnvIsGeneratedSnd" ENUM  "No","Yes";
 BA_DEF_ EV_  "GenEnvControlType" ENUM  "NoControl","SliderHoriz","SliderVert","PushButton","Edit","BitmapSwitch";
 BA_DEF_ SG_  "GenSigEVName" STRING ;
 BA_DEF_ SG_  "GenSigEnvVarType" ENUM  "int","float","undef";
-BA_DEF_ SG_  "GenSigStartValue" FLOAT -100000000000 100000000000;
+BA_DEF_ SG_  "GenSigStartValue" FLOAT -1215752192 1215752192;
 BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition";
 BA_DEF_ SG_  "GenSigAutoGenSnd" ENUM  "No","Yes";
 BA_DEF_ SG_  "GenSigInactiveValue" INT 0 100000;
@@ -645,22 +648,6 @@ BA_DEF_DEF_  "CANoeJitterMin" 0;
 BA_DEF_DEF_  "CANoeDrift" 0;
 BA_DEF_DEF_  "CANoeStartDelay" 0;
 BA_ "BusType" "CAN";
-BA_ "Bus" BO_ 1801 1;
-BA_ "Bus" BO_ 1799 1;
-BA_ "Bus" BO_ 1805 1;
-BA_ "Bus" BO_ 1798 1;
-BA_ "Bus" BO_ 1037 1;
-BA_ "Bus" BO_ 781 1;
-BA_ "Bus" BO_ 525 1;
-BA_ "Bus" BO_ 1030 1;
-BA_ "Bus" BO_ 774 1;
-BA_ "Bus" BO_ 518 1;
-BA_ "Bus" BO_ 1033 1;
-BA_ "Bus" BO_ 777 1;
-BA_ "Bus" BO_ 521 1;
-BA_ "Bus" BO_ 1031 1;
-BA_ "Bus" BO_ 775 1;
-BA_ "Bus" BO_ 519 1;
 BA_ "InternalType" SG_ 181 RN_Gearbox_Temp_RR 1;
 BA_ "GenSigStartValue" SG_ 181 RN_Gearbox_Temp_RL 5;
 BA_ "InternalType" SG_ 181 RN_Gearbox_Temp_RL 1;
@@ -675,6 +662,10 @@ BA_ "InternalType" SG_ 206 FN_TC_Knob 1;
 BA_ "InternalType" SG_ 206 FN_Regen_Neutral 1;
 BA_ "InternalType" SG_ 206 FN_Regen_Knob 1;
 BA_ "InternalType" SG_ 206 FN_Regen_Div 1;
+BA_ "Bus" BO_ 1801 1;
+BA_ "Bus" BO_ 1799 1;
+BA_ "Bus" BO_ 1805 1;
+BA_ "Bus" BO_ 1798 1;
 BA_ "InternalType" SG_ 1316 IVT_Result_U3 1;
 BA_ "InternalType" SG_ 1315 IVT_Result_U2 1;
 BA_ "InternalType" SG_ 1314 IVT_Result_U1 1;
@@ -740,14 +731,23 @@ BA_ "InternalType" SG_ 905 PE_RR_Uq 1;
 BA_ "InternalType" SG_ 905 PE_RR_Ud 1;
 BA_ "InternalType" SG_ 649 PE_RR_Measured_Udc 1;
 BA_ "InternalType" SG_ 393 PE_RR_Torque_Estimate 1;
+BA_ "Bus" BO_ 1037 1;
 BA_ "InternalType" SG_ 1037 RN_PE_FR_Torque_Set_Point 1;
+BA_ "Bus" BO_ 781 1;
 BA_ "InternalType" SG_ 781 RN_PE_FR_Torque_Set_Point 1;
+BA_ "Bus" BO_ 525 1;
 BA_ "InternalType" SG_ 525 RN_PE_FR_Torque_Set_Point 1;
+BA_ "Bus" BO_ 1030 1;
 BA_ "InternalType" SG_ 1030 RN_PE_FL_Torque_Set_Point 1;
+BA_ "Bus" BO_ 774 1;
 BA_ "InternalType" SG_ 774 RN_PE_FL_Torque_Set_Point 1;
+BA_ "Bus" BO_ 518 1;
 BA_ "InternalType" SG_ 518 RN_PE_FL_Torque_Set_Point 1;
+BA_ "Bus" BO_ 1033 1;
 BA_ "InternalType" SG_ 1033 RN_PE_RR_Torque_Set_Point 1;
+BA_ "Bus" BO_ 777 1;
 BA_ "InternalType" SG_ 777 RN_PE_RR_Torque_Set_Point 1;
+BA_ "Bus" BO_ 521 1;
 BA_ "InternalType" SG_ 521 RN_PE_RR_Torque_Set_Point 1;
 BA_ "InternalType" SG_ 903 PE_RL_Iq 1;
 BA_ "InternalType" SG_ 903 PE_RL_Id 1;
@@ -755,7 +755,12 @@ BA_ "InternalType" SG_ 903 PE_RL_Uq 1;
 BA_ "InternalType" SG_ 903 PE_RL_Ud 1;
 BA_ "InternalType" SG_ 647 PE_RL_Measured_Udc 1;
 BA_ "InternalType" SG_ 391 PE_RL_Torque_Estimate 1;
+BA_ "Bus" BO_ 1031 1;
 BA_ "InternalType" SG_ 1031 RN_PE_RL_Torque_Set_Point 1;
+BA_ "Bus" BO_ 775 1;
 BA_ "InternalType" SG_ 775 RN_PE_RL_Torque_Set_Point 1;
+BA_ "Bus" BO_ 519 1;
 BA_ "InternalType" SG_ 519 RN_PE_RL_Torque_Set_Point 1;
+SIG_VALTYPE_ 519 RN_PE_RL_Error_Reset : 2;
+SIG_VALTYPE_ 519 RN_PE_RL_Enable_Drive : 1;
 
