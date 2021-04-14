@@ -11,6 +11,10 @@ namespace CanDbCodeGenerator
 {
     class Program
     {
+        /// <summary>
+        /// Crteates a static library from DBC file
+        /// </summary>
+        /// <param name="args">1: Full path to dbc-file. 2: Output path and name. 3: Given namespace for the resulting code</param>
         static void Main(string[] args)
         {
             if (args.Length < 3)
@@ -36,7 +40,7 @@ namespace CanDbCodeGenerator
             // Set culture info to invariant. This is important for handling decimal separators as dots
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-            var canDatabase = CanDB.CanDB.OpenCanDB(canDbcLocation);
+            var canDatabase = CanDB.CanDbcParser.OpenCanDB(canDbcLocation);
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileNameAndPath))
             {
@@ -44,6 +48,7 @@ namespace CanDbCodeGenerator
                 file.Write(code);
             }
         }
+
 
         private static string GenerateCanMessageTypesCode(Dictionary<int, CanMessageType> canMessageTypes, string namespaceName)
         {
@@ -77,18 +82,13 @@ using CanDB;
             string nameSpace = CanDbCSharpCodeGeneration.GenerateNameSpace(namespaceName, classes);
 
             stringBuilder.Append(nameSpace);
-
-   
-            foreach (var canMessageType in canMessageTypes.Values)
-            {
-                //stringBuilder.Append(CanDbCSharpCodeGeneration.GenerateCanMessageTypeCode(canMessageType, 2, 4));
-            }
-
             
             
             return stringBuilder.ToString();
-
         }
+
+
+
 
         private static string GenerateCanExtractionAndInsertionCode(Dictionary<int, CanMessageType> canMessageTypes)
         {
