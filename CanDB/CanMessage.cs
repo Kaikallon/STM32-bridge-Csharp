@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace CanDB
 {
-    public static class Receiver
-    {
-        static void MessageReceived(CanMessage canMessage)
-        {
-
-        }
-    }
+    //public static class Receiver
+    //{
+    //    static void MessageReceived(CanMessage canMessage)
+    //    {
+    //
+    //    }
+    //}
 
     public interface ICanSignal
     {
@@ -82,7 +82,7 @@ namespace CanDB
         }
     }
 
-    public abstract class CanMessage
+    public abstract class CanMessage<T> where T : CanMessage<T>
     {
         public int            ID                        { get; set; }
         public UInt64         Data                      { get; set; }
@@ -116,9 +116,39 @@ namespace CanDB
 
             return bits;
         }
+
+
+        public delegate void CanMessageReceivedHandler(object sender, CanMessageReceivedEventArgs<T> e);
+        public static event CanMessageReceivedHandler CanMessageReceived;
+        public void NotifySubscribers()
+        {
+            CanMessageReceivedEventArgs<T> canMessageReceivedEventArgs = new CanMessageReceivedEventArgs<T>();
+            canMessageReceivedEventArgs.ReceivedMessage = (T)this;
+            CanMessageReceived?.BeginInvoke(this, new CanMessageReceivedEventArgs<T>(), CanMessageReceivedEndAsyncEvent, null);
+        }
+        protected void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
+        {
+            var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
+            var invokedMethod = (CanMessageReceivedHandler)ar.AsyncDelegate;
+            try
+            {
+                invokedMethod.EndInvoke(iar);
+            }
+            catch (Exception e)
+            {
+                // Handle any exceptions that were thrown by the invoked method
+                // Console.WriteLine("An event listener went kaboom!");
+                // TODO: Handle this?
+            }
+        }
     }
 
-    public class TestMessage : CanMessage
+    public class CanMessageReceivedEventArgs<T> where T : CanMessage<T>
+    {
+        public T ReceivedMessage { get; set; }
+    }
+
+    public class TestMessage : CanMessage<TestMessage>
     {
         public readonly CanSignalType CanSignal = new CanSignalType
         {

@@ -18,7 +18,7 @@ namespace CanDB.CodeGenerationExtensions
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(n * (0 + o), $"");
 
-            stringBuilder.AppendLine(n * (0 + o), $"public class {canMessageType.Name }Message : CanMessage");
+            stringBuilder.AppendLine(n * (0 + o), $"public class {canMessageType.Name }Message : CanMessage<{canMessageType.Name }Message>");
             stringBuilder.AppendLine(n * (0 + o), $"{{");
             stringBuilder.AppendLine(n * (1 + o), $"public {canMessageType.Name }Message()");
             stringBuilder.AppendLine(n * (1 + o), $"{{");

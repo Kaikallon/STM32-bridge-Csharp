@@ -9,30 +9,623 @@ using CanDB;
 namespace testNS
 {
 
-    public static class CanMessageTypes
+    public static class CanMessageReceiver
     {
-
-        public static class Receiver
+    
+        private static void CanMessageReceivedCallback(object sender, STLinkBridgeWrapper.CanMessageReceivedEventArgs e)
         {
-            static void MessageReceived(CanMessage canMessage)
+            foreach(var canMessage in e.ReceivedMessages)
             {
-                if (canMessage.ID == PE_FR_PDO_3_TX.ID)
+                if (canMessage.ID == CanMessageTypes.TireTemp_FR4.ID)
                 {
-
+                    TireTemp_FR4Message message = new TireTemp_FR4Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
                 }
-                else if (canMessage.ID == AMS_MaxMinVoltages.ID)
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_FR3.ID)
                 {
-                    var specifiedMessage = (AMS_MaxMinVoltagesMessage)canMessage;
-                    
-                    foreach(var signal in AMS_MaxMinVoltages.Signals.Values)
-                    {
-                        signal.NotifyListeners(canMessage);
-                    }
+                    TireTemp_FR3Message message = new TireTemp_FR3Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_FR2.ID)
+                {
+                    TireTemp_FR2Message message = new TireTemp_FR2Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_FR1.ID)
+                {
+                    TireTemp_FR1Message message = new TireTemp_FR1Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_FL4.ID)
+                {
+                    TireTemp_FL4Message message = new TireTemp_FL4Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_FL3.ID)
+                {
+                    TireTemp_FL3Message message = new TireTemp_FL3Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_FL2.ID)
+                {
+                    TireTemp_FL2Message message = new TireTemp_FL2Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_FL1.ID)
+                {
+                    TireTemp_FL1Message message = new TireTemp_FL1Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RR4.ID)
+                {
+                    TireTemp_RR4Message message = new TireTemp_RR4Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RR3.ID)
+                {
+                    TireTemp_RR3Message message = new TireTemp_RR3Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RR2.ID)
+                {
+                    TireTemp_RR2Message message = new TireTemp_RR2Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RR1.ID)
+                {
+                    TireTemp_RR1Message message = new TireTemp_RR1Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RL4.ID)
+                {
+                    TireTemp_RL4Message message = new TireTemp_RL4Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RL3.ID)
+                {
+                    TireTemp_RL3Message message = new TireTemp_RL3Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RL2.ID)
+                {
+                    TireTemp_RL2Message message = new TireTemp_RL2Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.TireTemp_RL1.ID)
+                {
+                    TireTemp_RL1Message message = new TireTemp_RL1Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_Temperatures2.ID)
+                {
+                    RN_Temperatures2Message message = new RN_Temperatures2Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_GPS_Pos.ID)
+                {
+                    FN_GPS_PosMessage message = new FN_GPS_PosMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_TV.ID)
+                {
+                    FN_TVMessage message = new FN_TVMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_Gyro.ID)
+                {
+                    FN_GyroMessage message = new FN_GyroMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_Accelerometer.ID)
+                {
+                    FN_AccelerometerMessage message = new FN_AccelerometerMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RR_NMT.ID)
+                {
+                    PE_RR_NMTMessage message = new PE_RR_NMTMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RL_NMT.ID)
+                {
+                    PE_RL_NMTMessage message = new PE_RL_NMTMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FR_NMT.ID)
+                {
+                    PE_FR_NMTMessage message = new PE_FR_NMTMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FL_NMT.ID)
+                {
+                    PE_FL_NMTMessage message = new PE_FL_NMTMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_Sensor_Status.ID)
+                {
+                    FN_Sensor_StatusMessage message = new FN_Sensor_StatusMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMS_Stack_Errors.ID)
+                {
+                    AMS_Stack_ErrorsMessage message = new AMS_Stack_ErrorsMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_Wh.ID)
+                {
+                    IVT_Msg_Result_WhMessage message = new IVT_Msg_Result_WhMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_W.ID)
+                {
+                    IVT_Msg_Result_WMessage message = new IVT_Msg_Result_WMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_U3.ID)
+                {
+                    IVT_Msg_Result_U3Message message = new IVT_Msg_Result_U3Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_U2.ID)
+                {
+                    IVT_Msg_Result_U2Message message = new IVT_Msg_Result_U2Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_U1.ID)
+                {
+                    IVT_Msg_Result_U1Message message = new IVT_Msg_Result_U1Message();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_T.ID)
+                {
+                    IVT_Msg_Result_TMessage message = new IVT_Msg_Result_TMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_I.ID)
+                {
+                    IVT_Msg_Result_IMessage message = new IVT_Msg_Result_IMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.IVT_Msg_Result_As.ID)
+                {
+                    IVT_Msg_Result_AsMessage message = new IVT_Msg_Result_AsMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMSClient_Status.ID)
+                {
+                    AMSClient_StatusMessage message = new AMSClient_StatusMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMS_Counters.ID)
+                {
+                    AMS_CountersMessage message = new AMS_CountersMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMS_Status.ID)
+                {
+                    AMS_StatusMessage message = new AMS_StatusMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMS_MaxMinTemperatures.ID)
+                {
+                    AMS_MaxMinTemperaturesMessage message = new AMS_MaxMinTemperaturesMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMS_MaxMinVoltages.ID)
+                {
+                    AMS_MaxMinVoltagesMessage message = new AMS_MaxMinVoltagesMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMS_Cell_Voltages.ID)
+                {
+                    AMS_Cell_VoltagesMessage message = new AMS_Cell_VoltagesMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.AMS_Cell_Temperatures.ID)
+                {
+                    AMS_Cell_TemperaturesMessage message = new AMS_Cell_TemperaturesMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_Sensor_Status.ID)
+                {
+                    RN_Sensor_StatusMessage message = new RN_Sensor_StatusMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_Sensors.ID)
+                {
+                    FN_SensorsMessage message = new FN_SensorsMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_Temperatures.ID)
+                {
+                    FN_TemperaturesMessage message = new FN_TemperaturesMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_Driver_Controls.ID)
+                {
+                    FN_Driver_ControlsMessage message = new FN_Driver_ControlsMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_Sensors.ID)
+                {
+                    RN_SensorsMessage message = new RN_SensorsMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_Errors_PE.ID)
+                {
+                    RN_Errors_PEMessage message = new RN_Errors_PEMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_Temperatures.ID)
+                {
+                    RN_TemperaturesMessage message = new RN_TemperaturesMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FN_Status.ID)
+                {
+                    FN_StatusMessage message = new FN_StatusMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FR_PDO_3_TX.ID)
+                {
+                    PE_FR_PDO_3_TXMessage message = new PE_FR_PDO_3_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FR_PDO_2_TX.ID)
+                {
+                    PE_FR_PDO_2_TXMessage message = new PE_FR_PDO_2_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FR_PDO_1_TX.ID)
+                {
+                    PE_FR_PDO_1_TXMessage message = new PE_FR_PDO_1_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FL_PDO_3_TX.ID)
+                {
+                    PE_FL_PDO_3_TXMessage message = new PE_FL_PDO_3_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FL_PDO_2_TX.ID)
+                {
+                    PE_FL_PDO_2_TXMessage message = new PE_FL_PDO_2_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_FL_PDO_1_TX.ID)
+                {
+                    PE_FL_PDO_1_TXMessage message = new PE_FL_PDO_1_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RR_PDO_3_TX.ID)
+                {
+                    PE_RR_PDO_3_TXMessage message = new PE_RR_PDO_3_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RR_PDO_2_TX.ID)
+                {
+                    PE_RR_PDO_2_TXMessage message = new PE_RR_PDO_2_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RR_PDO_1_TX.ID)
+                {
+                    PE_RR_PDO_1_TXMessage message = new PE_RR_PDO_1_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_FR_PDO_3_RX.ID)
+                {
+                    RN_PE_FR_PDO_3_RXMessage message = new RN_PE_FR_PDO_3_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_FR_PDO_2_RX.ID)
+                {
+                    RN_PE_FR_PDO_2_RXMessage message = new RN_PE_FR_PDO_2_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_FR_PDO_1_RX.ID)
+                {
+                    RN_PE_FR_PDO_1_RXMessage message = new RN_PE_FR_PDO_1_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_FL_PDO_3_RX.ID)
+                {
+                    RN_PE_FL_PDO_3_RXMessage message = new RN_PE_FL_PDO_3_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_FL_PDO_2_RX.ID)
+                {
+                    RN_PE_FL_PDO_2_RXMessage message = new RN_PE_FL_PDO_2_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_FL_PDO_1_RX.ID)
+                {
+                    RN_PE_FL_PDO_1_RXMessage message = new RN_PE_FL_PDO_1_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_RR_PDO_3_RX.ID)
+                {
+                    RN_PE_RR_PDO_3_RXMessage message = new RN_PE_RR_PDO_3_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_RR_PDO_2_RX.ID)
+                {
+                    RN_PE_RR_PDO_2_RXMessage message = new RN_PE_RR_PDO_2_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_RR_PDO_1_RX.ID)
+                {
+                    RN_PE_RR_PDO_1_RXMessage message = new RN_PE_RR_PDO_1_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_Status.ID)
+                {
+                    RN_StatusMessage message = new RN_StatusMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RL_PDO_3_TX.ID)
+                {
+                    PE_RL_PDO_3_TXMessage message = new PE_RL_PDO_3_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RL_PDO_2_TX.ID)
+                {
+                    PE_RL_PDO_2_TXMessage message = new PE_RL_PDO_2_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.PE_RL_PDO_1_TX.ID)
+                {
+                    PE_RL_PDO_1_TXMessage message = new PE_RL_PDO_1_TXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_RL_PDO_3_RX.ID)
+                {
+                    RN_PE_RL_PDO_3_RXMessage message = new RN_PE_RL_PDO_3_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_RL_PDO_2_RX.ID)
+                {
+                    RN_PE_RL_PDO_2_RXMessage message = new RN_PE_RL_PDO_2_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.RN_PE_RL_PDO_1_RX.ID)
+                {
+                    RN_PE_RL_PDO_1_RXMessage message = new RN_PE_RL_PDO_1_RXMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
                 }
             }
         }
+        
+        
+        
+    }
 
-
+    public static class CanMessageTypes
+    {
+    
+        
         static CanMessageTypes()
         {
             AllCanMessageTypes.Add(TireTemp_FR4);
@@ -6653,7 +7246,7 @@ namespace testNS
     }
 
     
-    public class TireTemp_FR4Message : CanMessage
+    public class TireTemp_FR4Message : CanMessage<TireTemp_FR4Message>
     {
         public TireTemp_FR4Message()
         {
@@ -6738,7 +7331,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_FR3Message : CanMessage
+    public class TireTemp_FR3Message : CanMessage<TireTemp_FR3Message>
     {
         public TireTemp_FR3Message()
         {
@@ -6823,7 +7416,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_FR2Message : CanMessage
+    public class TireTemp_FR2Message : CanMessage<TireTemp_FR2Message>
     {
         public TireTemp_FR2Message()
         {
@@ -6908,7 +7501,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_FR1Message : CanMessage
+    public class TireTemp_FR1Message : CanMessage<TireTemp_FR1Message>
     {
         public TireTemp_FR1Message()
         {
@@ -6993,7 +7586,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_FL4Message : CanMessage
+    public class TireTemp_FL4Message : CanMessage<TireTemp_FL4Message>
     {
         public TireTemp_FL4Message()
         {
@@ -7078,7 +7671,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_FL3Message : CanMessage
+    public class TireTemp_FL3Message : CanMessage<TireTemp_FL3Message>
     {
         public TireTemp_FL3Message()
         {
@@ -7163,7 +7756,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_FL2Message : CanMessage
+    public class TireTemp_FL2Message : CanMessage<TireTemp_FL2Message>
     {
         public TireTemp_FL2Message()
         {
@@ -7248,7 +7841,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_FL1Message : CanMessage
+    public class TireTemp_FL1Message : CanMessage<TireTemp_FL1Message>
     {
         public TireTemp_FL1Message()
         {
@@ -7333,7 +7926,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RR4Message : CanMessage
+    public class TireTemp_RR4Message : CanMessage<TireTemp_RR4Message>
     {
         public TireTemp_RR4Message()
         {
@@ -7418,7 +8011,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RR3Message : CanMessage
+    public class TireTemp_RR3Message : CanMessage<TireTemp_RR3Message>
     {
         public TireTemp_RR3Message()
         {
@@ -7503,7 +8096,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RR2Message : CanMessage
+    public class TireTemp_RR2Message : CanMessage<TireTemp_RR2Message>
     {
         public TireTemp_RR2Message()
         {
@@ -7588,7 +8181,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RR1Message : CanMessage
+    public class TireTemp_RR1Message : CanMessage<TireTemp_RR1Message>
     {
         public TireTemp_RR1Message()
         {
@@ -7673,7 +8266,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RL4Message : CanMessage
+    public class TireTemp_RL4Message : CanMessage<TireTemp_RL4Message>
     {
         public TireTemp_RL4Message()
         {
@@ -7758,7 +8351,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RL3Message : CanMessage
+    public class TireTemp_RL3Message : CanMessage<TireTemp_RL3Message>
     {
         public TireTemp_RL3Message()
         {
@@ -7843,7 +8436,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RL2Message : CanMessage
+    public class TireTemp_RL2Message : CanMessage<TireTemp_RL2Message>
     {
         public TireTemp_RL2Message()
         {
@@ -7928,7 +8521,7 @@ namespace testNS
     }
     
     
-    public class TireTemp_RL1Message : CanMessage
+    public class TireTemp_RL1Message : CanMessage<TireTemp_RL1Message>
     {
         public TireTemp_RL1Message()
         {
@@ -8013,7 +8606,7 @@ namespace testNS
     }
     
     
-    public class RN_Temperatures2Message : CanMessage
+    public class RN_Temperatures2Message : CanMessage<RN_Temperatures2Message>
     {
         public RN_Temperatures2Message()
         {
@@ -8098,7 +8691,7 @@ namespace testNS
     }
     
     
-    public class FN_GPS_PosMessage : CanMessage
+    public class FN_GPS_PosMessage : CanMessage<FN_GPS_PosMessage>
     {
         public FN_GPS_PosMessage()
         {
@@ -8164,7 +8757,7 @@ namespace testNS
     }
     
     
-    public class FN_TVMessage : CanMessage
+    public class FN_TVMessage : CanMessage<FN_TVMessage>
     {
         public FN_TVMessage()
         {
@@ -8268,7 +8861,7 @@ namespace testNS
     }
     
     
-    public class FN_GyroMessage : CanMessage
+    public class FN_GyroMessage : CanMessage<FN_GyroMessage>
     {
         public FN_GyroMessage()
         {
@@ -8334,7 +8927,7 @@ namespace testNS
     }
     
     
-    public class FN_AccelerometerMessage : CanMessage
+    public class FN_AccelerometerMessage : CanMessage<FN_AccelerometerMessage>
     {
         public FN_AccelerometerMessage()
         {
@@ -8400,7 +8993,7 @@ namespace testNS
     }
     
     
-    public class PE_RR_NMTMessage : CanMessage
+    public class PE_RR_NMTMessage : CanMessage<PE_RR_NMTMessage>
     {
         public PE_RR_NMTMessage()
         {
@@ -8428,7 +9021,7 @@ namespace testNS
     }
     
     
-    public class PE_RL_NMTMessage : CanMessage
+    public class PE_RL_NMTMessage : CanMessage<PE_RL_NMTMessage>
     {
         public PE_RL_NMTMessage()
         {
@@ -8456,7 +9049,7 @@ namespace testNS
     }
     
     
-    public class PE_FR_NMTMessage : CanMessage
+    public class PE_FR_NMTMessage : CanMessage<PE_FR_NMTMessage>
     {
         public PE_FR_NMTMessage()
         {
@@ -8484,7 +9077,7 @@ namespace testNS
     }
     
     
-    public class PE_FL_NMTMessage : CanMessage
+    public class PE_FL_NMTMessage : CanMessage<PE_FL_NMTMessage>
     {
         public PE_FL_NMTMessage()
         {
@@ -8512,7 +9105,7 @@ namespace testNS
     }
     
     
-    public class FN_Sensor_StatusMessage : CanMessage
+    public class FN_Sensor_StatusMessage : CanMessage<FN_Sensor_StatusMessage>
     {
         public FN_Sensor_StatusMessage()
         {
@@ -8540,7 +9133,7 @@ namespace testNS
     }
     
     
-    public class AMS_Stack_ErrorsMessage : CanMessage
+    public class AMS_Stack_ErrorsMessage : CanMessage<AMS_Stack_ErrorsMessage>
     {
         public AMS_Stack_ErrorsMessage()
         {
@@ -8663,7 +9256,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_WhMessage : CanMessage
+    public class IVT_Msg_Result_WhMessage : CanMessage<IVT_Msg_Result_WhMessage>
     {
         public IVT_Msg_Result_WhMessage()
         {
@@ -8729,7 +9322,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_WMessage : CanMessage
+    public class IVT_Msg_Result_WMessage : CanMessage<IVT_Msg_Result_WMessage>
     {
         public IVT_Msg_Result_WMessage()
         {
@@ -8795,7 +9388,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_U3Message : CanMessage
+    public class IVT_Msg_Result_U3Message : CanMessage<IVT_Msg_Result_U3Message>
     {
         public IVT_Msg_Result_U3Message()
         {
@@ -8861,7 +9454,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_U2Message : CanMessage
+    public class IVT_Msg_Result_U2Message : CanMessage<IVT_Msg_Result_U2Message>
     {
         public IVT_Msg_Result_U2Message()
         {
@@ -8927,7 +9520,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_U1Message : CanMessage
+    public class IVT_Msg_Result_U1Message : CanMessage<IVT_Msg_Result_U1Message>
     {
         public IVT_Msg_Result_U1Message()
         {
@@ -8993,7 +9586,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_TMessage : CanMessage
+    public class IVT_Msg_Result_TMessage : CanMessage<IVT_Msg_Result_TMessage>
     {
         public IVT_Msg_Result_TMessage()
         {
@@ -9059,7 +9652,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_IMessage : CanMessage
+    public class IVT_Msg_Result_IMessage : CanMessage<IVT_Msg_Result_IMessage>
     {
         public IVT_Msg_Result_IMessage()
         {
@@ -9125,7 +9718,7 @@ namespace testNS
     }
     
     
-    public class IVT_Msg_Result_AsMessage : CanMessage
+    public class IVT_Msg_Result_AsMessage : CanMessage<IVT_Msg_Result_AsMessage>
     {
         public IVT_Msg_Result_AsMessage()
         {
@@ -9191,7 +9784,7 @@ namespace testNS
     }
     
     
-    public class AMSClient_StatusMessage : CanMessage
+    public class AMSClient_StatusMessage : CanMessage<AMSClient_StatusMessage>
     {
         public AMSClient_StatusMessage()
         {
@@ -9295,7 +9888,7 @@ namespace testNS
     }
     
     
-    public class AMS_CountersMessage : CanMessage
+    public class AMS_CountersMessage : CanMessage<AMS_CountersMessage>
     {
         public AMS_CountersMessage()
         {
@@ -9361,7 +9954,7 @@ namespace testNS
     }
     
     
-    public class AMS_StatusMessage : CanMessage
+    public class AMS_StatusMessage : CanMessage<AMS_StatusMessage>
     {
         public AMS_StatusMessage()
         {
@@ -9465,7 +10058,7 @@ namespace testNS
     }
     
     
-    public class AMS_MaxMinTemperaturesMessage : CanMessage
+    public class AMS_MaxMinTemperaturesMessage : CanMessage<AMS_MaxMinTemperaturesMessage>
     {
         public AMS_MaxMinTemperaturesMessage()
         {
@@ -9569,7 +10162,7 @@ namespace testNS
     }
     
     
-    public class AMS_MaxMinVoltagesMessage : CanMessage
+    public class AMS_MaxMinVoltagesMessage : CanMessage<AMS_MaxMinVoltagesMessage>
     {
         public AMS_MaxMinVoltagesMessage()
         {
@@ -9673,7 +10266,7 @@ namespace testNS
     }
     
     
-    public class AMS_Cell_VoltagesMessage : CanMessage
+    public class AMS_Cell_VoltagesMessage : CanMessage<AMS_Cell_VoltagesMessage>
     {
         public AMS_Cell_VoltagesMessage()
         {
@@ -9777,7 +10370,7 @@ namespace testNS
     }
     
     
-    public class AMS_Cell_TemperaturesMessage : CanMessage
+    public class AMS_Cell_TemperaturesMessage : CanMessage<AMS_Cell_TemperaturesMessage>
     {
         public AMS_Cell_TemperaturesMessage()
         {
@@ -9881,7 +10474,7 @@ namespace testNS
     }
     
     
-    public class RN_Sensor_StatusMessage : CanMessage
+    public class RN_Sensor_StatusMessage : CanMessage<RN_Sensor_StatusMessage>
     {
         public RN_Sensor_StatusMessage()
         {
@@ -9909,7 +10502,7 @@ namespace testNS
     }
     
     
-    public class FN_SensorsMessage : CanMessage
+    public class FN_SensorsMessage : CanMessage<FN_SensorsMessage>
     {
         public FN_SensorsMessage()
         {
@@ -9994,7 +10587,7 @@ namespace testNS
     }
     
     
-    public class FN_TemperaturesMessage : CanMessage
+    public class FN_TemperaturesMessage : CanMessage<FN_TemperaturesMessage>
     {
         public FN_TemperaturesMessage()
         {
@@ -10117,7 +10710,7 @@ namespace testNS
     }
     
     
-    public class FN_Driver_ControlsMessage : CanMessage
+    public class FN_Driver_ControlsMessage : CanMessage<FN_Driver_ControlsMessage>
     {
         public FN_Driver_ControlsMessage()
         {
@@ -10240,7 +10833,7 @@ namespace testNS
     }
     
     
-    public class RN_SensorsMessage : CanMessage
+    public class RN_SensorsMessage : CanMessage<RN_SensorsMessage>
     {
         public RN_SensorsMessage()
         {
@@ -10325,7 +10918,7 @@ namespace testNS
     }
     
     
-    public class RN_Errors_PEMessage : CanMessage
+    public class RN_Errors_PEMessage : CanMessage<RN_Errors_PEMessage>
     {
         public RN_Errors_PEMessage()
         {
@@ -10410,7 +11003,7 @@ namespace testNS
     }
     
     
-    public class RN_TemperaturesMessage : CanMessage
+    public class RN_TemperaturesMessage : CanMessage<RN_TemperaturesMessage>
     {
         public RN_TemperaturesMessage()
         {
@@ -10495,7 +11088,7 @@ namespace testNS
     }
     
     
-    public class FN_StatusMessage : CanMessage
+    public class FN_StatusMessage : CanMessage<FN_StatusMessage>
     {
         public FN_StatusMessage()
         {
@@ -10637,7 +11230,7 @@ namespace testNS
     }
     
     
-    public class PE_FR_PDO_3_TXMessage : CanMessage
+    public class PE_FR_PDO_3_TXMessage : CanMessage<PE_FR_PDO_3_TXMessage>
     {
         public PE_FR_PDO_3_TXMessage()
         {
@@ -10722,7 +11315,7 @@ namespace testNS
     }
     
     
-    public class PE_FR_PDO_2_TXMessage : CanMessage
+    public class PE_FR_PDO_2_TXMessage : CanMessage<PE_FR_PDO_2_TXMessage>
     {
         public PE_FR_PDO_2_TXMessage()
         {
@@ -10807,7 +11400,7 @@ namespace testNS
     }
     
     
-    public class PE_FR_PDO_1_TXMessage : CanMessage
+    public class PE_FR_PDO_1_TXMessage : CanMessage<PE_FR_PDO_1_TXMessage>
     {
         public PE_FR_PDO_1_TXMessage()
         {
@@ -10892,7 +11485,7 @@ namespace testNS
     }
     
     
-    public class PE_FL_PDO_3_TXMessage : CanMessage
+    public class PE_FL_PDO_3_TXMessage : CanMessage<PE_FL_PDO_3_TXMessage>
     {
         public PE_FL_PDO_3_TXMessage()
         {
@@ -10977,7 +11570,7 @@ namespace testNS
     }
     
     
-    public class PE_FL_PDO_2_TXMessage : CanMessage
+    public class PE_FL_PDO_2_TXMessage : CanMessage<PE_FL_PDO_2_TXMessage>
     {
         public PE_FL_PDO_2_TXMessage()
         {
@@ -11062,7 +11655,7 @@ namespace testNS
     }
     
     
-    public class PE_FL_PDO_1_TXMessage : CanMessage
+    public class PE_FL_PDO_1_TXMessage : CanMessage<PE_FL_PDO_1_TXMessage>
     {
         public PE_FL_PDO_1_TXMessage()
         {
@@ -11147,7 +11740,7 @@ namespace testNS
     }
     
     
-    public class PE_RR_PDO_3_TXMessage : CanMessage
+    public class PE_RR_PDO_3_TXMessage : CanMessage<PE_RR_PDO_3_TXMessage>
     {
         public PE_RR_PDO_3_TXMessage()
         {
@@ -11232,7 +11825,7 @@ namespace testNS
     }
     
     
-    public class PE_RR_PDO_2_TXMessage : CanMessage
+    public class PE_RR_PDO_2_TXMessage : CanMessage<PE_RR_PDO_2_TXMessage>
     {
         public PE_RR_PDO_2_TXMessage()
         {
@@ -11317,7 +11910,7 @@ namespace testNS
     }
     
     
-    public class PE_RR_PDO_1_TXMessage : CanMessage
+    public class PE_RR_PDO_1_TXMessage : CanMessage<PE_RR_PDO_1_TXMessage>
     {
         public PE_RR_PDO_1_TXMessage()
         {
@@ -11402,7 +11995,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_FR_PDO_3_RXMessage : CanMessage
+    public class RN_PE_FR_PDO_3_RXMessage : CanMessage<RN_PE_FR_PDO_3_RXMessage>
     {
         public RN_PE_FR_PDO_3_RXMessage()
         {
@@ -11487,7 +12080,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_FR_PDO_2_RXMessage : CanMessage
+    public class RN_PE_FR_PDO_2_RXMessage : CanMessage<RN_PE_FR_PDO_2_RXMessage>
     {
         public RN_PE_FR_PDO_2_RXMessage()
         {
@@ -11572,7 +12165,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_FR_PDO_1_RXMessage : CanMessage
+    public class RN_PE_FR_PDO_1_RXMessage : CanMessage<RN_PE_FR_PDO_1_RXMessage>
     {
         public RN_PE_FR_PDO_1_RXMessage()
         {
@@ -11657,7 +12250,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_FL_PDO_3_RXMessage : CanMessage
+    public class RN_PE_FL_PDO_3_RXMessage : CanMessage<RN_PE_FL_PDO_3_RXMessage>
     {
         public RN_PE_FL_PDO_3_RXMessage()
         {
@@ -11742,7 +12335,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_FL_PDO_2_RXMessage : CanMessage
+    public class RN_PE_FL_PDO_2_RXMessage : CanMessage<RN_PE_FL_PDO_2_RXMessage>
     {
         public RN_PE_FL_PDO_2_RXMessage()
         {
@@ -11827,7 +12420,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_FL_PDO_1_RXMessage : CanMessage
+    public class RN_PE_FL_PDO_1_RXMessage : CanMessage<RN_PE_FL_PDO_1_RXMessage>
     {
         public RN_PE_FL_PDO_1_RXMessage()
         {
@@ -11912,7 +12505,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_RR_PDO_3_RXMessage : CanMessage
+    public class RN_PE_RR_PDO_3_RXMessage : CanMessage<RN_PE_RR_PDO_3_RXMessage>
     {
         public RN_PE_RR_PDO_3_RXMessage()
         {
@@ -11997,7 +12590,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_RR_PDO_2_RXMessage : CanMessage
+    public class RN_PE_RR_PDO_2_RXMessage : CanMessage<RN_PE_RR_PDO_2_RXMessage>
     {
         public RN_PE_RR_PDO_2_RXMessage()
         {
@@ -12082,7 +12675,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_RR_PDO_1_RXMessage : CanMessage
+    public class RN_PE_RR_PDO_1_RXMessage : CanMessage<RN_PE_RR_PDO_1_RXMessage>
     {
         public RN_PE_RR_PDO_1_RXMessage()
         {
@@ -12167,7 +12760,7 @@ namespace testNS
     }
     
     
-    public class RN_StatusMessage : CanMessage
+    public class RN_StatusMessage : CanMessage<RN_StatusMessage>
     {
         public RN_StatusMessage()
         {
@@ -12233,7 +12826,7 @@ namespace testNS
     }
     
     
-    public class PE_RL_PDO_3_TXMessage : CanMessage
+    public class PE_RL_PDO_3_TXMessage : CanMessage<PE_RL_PDO_3_TXMessage>
     {
         public PE_RL_PDO_3_TXMessage()
         {
@@ -12318,7 +12911,7 @@ namespace testNS
     }
     
     
-    public class PE_RL_PDO_2_TXMessage : CanMessage
+    public class PE_RL_PDO_2_TXMessage : CanMessage<PE_RL_PDO_2_TXMessage>
     {
         public PE_RL_PDO_2_TXMessage()
         {
@@ -12403,7 +12996,7 @@ namespace testNS
     }
     
     
-    public class PE_RL_PDO_1_TXMessage : CanMessage
+    public class PE_RL_PDO_1_TXMessage : CanMessage<PE_RL_PDO_1_TXMessage>
     {
         public PE_RL_PDO_1_TXMessage()
         {
@@ -12488,7 +13081,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_RL_PDO_3_RXMessage : CanMessage
+    public class RN_PE_RL_PDO_3_RXMessage : CanMessage<RN_PE_RL_PDO_3_RXMessage>
     {
         public RN_PE_RL_PDO_3_RXMessage()
         {
@@ -12573,7 +13166,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_RL_PDO_2_RXMessage : CanMessage
+    public class RN_PE_RL_PDO_2_RXMessage : CanMessage<RN_PE_RL_PDO_2_RXMessage>
     {
         public RN_PE_RL_PDO_2_RXMessage()
         {
@@ -12658,7 +13251,7 @@ namespace testNS
     }
     
     
-    public class RN_PE_RL_PDO_1_RXMessage : CanMessage
+    public class RN_PE_RL_PDO_1_RXMessage : CanMessage<RN_PE_RL_PDO_1_RXMessage>
     {
         public RN_PE_RL_PDO_1_RXMessage()
         {

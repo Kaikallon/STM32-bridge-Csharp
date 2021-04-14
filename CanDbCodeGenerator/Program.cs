@@ -65,6 +65,8 @@ using CanDB;
 
 ");
 
+            string canMessageReceiverBody = GenerateMessageReceiverBody(canMessageTypes.Values);
+            string canMessageReceiverClass = CanDbCSharpCodeGeneration.GenerateClass("public static", "CanMessageReceiver", canMessageReceiverBody);
 
             string canMessageTypesBody = GenerateCanMessageTypesBody(canMessageTypes.Values);
             string canMessageTypesClass = CanDbCSharpCodeGeneration.GenerateClass("public static", "CanMessageTypes", canMessageTypesBody);
@@ -75,6 +77,7 @@ using CanDB;
 
             var classes = new List<string>
             {
+                canMessageReceiverClass,
                 canMessageTypesClass,
                 canSignalTypesClass,
                 GenerateCanExtractionAndInsertionCode(canMessageTypes)
@@ -147,6 +150,49 @@ using CanDB;
             return canSignalsTypesBody.ToString();
         }
 
+        private static string GenerateMessageReceiverBody(IEnumerable<CanMessageType> canMessageTypes)
+        {
+            int n = 4;
+            int o = 2;
+            StringBuilder canMessageReceiverBody = new StringBuilder();
+            canMessageReceiverBody.AppendLine(n * (0 + o), $"private static void CanMessageReceivedCallback(object sender, STLinkBridgeWrapper.CanMessageReceivedEventArgs e)");
+            canMessageReceiverBody.AppendLine(n * (0 + o), $"{{");
+            canMessageReceiverBody.AppendLine(n * (1 + o), $"foreach(var canMessage in e.ReceivedMessages)");
+            canMessageReceiverBody.AppendLine(n * (1 + o), $"{{");
+
+            bool first = true;
+            foreach (var canMessageType in canMessageTypes)
+            {
+                if (!first)
+                    canMessageReceiverBody.AppendLine(n * (2 + o), "else ");
+                canMessageReceiverBody.Append(GenerateNotificationCode(canMessageType));
+
+                first = false;
+            }
+
+            canMessageReceiverBody.AppendLine(n * (1 + o), $"}}");
+            canMessageReceiverBody.AppendLine(n * (0 + o), $"}}");
+            canMessageReceiverBody.AppendLine(n * (0 + o), $"");
+            canMessageReceiverBody.AppendLine(n * (0 + o), $"");
+            canMessageReceiverBody.AppendLine(n * (0 + o), $"");
+
+            return canMessageReceiverBody.ToString();
+            
+
+            string GenerateNotificationCode(CanMessageType canMessageType)
+            {
+                StringBuilder canMessageNotification = new StringBuilder();
+                canMessageNotification.AppendLine(n * (2 + o), $"if (canMessage.ID == CanMessageTypes.{canMessageType.Name}.ID)");
+                canMessageNotification.AppendLine(n * (2 + o), $"{{");
+                canMessageNotification.AppendLine(n * (3 + o), $"{canMessageType.Name}Message message = new {canMessageType.Name}Message();");
+                canMessageNotification.AppendLine(n * (3 + o), $"message.Data = canMessage.data;");
+                canMessageNotification.AppendLine(n * (3 + o), $"message.SystemTimeStamp = DateTime.Now.Ticks;");
+                canMessageNotification.AppendLine(n * (3 + o), $"message.NotifySubscribers();");
+                canMessageNotification.AppendLine(n * (2 + o), $"}}");
+
+                return canMessageNotification.ToString();
+            }
+        }
 
         private static string GenerateCanMessageTypesBody(IEnumerable<CanMessageType> canMessageTypes)
         {
