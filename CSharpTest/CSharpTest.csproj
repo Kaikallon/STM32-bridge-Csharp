@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanTypes.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +81,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CanDB\CanDB.csproj">
+      <Project>{fee5cb1f-cc58-42b1-8665-f407cbd5843a}</Project>
+      <Name>CanDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\STLinkBridgeCLRWrapper\STLinkBridgeCLRWrapper.vcxproj">
       <Project>{1765041a-710b-4085-8aba-e1f618901390}</Project>
       <Name>STLinkBridgeCLRWrapper</Name>

@@ -43,15 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanDB.cs" />
+    <Compile Include="CanDbcParser.cs" />
+    <Compile Include="CanDbTypes.cs" />
     <Compile Include="CanMessage.cs" />
+    <Compile Include="CoodeGenerationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\STLinkBridgeCLRWrapper\STLinkBridgeCLRWrapper.vcxproj">
-      <Project>{1765041a-710b-4085-8aba-e1f618901390}</Project>
-      <Name>STLinkBridgeCLRWrapper</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

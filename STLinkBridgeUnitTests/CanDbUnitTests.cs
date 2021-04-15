@@ -13,7 +13,7 @@ namespace STLinkBridgeUnitTests
         [TestMethod]
         public void OpenLibraryTest()
         {
-            var result = CanDB.CanDB.OpenCanDB(@"..\..\..\CanDbCodeGenerator\Car_CFS19.dbc");
+            var result = CanDB.CanDbcParser.OpenCanDB(@"..\..\..\CanDbCodeGenerator\Car_CFS19.dbc");
 
             // TODO: Make comparison for validation
         }
