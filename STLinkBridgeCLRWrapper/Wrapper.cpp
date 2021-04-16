@@ -58,6 +58,8 @@ STLinkBridgeWrapperCpp::!STLinkBridgeWrapperCpp()
 	// Disconnect
 	if (Bridge != NULL)
 	{
+        if (TransmissionRunning)
+            StopTransmission();
 		Bridge->CloseBridge(COM_UNDEF_ALL);
 		Bridge->CloseStlink();
 		delete Bridge;

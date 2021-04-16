@@ -124,7 +124,7 @@ namespace CanDB
         {
             CanMessageReceivedEventArgs<T> canMessageReceivedEventArgs = new CanMessageReceivedEventArgs<T>();
             canMessageReceivedEventArgs.ReceivedMessage = (T)this;
-            CanMessageReceived?.BeginInvoke(this, new CanMessageReceivedEventArgs<T>(), CanMessageReceivedEndAsyncEvent, null);
+            CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
         }
         protected void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
         {
@@ -137,7 +137,7 @@ namespace CanDB
             catch (Exception e)
             {
                 // Handle any exceptions that were thrown by the invoked method
-                // Console.WriteLine("An event listener went kaboom!");
+                Console.WriteLine("An event listener went kaboom!");
                 // TODO: Handle this?
             }
         }

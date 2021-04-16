@@ -9,6 +9,7 @@ using CanDB.CodeGenerationExtensions;
 
 namespace CanDbCodeGenerator
 {
+    // TODO: Call calculate bitmask at startup
     class Program
     {
         /// <summary>
@@ -155,7 +156,7 @@ using CanDB;
             int n = 4;
             int o = 2;
             StringBuilder canMessageReceiverBody = new StringBuilder();
-            canMessageReceiverBody.AppendLine(n * (0 + o), $"private static void CanMessageReceivedCallback(object sender, STLinkBridgeWrapper.CanMessageReceivedEventArgs e)");
+            canMessageReceiverBody.AppendLine(n * (0 + o), $"public static void CanMessageReceivedCallback(object sender, STLinkBridgeWrapper.CanMessageReceivedEventArgs e)");
             canMessageReceiverBody.AppendLine(n * (0 + o), $"{{");
             canMessageReceiverBody.AppendLine(n * (1 + o), $"foreach(var canMessage in e.ReceivedMessages)");
             canMessageReceiverBody.AppendLine(n * (1 + o), $"{{");

@@ -38,8 +38,8 @@ namespace STLinkBridgeWrapper
 
         public new Brg_StatusT StopTransmission()
         {
-            base.StopTransmission();
             CanPollingTimer.Stop();
+            base.StopTransmission();    
             return BridgeStatus;
         }
 
@@ -48,21 +48,21 @@ namespace STLinkBridgeWrapper
             var receivedMessages = CanRead();
 
             CanMessageReceivedEventArgs canMessageReceivedEventArgs = new CanMessageReceivedEventArgs();
-
+            // TODO: Increase sample rate if there are too many messages in the buffer
             // Check for overrun
             foreach (var message in receivedMessages)
             {
                 if (message.OverrunBuffer || message.Fifo) 
                 {
                     CanPollingTimer.Interval /= 1.2; // Polling was too slow. Poll faster
+                    canMessageReceivedEventArgs.BufferOverrunDetected = true;
                 }
-                canMessageReceivedEventArgs.BufferOverrunDetected = true;
             }
 
             if (receivedMessages.Count > 0)
             {
                 canMessageReceivedEventArgs.ReceivedMessages = receivedMessages;
-                CanMessageReceived?.BeginInvoke(this, new CanMessageReceivedEventArgs(), CanMessageReceivedEndAsyncEvent, null);
+                CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
             }
         }
 

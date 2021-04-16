@@ -31,6 +31,9 @@
             this.btnEnumerate = new System.Windows.Forms.Button();
             this.dgv_stLinks = new System.Windows.Forms.DataGridView();
             this.btn_OpenBridge = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btn_CloseBridge = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_stLinks)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,11 +67,42 @@
             this.btn_OpenBridge.UseVisualStyleBackColor = true;
             this.btn_OpenBridge.Click += new System.EventHandler(this.btn_OpenBridge_Click);
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(273, 210);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(100, 96);
+            this.richTextBox1.TabIndex = 3;
+            this.richTextBox1.Text = "";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(553, 254);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btn_CloseBridge
+            // 
+            this.btn_CloseBridge.Location = new System.Drawing.Point(555, 97);
+            this.btn_CloseBridge.Name = "btn_CloseBridge";
+            this.btn_CloseBridge.Size = new System.Drawing.Size(75, 23);
+            this.btn_CloseBridge.TabIndex = 2;
+            this.btn_CloseBridge.Text = "Close Bridge";
+            this.btn_CloseBridge.UseVisualStyleBackColor = true;
+            this.btn_CloseBridge.Click += new System.EventHandler(this.btn_CloseBridge_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.btn_CloseBridge);
             this.Controls.Add(this.btn_OpenBridge);
             this.Controls.Add(this.dgv_stLinks);
             this.Controls.Add(this.btnEnumerate);
@@ -84,6 +118,9 @@
         private System.Windows.Forms.Button btnEnumerate;
         private System.Windows.Forms.DataGridView dgv_stLinks;
         private System.Windows.Forms.Button btn_OpenBridge;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_CloseBridge;
     }
 }
 
