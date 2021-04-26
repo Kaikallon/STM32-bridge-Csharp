@@ -17,6 +17,7 @@ using namespace System::Collections::Generic;
 using namespace System::Runtime::InteropServices;
 
 
+
 namespace STLinkBridgeWrapper
 {
     // Structure used to contain the device info data for CLR, copied and modified from stlink_interface.h
@@ -61,7 +62,7 @@ namespace STLinkBridgeWrapper
         uint64_t data;
     } ;
 
-    public  ref class STLinkBridgeWrapperCpp abstract
+    public ref class STLinkBridgeWrapperCpp abstract
     {
     private:
         STLinkInterface* sTLinkInterface = NULL;
@@ -76,6 +77,8 @@ namespace STLinkBridgeWrapper
         Brg_StatusT      CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, uint8_t *pDataTx, Brg_CanRxMsgT *pCanRxMsg, uint8_t *pDataRx, Brg_CanRxFifoT rxFifo, uint8_t size);
         Brg_StatusT      StartTransmission();
         Brg_StatusT      StopTransmission();
+
+        virtual void NotifyTransmissionChanged() = 0;
 
     public:
         STLinkBridgeWrapperCpp();

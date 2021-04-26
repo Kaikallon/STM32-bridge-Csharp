@@ -8,7 +8,7 @@ using System.Timers;
 
 namespace STLinkBridgeWrapper
 {
-    public class CanMessageReceivedEventArgs
+    public class CanMessageReceivedEventArgs : EventArgs
     {
         public List<CanBridgeMessageRx> ReceivedMessages { get; set; } = new List<CanBridgeMessageRx>();
         public bool BufferOverrunDetected { get; set; } = false;
@@ -16,8 +16,8 @@ namespace STLinkBridgeWrapper
 
     public class STLinkBridgeWrapper : STLinkBridgeWrapperCpp
     {
-        public delegate void CanMessageReceivedHandler(object sender, CanMessageReceivedEventArgs e);
-        public event CanMessageReceivedHandler CanMessageReceived;
+        public event EventHandler CanTransmissionStatusChanged;
+        public event EventHandler<CanMessageReceivedEventArgs> CanMessageReceived;
         protected Timer CanPollingTimer = new Timer();
         
         public STLinkBridgeWrapper()
@@ -62,7 +62,8 @@ namespace STLinkBridgeWrapper
             if (receivedMessages.Count > 0)
             {
                 canMessageReceivedEventArgs.ReceivedMessages = receivedMessages;
-                CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
+                //CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
+                CanMessageReceived?.Invoke(this, canMessageReceivedEventArgs);
             }
         }
 
@@ -72,6 +73,17 @@ namespace STLinkBridgeWrapper
             base.CanReadLL(out receivedMessages);
             return receivedMessages;
         }
+
+        protected override void NotifyTransmissionChanged()
+        {
+            CanTransmissionStatusChanged?.Invoke(this, new EventArgs());
+        }
+
+        new public bool TransmissionRunning
+        {
+            get { return base.TransmissionRunning; }
+        }
+
 
         //public Brg_StatusT CanWrite(CanMessageType canMessageType)
         //{
@@ -105,21 +117,21 @@ namespace STLinkBridgeWrapper
         //    return base.CanWriteLL(message);
         //}
 
-        private void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
-        {
-            var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
-            var invokedMethod = (CanMessageReceivedHandler)ar.AsyncDelegate;
-
-            try
-            {
-                invokedMethod.EndInvoke(iar);
-            }
-            catch (Exception e)
-            {
-                // Handle any exceptions that were thrown by the invoked method
-                // Console.WriteLine("An event listener went kaboom!");
-                // TODO: Handle this?
-            }
-        }
+        //private void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
+        //{
+        //    var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
+        //    var invokedMethod = (CanMessageReceivedHandler)ar.AsyncDelegate;
+        //
+        //    try
+        //    {
+        //        invokedMethod.EndInvoke(iar);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        // Handle any exceptions that were thrown by the invoked method
+        //        // Console.WriteLine("An event listener went kaboom!");
+        //        // TODO: Handle this?
+        //    }
+        //}
     }
 }

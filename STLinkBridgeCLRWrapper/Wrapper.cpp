@@ -109,10 +109,24 @@ STLinkIf_StatusT STLinkBridgeWrapperCpp::EnumerateDevices([Out] List<DeviceInfo^
 {
     uint32_t numDevices;
     // Safety check
-    if (InterfaceStatus != STLinkIf_StatusT::NO_ERR)
+    switch (InterfaceStatus)
     {
+    case STLinkIf_StatusT::NO_ERR:
+    case STLinkIf_StatusT::NO_STLINK:
+    case STLinkIf_StatusT::SN_NOT_FOUND:
+        break;
+    case STLinkIf_StatusT::CONNECT_ERR:
+    case STLinkIf_StatusT::DLL_ERR:
+    case STLinkIf_StatusT::USB_COMM_ERR:
+    case STLinkIf_StatusT::PARAM_ERR:
+    case STLinkIf_StatusT::NOT_SUPPORTED:
+    case STLinkIf_StatusT::PERMISSION_ERR:
+    case STLinkIf_StatusT::ENUM_ERR:
+    case STLinkIf_StatusT::GET_INFO_ERR:
+    case STLinkIf_StatusT::CLOSE_ERR:
         Console::WriteLine("STLinkUSBDriver library (dll) issue");
         return InterfaceStatus;
+        break;
     }
 
     // Do the enumeration, find the total number of devices
@@ -495,6 +509,7 @@ Brg_StatusT STLinkBridgeWrapperCpp::StartTransmission()
     }
 
     TransmissionRunning = true;
+    NotifyTransmissionChanged();
 
     return BridgeStatus;
 }
@@ -508,6 +523,8 @@ Brg_StatusT STLinkBridgeWrapperCpp::StopTransmission()
     }
 
     TransmissionRunning = false;
+    NotifyTransmissionChanged();
+
 
     return BridgeStatus;
 }

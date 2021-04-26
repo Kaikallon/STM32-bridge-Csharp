@@ -118,29 +118,30 @@ namespace CanDB
         }
 
 
-        public delegate void CanMessageReceivedHandler(object sender, CanMessageReceivedEventArgs<T> e);
-        public static event CanMessageReceivedHandler CanMessageReceived;
+        public static event EventHandler<CanMessageReceivedEventArgs<T>> CanMessageReceived;
         public void NotifySubscribers()
         {
             CanMessageReceivedEventArgs<T> canMessageReceivedEventArgs = new CanMessageReceivedEventArgs<T>();
             canMessageReceivedEventArgs.ReceivedMessage = (T)this;
-            CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
+
+            CanMessageReceived?.Invoke(this, canMessageReceivedEventArgs); // TODO: Consider changing to BeginInvoke to utilize multiple threads
+            //CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
         }
-        protected void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
-        {
-            var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
-            var invokedMethod = (CanMessageReceivedHandler)ar.AsyncDelegate;
-            try
-            {
-                invokedMethod.EndInvoke(iar);
-            }
-            catch (Exception e)
-            {
-                // Handle any exceptions that were thrown by the invoked method
-                Console.WriteLine("An event listener went kaboom!");
-                // TODO: Handle this?
-            }
-        }
+        //protected void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
+        //{
+        //    var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
+        //    var invokedMethod = (CanMessageReceivedHandler)ar.AsyncDelegate;
+        //    try
+        //    {
+        //        invokedMethod.EndInvoke(iar);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        // Handle any exceptions that were thrown by the invoked method
+        //        Console.WriteLine("An event listener went kaboom!");
+        //        // TODO: Handle this?
+        //    }
+        //}
     }
 
     public class CanMessageReceivedEventArgs<T> where T : CanMessage<T>
