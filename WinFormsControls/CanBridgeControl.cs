@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CanDB;
 using STLinkBridgeWrapper;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace WinFormsControls
 {
@@ -32,7 +33,7 @@ namespace WinFormsControls
         {
             InitializeComponent();
             StLinkBridge = new STLinkBridgeWrapper.STLinkBridgeWrapper();
-            cbSpeed.DataSource = new List<uint> { 1000, 800, 500, 250, 125, 100 };
+            cbSpeed.DataSource = new List<uint> { 1000, 750, 500, 250, 125, 100 };
             cbSpeed.SelectedIndex = 0;
             StLinkBridge.CanTransmissionStatusChanged += StLinkBridge_CanTransmissionStatusChanged;
             btnEnumerate_Click(null, null);
@@ -42,7 +43,8 @@ namespace WinFormsControls
 
         public void UpdateActivityIndicator()
         {
-            dgvActivityIndicator.DataSource = ReceivedDataSummary.Values.ToList();
+            SetControlPropertyThreadSafe(dgvActivityIndicator, "DataSource", ReceivedDataSummary.Values.ToList());
+            //dgvActivityIndicator.DataSource = ReceivedDataSummary.Values.ToList();
         }
 
         private void AddMessageToActivityIndicator(CanBridgeMessageRx receivedMessage)
@@ -76,30 +78,58 @@ namespace WinFormsControls
                 throw new Exception("No STLink device found");
 
             Brg_StatusT bridgeStatus = StLinkBridge.OpenBridge(selectedDevice);
-            //wrapper.CanMessageReceived += Wrapper_CanMessageReceived;
-            //wrapper.CanMessageReceived += testNS.CanMessageReceiver.CanMessageReceivedCallback;
             StLinkBridge.CanMessageReceived += StLinkBridge_CanMessageReceived;
 
             Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
 
-            // TODO: Selectable speed
             StLinkBridge.CanInit(baudrate, false);
             Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
 
-            // TODO: Selectable pollrate
             StLinkBridge.StartTransmission(polltime);
             Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
         }
 
         private void StLinkBridge_CanMessageReceived(object sender, CanMessageReceivedEventArgs e)
         {
-            if ((DateTime.Now.Ticks - canMessageReceivedPreviousTimeStamp) < RefreshTime*10000)
+            if ((DateTime.Now.Ticks - canMessageReceivedPreviousTimeStamp) > RefreshTime*10000)
             {
                 UpdateActivityIndicator();
                 canMessageReceivedPreviousTimeStamp = DateTime.Now.Ticks;
             }
+            foreach (var message in e.ReceivedMessages)
+            {
+                AddMessageToActivityIndicator(message);
+            }
         }
         #endregion
+
+        private delegate void SetControlPropertyThreadSafeDelegate(
+            Control control,
+            string propertyName,
+            object propertyValue);
+
+        public static void SetControlPropertyThreadSafe(
+            Control control,
+            string propertyName,
+            object propertyValue)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new SetControlPropertyThreadSafeDelegate
+                (SetControlPropertyThreadSafe),
+                new object[] { control, propertyName, propertyValue });
+            }
+            else
+            {
+                control.GetType().InvokeMember(
+                    propertyName,
+                    BindingFlags.SetProperty,
+                    null,
+                    control,
+                    new object[] { propertyValue });
+            }
+        }
+
 
         #region EventHandlers
         private void btnEnumerate_Click(object sender, EventArgs e)
@@ -116,7 +146,7 @@ namespace WinFormsControls
                 var deviceInfo = dgv_stLinks.CurrentRow.DataBoundItem as DeviceInfo;
                 if (deviceInfo != null)
                 {
-                    var baudrate = (uint)cbSpeed.SelectedItem;
+                    var baudrate = (uint)cbSpeed.SelectedItem * 1000;
                     var polltime = nudPollTime.Value;
                     InitializeCAN(deviceInfo, baudrate, (double)polltime);
 
@@ -135,7 +165,6 @@ namespace WinFormsControls
             {
                 cbSpeed.Enabled = true;
                 nudPollTime.Enabled = false;
-
             }
         }
         #endregion

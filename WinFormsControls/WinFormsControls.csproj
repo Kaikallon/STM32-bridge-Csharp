@@ -45,13 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\CanBridgeControl.cs">
+    <Compile Include="CanBridgeControl.cs">
       <SubType>UserControl</SubType>
-      <Link>CanBridgeControl.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\CanBridgeControl.Designer.cs">
+    <Compile Include="CanBridgeControl.Designer.cs">
       <DependentUpon>CanBridgeControl.cs</DependentUpon>
-      <Link>CanBridgeControl.Designer.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
@@ -67,9 +65,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\..\CanBridgeControl.resx">
+    <EmbeddedResource Include="CanBridgeControl.resx">
       <DependentUpon>CanBridgeControl.cs</DependentUpon>
-      <Link>CanBridgeControl.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
