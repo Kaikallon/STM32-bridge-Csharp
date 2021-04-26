@@ -10,7 +10,6 @@ using CanDB.CodeGenerationExtensions;
 
 namespace CanDbCodeGenerator
 {
-    // TODO: Call calculate bitmask at startup
     class Program
     {
         /// <summary>
@@ -129,6 +128,12 @@ using CanDB;
             {
                 canSignalsTypesBody.AppendLine(n * (1 + o), $"AllCanSignalTypes.Add({signal.QualifiedName.Replace(".", "__")}); ");
             }
+
+            canSignalsTypesBody.AppendLine(n * (1 + o), $"foreach (var signal in AllCanSignalTypes)");
+            canSignalsTypesBody.AppendLine(n * (1 + o), $"{{");
+            canSignalsTypesBody.AppendLine(n * (2 + o), $"signal.CalculateBitMask();");
+            canSignalsTypesBody.AppendLine(n * (1 + o), $"}}");
+
             canSignalsTypesBody.AppendLine(n * (0 + o), $"}}");
             canSignalsTypesBody.AppendLine(n * (0 + o), $"");
 
@@ -217,7 +222,7 @@ using CanDB;
             {
                 canMessageTypesBody.AppendLine(n * (1 + o), $"AllCanMessageTypes.Add({canMessageType.ID}, {canMessageType.Name});");
             }
-            canMessageTypesBody.AppendLine(n * (0 + o), $"}}");
+             canMessageTypesBody.AppendLine(n * (0 + o), $"}}");
             canMessageTypesBody.AppendLine(n * (0 + o), $"");
             canMessageTypesBody.AppendLine(n * (0 + o), $"public static Dictionary<int, CanMessageType> AllCanMessageTypes = new Dictionary<int, CanMessageType>();");
             canMessageTypesBody.AppendLine(n * (0 + o), $"");

@@ -1586,6 +1586,10 @@ namespace testNS
             AllCanSignalTypes.Add(PE_RL_NMT__pe_rl_nmt); 
             AllCanSignalTypes.Add(PE_FR_NMT__pe_fr_nmt); 
             AllCanSignalTypes.Add(PE_FL_NMT__pe_fl_nmt); 
+            foreach (var signal in AllCanSignalTypes)
+            {
+                signal.CalculateBitMask();
+            }
         }
         
         public static CanSignalType GpsState__gps_ok = new CanSignalType(new List<string>{
@@ -5167,16 +5171,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(gps_ok);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setgps_ok(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(gps_ok, (UInt64)value);
         }
@@ -5195,16 +5199,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(latitude);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setlatitude(float value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(latitude, (UInt64)value);
         }
@@ -5214,16 +5218,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(longitude);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setlongitude(float value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(longitude, (UInt64)value);
         }
@@ -5242,16 +5246,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(gyro_z);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setgyro_z(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(gyro_z, (UInt64)value);
         }
@@ -5261,16 +5265,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(gyro_y);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setgyro_y(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(gyro_y, (UInt64)value);
         }
@@ -5280,16 +5284,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(gyro_x);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setgyro_x(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(gyro_x, (UInt64)value);
         }
@@ -5308,16 +5312,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(acc_z);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setacc_z(float value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(acc_z, (UInt64)value);
         }
@@ -5327,16 +5331,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(acc_y);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setacc_y(float value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(acc_y, (UInt64)value);
         }
@@ -5346,16 +5350,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(acc_x);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setacc_x(float value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(acc_x, (UInt64)value);
         }
@@ -5374,16 +5378,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(rotor_temp_fl);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setrotor_temp_fl(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(rotor_temp_fl, (UInt64)value);
         }
@@ -5393,16 +5397,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(rotor_temp_FR);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setrotor_temp_FR(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(rotor_temp_FR, (UInt64)value);
         }
@@ -5412,16 +5416,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(damper_fr);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setdamper_fr(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(damper_fr, (UInt64)value);
         }
@@ -5431,16 +5435,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(damper_fl);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setdamper_fl(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(damper_fl, (UInt64)value);
         }
@@ -5459,16 +5463,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(water_temp_fr);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setwater_temp_fr(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(water_temp_fr, (UInt64)value);
         }
@@ -5478,16 +5482,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(water_temp_fl);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setwater_temp_fl(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(water_temp_fl, (UInt64)value);
         }
@@ -5497,16 +5501,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(gearbox_temp_fr);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setgearbox_temp_fr(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(gearbox_temp_fr, (UInt64)value);
         }
@@ -5516,16 +5520,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(gearbox_temp_fl);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setgearbox_temp_fl(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(gearbox_temp_fl, (UInt64)value);
         }
@@ -5535,16 +5539,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(brake_temp_fr);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 4;
+            tempValue  *= 4;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setbrake_temp_fr(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 4;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 4;
             // Cats to integer and prepare for sending
             this.InsertBits(brake_temp_fr, (UInt64)value);
         }
@@ -5554,16 +5558,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(brake_temp_fl);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 4;
+            tempValue  *= 4;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setbrake_temp_fl(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 4;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 4;
             // Cats to integer and prepare for sending
             this.InsertBits(brake_temp_fl, (UInt64)value);
         }
@@ -5582,16 +5586,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(apps);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setapps(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(apps, (UInt64)value);
         }
@@ -5601,16 +5605,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(steering_angle);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 2;
+            tempValue  *= 2;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setsteering_angle(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 2;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(steering_angle, (UInt64)value);
         }
@@ -5620,16 +5624,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(FN_Brake_System);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetFN_Brake_System(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(FN_Brake_System, (UInt64)value);
         }
@@ -5639,16 +5643,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(FN_Brake_Pedal);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetFN_Brake_Pedal(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(FN_Brake_Pedal, (UInt64)value);
         }
@@ -5658,16 +5662,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(apps_2_voltage);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setapps_2_voltage(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(apps_2_voltage, (UInt64)value);
         }
@@ -5677,16 +5681,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(apps_1_voltage);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setapps_1_voltage(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(apps_1_voltage, (UInt64)value);
         }
@@ -5705,16 +5709,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(rotor_temp_rr);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setrotor_temp_rr(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(rotor_temp_rr, (UInt64)value);
         }
@@ -5724,16 +5728,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(rotor_temp_rl);
             // Apply inverse transform to restore actual value
-            tempValue  += -5;
-            tempValue  *= 2;
+            tempValue  /= 2;
+            tempValue  -= -5;
             return tempValue;
         }
         
         public void Setrotor_temp_rl(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= 2;
+            // Scale and offset value according to signal specification
             value += -5;
+            value *= 2;
             // Cats to integer and prepare for sending
             this.InsertBits(rotor_temp_rl, (UInt64)value);
         }
@@ -5743,16 +5747,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(damper_rr);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setdamper_rr(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(damper_rr, (UInt64)value);
         }
@@ -5762,16 +5766,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(damper_rl);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setdamper_rl(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(damper_rl, (UInt64)value);
         }
@@ -5790,16 +5794,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_Water_Motor_RR);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_Water_Motor_RR(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_Water_Motor_RR, (UInt64)value);
         }
@@ -5809,16 +5813,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_Water_Motor_RL);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_Water_Motor_RL(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_Water_Motor_RL, (UInt64)value);
         }
@@ -5828,16 +5832,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_Water_Motor_Radiator);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_Water_Motor_Radiator(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_Water_Motor_Radiator, (UInt64)value);
         }
@@ -5847,16 +5851,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_Water_Motor_PE);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_Water_Motor_PE(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_Water_Motor_PE, (UInt64)value);
         }
@@ -5875,16 +5879,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(fn_front_torque_scale);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= (sbyte)2.5;
+            tempValue  /= (sbyte)2.5;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setfn_front_torque_scale(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= (sbyte)2.5;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= (sbyte)2.5;
             // Cats to integer and prepare for sending
             this.InsertBits(fn_front_torque_scale, (UInt64)value);
         }
@@ -5894,16 +5898,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(fn_speed_limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 100;
+            tempValue  *= 100;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setfn_speed_limit(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 100;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(fn_speed_limit, (UInt64)value);
         }
@@ -5913,16 +5917,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(fn_max_torque);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= (sbyte)2.5;
+            tempValue  /= (sbyte)2.5;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void Setfn_max_torque(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value /= (sbyte)2.5;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= (sbyte)2.5;
             // Cats to integer and prepare for sending
             this.InsertBits(fn_max_torque, (UInt64)value);
         }
@@ -5932,16 +5936,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(fn_status);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setfn_status(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(fn_status, (UInt64)value);
         }
@@ -5960,16 +5964,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(rn_status);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setrn_status(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(rn_status, (UInt64)value);
         }
@@ -5988,16 +5992,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(stack6_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setstack6_errors(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(stack6_errors, (UInt64)value);
         }
@@ -6007,16 +6011,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(stack5_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setstack5_errors(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(stack5_errors, (UInt64)value);
         }
@@ -6026,16 +6030,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(stack4_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setstack4_errors(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(stack4_errors, (UInt64)value);
         }
@@ -6045,16 +6049,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(stack3_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setstack3_errors(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(stack3_errors, (UInt64)value);
         }
@@ -6064,16 +6068,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(stack2_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setstack2_errors(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(stack2_errors, (UInt64)value);
         }
@@ -6083,16 +6087,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(stack1_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setstack1_errors(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(stack1_errors, (UInt64)value);
         }
@@ -6111,16 +6115,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_Wh);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_Wh(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_Wh, (UInt64)value);
         }
@@ -6130,16 +6134,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_Wh);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_Result_Wh(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_Wh, (UInt64)value);
         }
@@ -6149,16 +6153,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_Wh);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_Wh(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_Wh, (UInt64)value);
         }
@@ -6177,16 +6181,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_W);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_W(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_W, (UInt64)value);
         }
@@ -6196,16 +6200,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_W);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_Result_W(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_W, (UInt64)value);
         }
@@ -6215,16 +6219,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_W);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_W(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_W, (UInt64)value);
         }
@@ -6243,16 +6247,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(AmsClient_Trigger_Ams);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAmsClient_Trigger_Ams(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(AmsClient_Trigger_Ams, (UInt64)value);
         }
@@ -6262,16 +6266,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(AmsClient_Start_TS);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAmsClient_Start_TS(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(AmsClient_Start_TS, (UInt64)value);
         }
@@ -6281,16 +6285,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(AmsClient_FN_Buttons);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAmsClient_FN_Buttons(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(AmsClient_FN_Buttons, (UInt64)value);
         }
@@ -6300,16 +6304,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(AmsClient_FrontNode_Status);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAmsClient_FrontNode_Status(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(AmsClient_FrontNode_Status, (UInt64)value);
         }
@@ -6319,16 +6323,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(AmsClient_Enable_Communication);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAmsClient_Enable_Communication(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(AmsClient_Enable_Communication, (UInt64)value);
         }
@@ -6347,16 +6351,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(progress);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setprogress(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(progress, (UInt64)value);
         }
@@ -6366,16 +6370,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(fail_air1_open);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setfail_air1_open(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(fail_air1_open, (UInt64)value);
         }
@@ -6385,16 +6389,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(fail_timeout);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setfail_timeout(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(fail_timeout, (UInt64)value);
         }
@@ -6404,16 +6408,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(succeeded);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setsucceeded(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(succeeded, (UInt64)value);
         }
@@ -6432,16 +6436,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_Watchdog);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_Watchdog(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_Watchdog, (UInt64)value);
         }
@@ -6451,16 +6455,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_Precharge_Time);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_Precharge_Time(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_Precharge_Time, (UInt64)value);
         }
@@ -6470,16 +6474,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_Accumulator_Errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_Accumulator_Errors(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_Accumulator_Errors, (UInt64)value);
         }
@@ -6489,16 +6493,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_Accumulator_SoC);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_Accumulator_SoC(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_Accumulator_SoC, (UInt64)value);
         }
@@ -6508,16 +6512,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(ams_status);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setams_status(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(ams_status, (UInt64)value);
         }
@@ -6536,16 +6540,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(Ams_AvgTemp);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_AvgTemp(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_AvgTemp, (UInt64)value);
         }
@@ -6555,16 +6559,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(Ams_MinTemp);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetAms_MinTemp(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MinTemp, (UInt64)value);
         }
@@ -6574,16 +6578,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_MinTemp_Pos_Stack);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_MinTemp_Pos_Stack(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MinTemp_Pos_Stack, (UInt64)value);
         }
@@ -6593,16 +6597,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(Ams_MaxTemp);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetAms_MaxTemp(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MaxTemp, (UInt64)value);
         }
@@ -6612,16 +6616,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_MaxTemp_Pos_Stack);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_MaxTemp_Pos_Stack(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MaxTemp_Pos_Stack, (UInt64)value);
         }
@@ -6640,16 +6644,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(Ams_AvgVoltage);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_AvgVoltage(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_AvgVoltage, (UInt64)value);
         }
@@ -6659,16 +6663,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(Ams_MinVoltage);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetAms_MinVoltage(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MinVoltage, (UInt64)value);
         }
@@ -6678,16 +6682,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_MinVoltage_Pos_Stack);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_MinVoltage_Pos_Stack(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MinVoltage_Pos_Stack, (UInt64)value);
         }
@@ -6697,16 +6701,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(Ams_MaxVoltage);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetAms_MaxVoltage(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MaxVoltage, (UInt64)value);
         }
@@ -6716,16 +6720,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(Ams_MaxVoltage_Pos_Stack);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetAms_MaxVoltage_Pos_Stack(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_MaxVoltage_Pos_Stack, (UInt64)value);
         }
@@ -6744,16 +6748,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(Ams_Voltage3);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetAms_Voltage3(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_Voltage3, (UInt64)value);
         }
@@ -6772,16 +6776,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(Ams_Temp3);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 100;
+            tempValue  /= 100;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetAms_Temp3(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 100;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 100;
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_Temp3, (UInt64)value);
         }
@@ -6800,16 +6804,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_U3);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_U3(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_U3, (UInt64)value);
         }
@@ -6826,9 +6830,9 @@ namespace testNS
         
         public void SetIVT_Result_U3(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_U3, (UInt64)value);
         }
@@ -6838,16 +6842,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_U3);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_U3(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_U3, (UInt64)value);
         }
@@ -6866,16 +6870,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_U2);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_U2(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_U2, (UInt64)value);
         }
@@ -6892,9 +6896,9 @@ namespace testNS
         
         public void SetIVT_Result_U2(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_U2, (UInt64)value);
         }
@@ -6904,16 +6908,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_U2);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_U2(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_U2, (UInt64)value);
         }
@@ -6932,16 +6936,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_U1);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_U1(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_U1, (UInt64)value);
         }
@@ -6958,9 +6962,9 @@ namespace testNS
         
         public void SetIVT_Result_U1(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_U1, (UInt64)value);
         }
@@ -6970,16 +6974,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_U1);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_U1(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_U1, (UInt64)value);
         }
@@ -6998,16 +7002,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_T);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_T(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_T, (UInt64)value);
         }
@@ -7017,16 +7021,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_T);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetIVT_Result_T(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_T, (UInt64)value);
         }
@@ -7036,16 +7040,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_T);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_T(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_T, (UInt64)value);
         }
@@ -7064,16 +7068,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_I);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_I(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_I, (UInt64)value);
         }
@@ -7083,16 +7087,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_I);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetIVT_Result_I(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_I, (UInt64)value);
         }
@@ -7102,16 +7106,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_I);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_I(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_I, (UInt64)value);
         }
@@ -7130,16 +7134,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             byte tempValue = (byte)ExtractBits(IVT_ResultState_And_MsgCount_As);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_ResultState_And_MsgCount_As(byte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_ResultState_And_MsgCount_As, (UInt64)value);
         }
@@ -7149,16 +7153,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_As);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetIVT_Result_As(Int32 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_Result_As, (UInt64)value);
         }
@@ -7168,16 +7172,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(IVT_MuxID_As);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetIVT_MuxID_As(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(IVT_MuxID_As, (UInt64)value);
         }
@@ -7196,16 +7200,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(pe_rr_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_rr_errors(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_rr_errors, (UInt64)value);
         }
@@ -7215,16 +7219,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(pe_rl_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_rl_errors(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_rl_errors, (UInt64)value);
         }
@@ -7234,16 +7238,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(pe_fr_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_fr_errors(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_fr_errors, (UInt64)value);
         }
@@ -7253,16 +7257,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(pe_fl_errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_fl_errors(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_fl_errors, (UInt64)value);
         }
@@ -7281,16 +7285,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Iq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FR_Iq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Iq, (UInt64)value);
         }
@@ -7300,16 +7304,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Id);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FR_Id(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Id, (UInt64)value);
         }
@@ -7319,16 +7323,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Uq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FR_Uq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Uq, (UInt64)value);
         }
@@ -7338,16 +7342,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Ud);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FR_Ud(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Ud, (UInt64)value);
         }
@@ -7366,16 +7370,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Temp_Stator);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FR_Temp_Stator(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Temp_Stator, (UInt64)value);
         }
@@ -7385,16 +7389,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Measured_Udc);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FR_Measured_Udc(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Measured_Udc, (UInt64)value);
         }
@@ -7404,16 +7408,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Temp_Inverter);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FR_Temp_Inverter(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Temp_Inverter, (UInt64)value);
         }
@@ -7423,16 +7427,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Power_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FR_Power_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Power_Estimate, (UInt64)value);
         }
@@ -7451,16 +7455,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(PE_FR_Errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FR_Errors(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Errors, (UInt64)value);
         }
@@ -7470,16 +7474,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Speed_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FR_Speed_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Speed_Estimate, (UInt64)value);
         }
@@ -7489,16 +7493,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FR_Torque_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FR_Torque_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Torque_Estimate, (UInt64)value);
         }
@@ -7508,16 +7512,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(PE_FR_Drive_Engaged);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FR_Drive_Engaged(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FR_Drive_Engaged, (UInt64)value);
         }
@@ -7536,16 +7540,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Iq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FL_Iq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Iq, (UInt64)value);
         }
@@ -7555,16 +7559,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Id);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FL_Id(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Id, (UInt64)value);
         }
@@ -7574,16 +7578,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Uq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FL_Uq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Uq, (UInt64)value);
         }
@@ -7593,16 +7597,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Ud);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FL_Ud(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Ud, (UInt64)value);
         }
@@ -7621,16 +7625,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Temp_Stator);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FL_Temp_Stator(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Temp_Stator, (UInt64)value);
         }
@@ -7640,16 +7644,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Measured_Udc);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FL_Measured_Udc(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Measured_Udc, (UInt64)value);
         }
@@ -7659,16 +7663,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Temp_Inverter);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FL_Temp_Inverter(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Temp_Inverter, (UInt64)value);
         }
@@ -7678,16 +7682,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Power_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FL_Power_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Power_Estimate, (UInt64)value);
         }
@@ -7706,16 +7710,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(PE_FL_Errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FL_Errors(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Errors, (UInt64)value);
         }
@@ -7725,16 +7729,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Speed_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FL_Speed_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Speed_Estimate, (UInt64)value);
         }
@@ -7744,16 +7748,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_FL_Torque_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_FL_Torque_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Torque_Estimate, (UInt64)value);
         }
@@ -7763,16 +7767,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(PE_FL_Drive_Engaged);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_FL_Drive_Engaged(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_FL_Drive_Engaged, (UInt64)value);
         }
@@ -7791,16 +7795,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Iq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RR_Iq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Iq, (UInt64)value);
         }
@@ -7810,16 +7814,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Id);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RR_Id(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Id, (UInt64)value);
         }
@@ -7829,16 +7833,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Uq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RR_Uq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Uq, (UInt64)value);
         }
@@ -7848,16 +7852,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Ud);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RR_Ud(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Ud, (UInt64)value);
         }
@@ -7876,16 +7880,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Temp_Stator);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RR_Temp_Stator(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Temp_Stator, (UInt64)value);
         }
@@ -7895,16 +7899,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Measured_Udc);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RR_Measured_Udc(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Measured_Udc, (UInt64)value);
         }
@@ -7914,16 +7918,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Temp_Inverter);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RR_Temp_Inverter(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Temp_Inverter, (UInt64)value);
         }
@@ -7933,16 +7937,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Power_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RR_Power_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Power_Estimate, (UInt64)value);
         }
@@ -7961,16 +7965,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(PE_RR_Errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RR_Errors(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Errors, (UInt64)value);
         }
@@ -7980,16 +7984,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Speed_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RR_Speed_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Speed_Estimate, (UInt64)value);
         }
@@ -7999,16 +8003,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RR_Torque_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RR_Torque_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Torque_Estimate, (UInt64)value);
         }
@@ -8018,16 +8022,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(PE_RR_Drive_Engaged);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RR_Drive_Engaged(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RR_Drive_Engaged, (UInt64)value);
         }
@@ -8046,16 +8050,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_FR_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Max_Power, (UInt64)value);
         }
@@ -8065,16 +8069,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FR_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Speed_Limit, (UInt64)value);
         }
@@ -8084,16 +8088,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FR_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Torque_Set_Point, (UInt64)value);
         }
@@ -8103,16 +8107,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_FR_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Enable_Drive, (UInt64)value);
         }
@@ -8131,16 +8135,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_FR_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Max_Power, (UInt64)value);
         }
@@ -8150,16 +8154,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FR_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Speed_Limit, (UInt64)value);
         }
@@ -8169,16 +8173,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FR_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Torque_Set_Point, (UInt64)value);
         }
@@ -8188,16 +8192,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_FR_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Enable_Drive, (UInt64)value);
         }
@@ -8216,16 +8220,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_FR_Error_Reset);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Error_Reset(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Error_Reset, (UInt64)value);
         }
@@ -8235,16 +8239,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FR_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Speed_Limit, (UInt64)value);
         }
@@ -8254,16 +8258,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FR_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Torque_Set_Point, (UInt64)value);
         }
@@ -8273,16 +8277,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_FR_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FR_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FR_Enable_Drive, (UInt64)value);
         }
@@ -8301,16 +8305,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_FL_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Max_Power, (UInt64)value);
         }
@@ -8320,16 +8324,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FL_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Speed_Limit, (UInt64)value);
         }
@@ -8339,16 +8343,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FL_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Torque_Set_Point, (UInt64)value);
         }
@@ -8358,16 +8362,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_FL_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Enable_Drive, (UInt64)value);
         }
@@ -8386,16 +8390,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_FL_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Max_Power, (UInt64)value);
         }
@@ -8405,16 +8409,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FL_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Speed_Limit, (UInt64)value);
         }
@@ -8424,16 +8428,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FL_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Torque_Set_Point, (UInt64)value);
         }
@@ -8443,16 +8447,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_FL_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Enable_Drive, (UInt64)value);
         }
@@ -8471,16 +8475,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_FL_Error_Reset);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Error_Reset(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Error_Reset, (UInt64)value);
         }
@@ -8490,16 +8494,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FL_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Speed_Limit, (UInt64)value);
         }
@@ -8509,16 +8513,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_FL_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Torque_Set_Point, (UInt64)value);
         }
@@ -8528,16 +8532,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_FL_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_FL_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_FL_Enable_Drive, (UInt64)value);
         }
@@ -8556,16 +8560,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_RR_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Max_Power, (UInt64)value);
         }
@@ -8575,16 +8579,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RR_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Speed_Limit, (UInt64)value);
         }
@@ -8594,16 +8598,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RR_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Torque_Set_Point, (UInt64)value);
         }
@@ -8613,16 +8617,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_RR_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Enable_Drive, (UInt64)value);
         }
@@ -8641,16 +8645,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_RR_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Max_Power, (UInt64)value);
         }
@@ -8660,16 +8664,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RR_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Speed_Limit, (UInt64)value);
         }
@@ -8679,16 +8683,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RR_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Torque_Set_Point, (UInt64)value);
         }
@@ -8698,16 +8702,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_RR_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Enable_Drive, (UInt64)value);
         }
@@ -8726,16 +8730,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_RR_Error_Reset);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Error_Reset(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Error_Reset, (UInt64)value);
         }
@@ -8745,16 +8749,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RR_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Speed_Limit, (UInt64)value);
         }
@@ -8764,16 +8768,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RR_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Torque_Set_Point, (UInt64)value);
         }
@@ -8783,16 +8787,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_RR_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RR_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RR_Enable_Drive, (UInt64)value);
         }
@@ -8811,16 +8815,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Iq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RL_Iq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Iq, (UInt64)value);
         }
@@ -8830,16 +8834,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Id);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RL_Id(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Id, (UInt64)value);
         }
@@ -8849,16 +8853,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Uq);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RL_Uq(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Uq, (UInt64)value);
         }
@@ -8868,16 +8872,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Ud);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RL_Ud(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Ud, (UInt64)value);
         }
@@ -8896,16 +8900,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Temp_Stator);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RL_Temp_Stator(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Temp_Stator, (UInt64)value);
         }
@@ -8915,16 +8919,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Measured_Udc);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 10;
+            tempValue  /= 10;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RL_Measured_Udc(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 10;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Measured_Udc, (UInt64)value);
         }
@@ -8934,16 +8938,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Temp_Inverter);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RL_Temp_Inverter(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Temp_Inverter, (UInt64)value);
         }
@@ -8953,16 +8957,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Power_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RL_Power_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Power_Estimate, (UInt64)value);
         }
@@ -8981,16 +8985,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(PE_RL_Errors);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RL_Errors(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Errors, (UInt64)value);
         }
@@ -9000,16 +9004,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Speed_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RL_Speed_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Speed_Estimate, (UInt64)value);
         }
@@ -9019,16 +9023,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(PE_RL_Torque_Estimate);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetPE_RL_Torque_Estimate(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Torque_Estimate, (UInt64)value);
         }
@@ -9038,16 +9042,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(PE_RL_Drive_Engaged);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetPE_RL_Drive_Engaged(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(PE_RL_Drive_Engaged, (UInt64)value);
         }
@@ -9066,16 +9070,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_RL_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Max_Power, (UInt64)value);
         }
@@ -9085,16 +9089,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RL_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Speed_Limit, (UInt64)value);
         }
@@ -9104,16 +9108,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RL_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Torque_Set_Point, (UInt64)value);
         }
@@ -9123,16 +9127,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_RL_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Enable_Drive, (UInt64)value);
         }
@@ -9151,16 +9155,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_RL_Max_Power);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 10;
+            tempValue  *= 10;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Max_Power(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 10;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 10;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Max_Power, (UInt64)value);
         }
@@ -9170,16 +9174,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RL_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Speed_Limit, (UInt64)value);
         }
@@ -9189,16 +9193,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RL_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Torque_Set_Point, (UInt64)value);
         }
@@ -9208,16 +9212,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_RL_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Enable_Drive, (UInt64)value);
         }
@@ -9236,16 +9240,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             UInt16 tempValue = (UInt16)ExtractBits(RN_PE_RL_Error_Reset);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Error_Reset(UInt16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Error_Reset, (UInt64)value);
         }
@@ -9255,16 +9259,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RL_Speed_Limit);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Speed_Limit(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Speed_Limit, (UInt64)value);
         }
@@ -9274,16 +9278,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int16 tempValue = (Int16)ExtractBits(RN_PE_RL_Torque_Set_Point);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Torque_Set_Point(Int16 value)
         {
-            // Scale and offset value according to signal secification
-            value /= 1000;
+            // Scale and offset value according to signal specification
             value += 0;
+            value *= 1000;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Torque_Set_Point, (UInt64)value);
         }
@@ -9293,16 +9297,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(RN_PE_RL_Enable_Drive);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void SetRN_PE_RL_Enable_Drive(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(RN_PE_RL_Enable_Drive, (UInt64)value);
         }
@@ -9321,16 +9325,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(pe_rr_nmt);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_rr_nmt(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_rr_nmt, (UInt64)value);
         }
@@ -9349,16 +9353,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(pe_rl_nmt);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_rl_nmt(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_rl_nmt, (UInt64)value);
         }
@@ -9377,16 +9381,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(pe_fr_nmt);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_fr_nmt(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_fr_nmt, (UInt64)value);
         }
@@ -9405,16 +9409,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             sbyte tempValue = (sbyte)ExtractBits(pe_fl_nmt);
             // Apply inverse transform to restore actual value
-            tempValue  -= 0;
-            tempValue  /= 1;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
         public void Setpe_fl_nmt(sbyte value)
         {
-            // Scale and offset value according to signal secification
-            value *= 1;
+            // Scale and offset value according to signal specification
             value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_fl_nmt, (UInt64)value);
         }
