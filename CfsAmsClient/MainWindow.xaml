@@ -1,0 +1,29 @@
+﻿<Window x:Class="CfsAmsClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CfsAmsClient"
+        xmlns:uc="clr-namespace:CfsAmsClient.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="1100">
+    <Grid>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <uc:CellStack x:Name ="stack0"/>
+            <uc:CellStack x:Name ="stack1"/>
+            <uc:CellStack x:Name ="stack2"/>
+            <uc:CellStack x:Name ="stack3"/>
+            <uc:CellStack x:Name ="stack4"/>
+            <uc:CellStack x:Name ="stack5"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>

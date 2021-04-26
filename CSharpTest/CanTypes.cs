@@ -6823,8 +6823,8 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_U3);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
@@ -6889,8 +6889,8 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_U2);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
@@ -6955,8 +6955,8 @@ namespace testNS
             // Get bits from raw data storage and cast
             Int32 tempValue = (Int32)ExtractBits(IVT_Result_U1);
             // Apply inverse transform to restore actual value
-            tempValue  += 0;
-            tempValue  *= 1000;
+            tempValue  /= 1000;
+            tempValue  -= 0;
             return tempValue;
         }
         
