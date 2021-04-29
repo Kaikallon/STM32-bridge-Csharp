@@ -35,7 +35,6 @@ BS_:
 
 BU_: IVT AmsClient Ams PE_FR PE_FL PE_RR FrontNode PE_RL RearNode
 
-
 BO_ 1 GpsState: 1 RearNode
  SG_ gps_ok : 0|1@1+ (1,0) [0|0] ""  RearNode
 
@@ -87,22 +86,22 @@ BO_ 177 RearNodeTemperatures: 8 RearNode
  SG_ RN_Water_Motor_Radiator : 16|16@1+ (0.01,0) [0|655.35] ""  FrontNode
  SG_ RN_Water_Motor_PE : 0|16@1+ (0.01,0) [0|655.35] ""  FrontNode
 
-BO_ 207 FrontNodeState: 8 FrontNode
- SG_ fn_front_torque_scale : 40|8@1+ (0.4,0) [0|102] ""  FrontNode
- SG_ fn_speed_limit : 32|8@1+ (100,0) [0|25500] ""  FrontNode
- SG_ fn_max_torque : 24|8@1+ (0.4,0) [0|102] ""  FrontNode
- SG_ fn_status : 0|16@1+ (1,0) [0|0] ""  FrontNode,Ams,RearNode
+BO_ 207 FrontNodeDriverInputs: 4 FrontNode
+ SG_ fn_front_torque_scale : 24|8@1+ (0.4,0) [0|102] ""  FrontNode
+ SG_ fn_speed_limit : 16|8@1+ (100,0) [0|25500] ""  FrontNode
+ SG_ fn_max_torque : 8|8@1+ (0.4,0) [0|102] ""  FrontNode
+ SG_ fn_flags : 0|8@1+ (1,0) [0|0] ""  FrontNode,Ams,RearNode
 
 BO_ 191 RearNodeStatus: 4 RearNode
- SG_ rn_status : 0|8@1+ (1,0) [0|0] ""  FrontNode
+ SG_ rn_state : 0|8@1+ (1,0) [0|0] ""  FrontNode
 
-BO_ 161 AccumulatorStackErrors: 6 Ams
- SG_ stack6_errors : 40|8@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack5_errors : 32|8@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack4_errors : 24|8@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack3_errors : 16|8@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack2_errors : 8|8@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack1_errors : 0|8@1+ (1,0) [0|0] ""  FrontNode
+BO_ 161 AccumulatorStackErrors: 1 Ams
+ SG_ stack6_errors : 5|1@1+ (1,0) [0|0] ""  FrontNode
+ SG_ stack5_errors : 4|1@1+ (1,0) [0|0] ""  FrontNode
+ SG_ stack4_errors : 3|1@1+ (1,0) [0|0] ""  FrontNode
+ SG_ stack3_errors : 2|1@1+ (1,0) [0|0] ""  FrontNode
+ SG_ stack2_errors : 1|1@1+ (1,0) [0|0] ""  FrontNode
+ SG_ stack1_errors : 0|1@1+ (1,0) [0|0] ""  FrontNode
 
 BO_ 1320 IVT_Msg_Result_Wh: 6 IVT
  SG_ IVT_ResultState_And_MsgCount_Wh : 8|8@1- (1,0) [0|0] ""  Ams
@@ -114,45 +113,61 @@ BO_ 1318 IVT_Msg_Result_W: 6 IVT
  SG_ IVT_Result_W : 16|32@1- (1,0) [0|0] ""  Ams
  SG_ IVT_MuxID_W : 0|8@1+ (1,0) [0|0] ""  Ams
 
-BO_ 241 AmsClientStatus: 5 AmsClient
- SG_ AmsClient_Trigger_Ams : 32|8@1+ (1,0) [0|0] ""  Ams
- SG_ AmsClient_Start_TS : 24|8@1+ (1,0) [0|255] ""  Ams
- SG_ AmsClient_FN_Buttons : 16|8@1+ (1,0) [0|0] ""  Ams
- SG_ AmsClient_FrontNode_Status : 8|8@1+ (1,0) [0|0] ""  Ams
- SG_ AmsClient_Enable_Communication : 0|8@1+ (1,0) [0|255] ""  Ams
+BO_ 241 AmsClientStatus: 1 AmsClient
+ SG_ AmsClient_Trigger_Ams : 0|1@1+ (1,0) [0|0] ""  Ams
+ SG_ AmsClient_Start_TS : 1|1@1+ (1,0) [0|255] ""  Ams
 
-BO_ 168 PrechargeProgress: 2 Ams
- SG_ progress : 0|8@1+ (1,0) [0|100] ""  FrontNode
- SG_ fail_air1_open : 8|1@1+ (1,0) [0|0] ""  FrontNode
- SG_ fail_timeout : 9|1@1+ (1,0) [0|0] ""  FrontNode
- SG_ succeeded : 10|1@1+ (1,0) [0|0] ""  FrontNode
+BO_ 168 PrechargeProgress: 3 Ams
+ SG_ time_progress : 0|8@1+ (1,0) [0|100] "%"  FrontNode
+ SG_ fail_air1_open : 17|1@1+ (1,0) [0|0] "flag"  FrontNode
+ SG_ fail_timeout : 18|1@1+ (1,0) [0|0] "flag"  FrontNode
+ SG_ succeeded : 16|1@1+ (1,0) [0|0] "flag"  FrontNode
+ SG_ voltage_progress : 8|8@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ fail_sdc_open : 19|1@1+ (1,0) [0|0] "flag" Vector__XXX
+ SG_ fail_air2_open : 20|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ fail_communication : 21|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 175 AmsStatus: 5 Ams
- SG_ Ams_Watchdog : 32|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ Ams_Precharge_Time : 16|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ Ams_Accumulator_Errors : 8|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ Ams_Accumulator_SoC : 24|8@1+ (1,0) [0|255] ""  FrontNode
- SG_ ams_status : 0|8@1+ (1,0) [0|255] ""  FrontNode
+BO_ 175 AmsStatus: 3 Ams
+ SG_ Ams_Accumulator_SoC : 8|8@1+ (1,0) [0|255] ""  FrontNode
+ SG_ ams_state : 0|8@1+ (1,0) [0|3] ""  FrontNode
+ SG_ ams_relay_closed : 16|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ imd_relay_closed : 17|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ safestate_relay_closed : 18|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ bspd_relay_closed : 19|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 167 AccumulatorMinMaxTemperatures: 7 Ams
- SG_ Ams_AvgTemp : 8|8@1- (1,0) [0|0] "" Vector__XXX
- SG_ Ams_MinTemp : 40|16@1+ (0.01,0) [0|655.35] ""  FrontNode
- SG_ Ams_MinTemp_Pos_Stack : 32|8@1+ (1,0) [0|255] ""  FrontNode
- SG_ Ams_MaxTemp : 16|16@1+ (0.01,0) [0|655.35] ""  FrontNode
- SG_ Ams_MaxTemp_Pos_Stack : 0|8@1+ (1,0) [0|255] ""  FrontNode
+ SG_ avg_temperature : 8|8@1- (1,0) [0|0] "" Vector__XXX
+ SG_ min_temp : 40|16@1- (0.01,0) [0|655.35] ""  FrontNode
+ SG_ min_temp_thermistor_index : 32|8@1+ (1,0) [0|255] ""  FrontNode
+ SG_ max_temp : 16|16@1- (0.01,0) [0|655.35] ""  FrontNode
+ SG_ max_temp_thermistor_index : 0|8@1+ (1,0) [0|255] ""  FrontNode
 
 BO_ 166 AccumulatorMinMaxVoltages: 7 Ams
- SG_ Ams_AvgVoltage : 0|8@1- (1,0) [0|0] "" Vector__XXX
- SG_ Ams_MinVoltage : 40|16@1+ (0.001,0) [0|65.535] ""  FrontNode
- SG_ Ams_MinVoltage_Pos_Stack : 32|8@1+ (1,0) [0|255] ""  FrontNode
- SG_ Ams_MaxVoltage : 16|16@1+ (0.001,0) [0|65.535] ""  FrontNode
- SG_ Ams_MaxVoltage_Pos_Stack : 8|8@1+ (1,0) [0|255] ""  FrontNode
+ SG_ avg_voltage : 0|8@1- (0.00509804,2.9) [2.9|4.2] "" Vector__XXX
+ SG_ min_voltage : 40|16@1- (0.001,0) [0|65.535] ""  FrontNode
+ SG_ min_voltage_cell_index : 32|8@1+ (1,0) [0|137] ""  FrontNode
+ SG_ max_voltage : 16|16@1- (0.001,0) [0|65.535] ""  FrontNode
+ SG_ max_voltage_cell_index : 8|8@1+ (1,0) [0|137] ""  FrontNode
 
-BO_ 163 Ams_Cell_Voltages: 8 Ams
- SG_ Ams_Voltage3 : 48|16@1+ (0.001,0) [0|65.535] "" Vector__XXX
+BO_ 163 AmsCellVoltages: 8 Ams
+ SG_ cell_offset M : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ voltage_1 : 8|8@1- (0.00509804,2.9) [2.9|4.2] "Volt" Vector__XXX
+ SG_ voltage_2 : 16|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
+ SG_ voltage_3 : 24|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
+ SG_ voltage_4 : 32|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
+ SG_ voltage_5 : 40|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
+ SG_ voltage_6 : 48|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
+ SG_ voltage_7 : 56|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
 
-BO_ 162 AmsCellTemperatures: 8 Ams
- SG_ Ams_Temp3 : 48|16@1+ (0.01,0) [0|655.35] "" Vector__XXX
+BO_ 162 AmsThermistorTemperatures: 8 Ams
+ SG_ thermistor_offset : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ temperature_1 : 8|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
+ SG_ temperature_2 : 16|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
+ SG_ temperature_3 : 24|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
+ SG_ temperature_4 : 32|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
+ SG_ temperature_5 : 40|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
+ SG_ temperature_6 : 48|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
+ SG_ temperature_7 : 56|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
 
 BO_ 1316 IVT_Msg_Result_U3: 6 IVT
  SG_ IVT_ResultState_And_MsgCount_U3 : 8|8@1- (1,0) [0|0] ""  Ams
@@ -346,13 +361,21 @@ BO_ 1805 PE_FR_NMT: 1 PE_FR
 BO_ 1798 PE_FL_NMT: 1 PE_FL
  SG_ pe_fl_nmt : 0|8@1+ (1,0) [0|255] ""  RearNode
 
+BO_ 2 FrontNodeRequests: 1 FrontNode
+ SG_ fn_request : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 3 FrontNodeStatus: 1 FrontNode
+ SG_ fn_state : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
 BO_ 300 PrechargeRequest: 0 FrontNode
 
 
 
-CM_ SG_ 207 fn_status "TS_Start,R2D,Fan, Pumps, DRS_Driver_Activate, APPS_Implausibility, Brake_APPS_Implausibility";
-CM_ SG_ 191 rn_status "DRS, Enable_Drive";
-CM_ SG_ 175 ams_status "TS_On, Precharging, PreChargeNotReady, PreChargeFailed, IMD_Closed, BSPD_Closed,";
+CM_ SG_ 207 fn_flags "TS_Start,R2D,Fan, Pumps, DRS_Driver_Activate, APPS_Implausibility, Brake_APPS_Implausibility";
+CM_ SG_ 191 rn_state "Idle=0,Ready=1,Drive=2
+";
+CM_ SG_ 175 ams_state "Idle=0, Ready=1, Precharging=2, Drive=3
+";
 CM_ SG_ 1037 RN_PE_FR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
 CM_ SG_ 781 RN_PE_FR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
 CM_ SG_ 525 RN_PE_FR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
@@ -365,6 +388,9 @@ CM_ SG_ 521 RN_PE_RR_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque c
 CM_ SG_ 1031 RN_PE_RL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
 CM_ SG_ 775 RN_PE_RL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
 CM_ SG_ 519 RN_PE_RL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque calculation, will be fixed later on";
+CM_ SG_ 2 fn_request "bit1-r2d,bit2-ts0n-bit3-precharge,bit4-AppsImplausibility,bit5-Apps-BrakeImplausibility,bit6-Pumps,bit7-Fans";
+CM_ SG_ 3 fn_state "Idle=0,Ready=1,Drive=2
+";
 BA_DEF_ BO_  "Bus" ENUM  "CAN1","CAN2";
 BA_DEF_ SG_  "InternalType" ENUM  "int","float";
 BA_DEF_ EV_  "GenEnvIsGeneratedDsp" ENUM  "No","Yes";
@@ -540,15 +566,14 @@ BA_ "InternalType" SG_ 177 RN_Water_Motor_PE 1;
 BA_ "InternalType" SG_ 207 fn_front_torque_scale 1;
 BA_ "InternalType" SG_ 207 fn_speed_limit 1;
 BA_ "InternalType" SG_ 207 fn_max_torque 1;
-BA_ "InternalType" SG_ 167 Ams_AvgTemp 1;
-BA_ "InternalType" SG_ 167 Ams_MinTemp 1;
-BA_ "InternalType" SG_ 167 Ams_MaxTemp 1;
-BA_ "InternalType" SG_ 166 Ams_AvgVoltage 1;
-BA_ "InternalType" SG_ 166 Ams_MinVoltage 1;
-BA_ "InternalType" SG_ 166 Ams_MaxVoltage 1;
+BA_ "InternalType" SG_ 167 avg_temperature 1;
+BA_ "InternalType" SG_ 167 min_temp 1;
+BA_ "InternalType" SG_ 167 max_temp 1;
+BA_ "InternalType" SG_ 166 avg_voltage 1;
+BA_ "InternalType" SG_ 166 min_voltage 1;
+BA_ "InternalType" SG_ 166 max_voltage 1;
 BA_ "InternalType" BO_ 163 1;
 BA_ "InternalType" BO_ 163 1;
-BA_ "InternalType" SG_ 163 Ams_Voltage3 1;
 BA_ "InternalType" BO_ 162 1;
 BA_ "InternalType" SG_ 1316 IVT_Result_U3 1;
 BA_ "InternalType" SG_ 1315 IVT_Result_U2 1;
@@ -613,4 +638,16 @@ SIG_VALTYPE_ 197 longitude : 1;
 SIG_VALTYPE_ 198 acc_z : 1;
 SIG_VALTYPE_ 198 acc_y : 1;
 SIG_VALTYPE_ 198 acc_x : 1;
+SIG_VALTYPE_ 167 min_temp : 1;
+SIG_VALTYPE_ 167 max_temp : 1;
+SIG_VALTYPE_ 166 avg_voltage : 1;
+SIG_VALTYPE_ 166 min_voltage : 1;
+SIG_VALTYPE_ 166 max_voltage : 1;
+SIG_VALTYPE_ 163 voltage_1 : 1;
+SIG_VALTYPE_ 163 voltage_2 : 1;
+SIG_VALTYPE_ 163 voltage_3 : 1;
+SIG_VALTYPE_ 163 voltage_4 : 1;
+SIG_VALTYPE_ 163 voltage_5 : 1;
+SIG_VALTYPE_ 163 voltage_6 : 1;
+SIG_VALTYPE_ 163 voltage_7 : 1;
 

@@ -79,6 +79,9 @@ namespace STLinkBridgeWrapper
         Brg_StatusT      StopTransmission();
 
         virtual void NotifyTransmissionChanged() = 0;
+        
+        // TODO Clean up unused function
+        Brg_StatusT      InitBridge(DeviceInfo^ device);
 
     public:
         STLinkBridgeWrapperCpp();
@@ -86,12 +89,12 @@ namespace STLinkBridgeWrapper
 		!STLinkBridgeWrapperCpp();
 
 
-        Brg_StatusT      InitBridge(DeviceInfo^ device);
         STLinkIf_StatusT GetInterfaceStatus();
         Brg_StatusT      GetBridgeStatus();
 
 		STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo^>^% results);
         Brg_StatusT      OpenBridge(DeviceInfo^ device);
+        void             CloseBridge();
         Brg_StatusT      TestVoltage([Out] float% result);
 		Brg_StatusT      TestGetClock();
 		Brg_StatusT		 GPIOInit();

@@ -95,9 +95,9 @@ namespace testNS
                     message.NotifySubscribers();
                 }
                 else 
-                if (canMessage.ID == CanMessageTypes.FrontNodeState.ID)
+                if (canMessage.ID == CanMessageTypes.FrontNodeDriverInputs.ID)
                 {
-                    FrontNodeStateMessage message = new FrontNodeStateMessage();
+                    FrontNodeDriverInputsMessage message = new FrontNodeDriverInputsMessage();
                     message.Data = canMessage.data;
                     message.SystemTimeStamp = DateTime.Now.Ticks;
                     message.NotifySubscribers();
@@ -175,17 +175,17 @@ namespace testNS
                     message.NotifySubscribers();
                 }
                 else 
-                if (canMessage.ID == CanMessageTypes.Ams_Cell_Voltages.ID)
+                if (canMessage.ID == CanMessageTypes.AmsCellVoltages.ID)
                 {
-                    Ams_Cell_VoltagesMessage message = new Ams_Cell_VoltagesMessage();
+                    AmsCellVoltagesMessage message = new AmsCellVoltagesMessage();
                     message.Data = canMessage.data;
                     message.SystemTimeStamp = DateTime.Now.Ticks;
                     message.NotifySubscribers();
                 }
                 else 
-                if (canMessage.ID == CanMessageTypes.AmsCellTemperatures.ID)
+                if (canMessage.ID == CanMessageTypes.AmsThermistorTemperatures.ID)
                 {
-                    AmsCellTemperaturesMessage message = new AmsCellTemperaturesMessage();
+                    AmsThermistorTemperaturesMessage message = new AmsThermistorTemperaturesMessage();
                     message.Data = canMessage.data;
                     message.SystemTimeStamp = DateTime.Now.Ticks;
                     message.NotifySubscribers();
@@ -471,6 +471,22 @@ namespace testNS
                     message.NotifySubscribers();
                 }
                 else 
+                if (canMessage.ID == CanMessageTypes.FrontNodeRequests.ID)
+                {
+                    FrontNodeRequestsMessage message = new FrontNodeRequestsMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
+                if (canMessage.ID == CanMessageTypes.FrontNodeStatus.ID)
+                {
+                    FrontNodeStatusMessage message = new FrontNodeStatusMessage();
+                    message.Data = canMessage.data;
+                    message.SystemTimeStamp = DateTime.Now.Ticks;
+                    message.NotifySubscribers();
+                }
+                else 
                 if (canMessage.ID == CanMessageTypes.PrechargeRequest.ID)
                 {
                     PrechargeRequestMessage message = new PrechargeRequestMessage();
@@ -501,7 +517,7 @@ namespace testNS
             AllCanMessageTypes.Add(193, DriveControls);
             AllCanMessageTypes.Add(178, RearSensors);
             AllCanMessageTypes.Add(177, RearNodeTemperatures);
-            AllCanMessageTypes.Add(207, FrontNodeState);
+            AllCanMessageTypes.Add(207, FrontNodeDriverInputs);
             AllCanMessageTypes.Add(191, RearNodeStatus);
             AllCanMessageTypes.Add(161, AccumulatorStackErrors);
             AllCanMessageTypes.Add(1320, IVT_Msg_Result_Wh);
@@ -511,8 +527,8 @@ namespace testNS
             AllCanMessageTypes.Add(175, AmsStatus);
             AllCanMessageTypes.Add(167, AccumulatorMinMaxTemperatures);
             AllCanMessageTypes.Add(166, AccumulatorMinMaxVoltages);
-            AllCanMessageTypes.Add(163, Ams_Cell_Voltages);
-            AllCanMessageTypes.Add(162, AmsCellTemperatures);
+            AllCanMessageTypes.Add(163, AmsCellVoltages);
+            AllCanMessageTypes.Add(162, AmsThermistorTemperatures);
             AllCanMessageTypes.Add(1316, IVT_Msg_Result_U3);
             AllCanMessageTypes.Add(1315, IVT_Msg_Result_U2);
             AllCanMessageTypes.Add(1314, IVT_Msg_Result_U1);
@@ -548,6 +564,8 @@ namespace testNS
             AllCanMessageTypes.Add(1799, PE_RL_NMT);
             AllCanMessageTypes.Add(1805, PE_FR_NMT);
             AllCanMessageTypes.Add(1798, PE_FL_NMT);
+            AllCanMessageTypes.Add(2, FrontNodeRequests);
+            AllCanMessageTypes.Add(3, FrontNodeStatus);
             AllCanMessageTypes.Add(300, PrechargeRequest);
         }
         
@@ -685,23 +703,23 @@ namespace testNS
             SendingNode   = "RearNode",
         };
         
-        public static CanMessageType FrontNodeState = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.FrontNodeState__fn_front_torque_scale,
-                CanSignalTypes.FrontNodeState__fn_speed_limit,
-                CanSignalTypes.FrontNodeState__fn_max_torque,
-                CanSignalTypes.FrontNodeState__fn_status,
+        public static CanMessageType FrontNodeDriverInputs = new CanMessageType(new List<CanSignalType>{
+                CanSignalTypes.FrontNodeDriverInputs__fn_front_torque_scale,
+                CanSignalTypes.FrontNodeDriverInputs__fn_speed_limit,
+                CanSignalTypes.FrontNodeDriverInputs__fn_max_torque,
+                CanSignalTypes.FrontNodeDriverInputs__fn_flags,
             })
         {
             Comment       = "",
-            DLC           =   8,
+            DLC           =   4,
             ID            =   207,
-            Name          = "FrontNodeState",
-            QualifiedName = "FrontNodeState",
+            Name          = "FrontNodeDriverInputs",
+            QualifiedName = "FrontNodeDriverInputs",
             SendingNode   = "FrontNode",
         };
         
         public static CanMessageType RearNodeStatus = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.RearNodeStatus__rn_status,
+                CanSignalTypes.RearNodeStatus__rn_state,
             })
         {
             Comment       = "",
@@ -722,7 +740,7 @@ namespace testNS
             })
         {
             Comment       = "",
-            DLC           =   6,
+            DLC           =   1,
             ID            =   161,
             Name          = "AccumulatorStackErrors",
             QualifiedName = "AccumulatorStackErrors",
@@ -760,13 +778,10 @@ namespace testNS
         public static CanMessageType AmsClientStatus = new CanMessageType(new List<CanSignalType>{
                 CanSignalTypes.AmsClientStatus__AmsClient_Trigger_Ams,
                 CanSignalTypes.AmsClientStatus__AmsClient_Start_TS,
-                CanSignalTypes.AmsClientStatus__AmsClient_FN_Buttons,
-                CanSignalTypes.AmsClientStatus__AmsClient_FrontNode_Status,
-                CanSignalTypes.AmsClientStatus__AmsClient_Enable_Communication,
             })
         {
             Comment       = "",
-            DLC           =   5,
+            DLC           =   1,
             ID            =   241,
             Name          = "AmsClientStatus",
             QualifiedName = "AmsClientStatus",
@@ -774,14 +789,18 @@ namespace testNS
         };
         
         public static CanMessageType PrechargeProgress = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.PrechargeProgress__progress,
+                CanSignalTypes.PrechargeProgress__time_progress,
                 CanSignalTypes.PrechargeProgress__fail_air1_open,
                 CanSignalTypes.PrechargeProgress__fail_timeout,
                 CanSignalTypes.PrechargeProgress__succeeded,
+                CanSignalTypes.PrechargeProgress__voltage_progress,
+                CanSignalTypes.PrechargeProgress__fail_sdc_open,
+                CanSignalTypes.PrechargeProgress__fail_air2_open,
+                CanSignalTypes.PrechargeProgress__fail_communication,
             })
         {
             Comment       = "",
-            DLC           =   2,
+            DLC           =   3,
             ID            =   168,
             Name          = "PrechargeProgress",
             QualifiedName = "PrechargeProgress",
@@ -789,15 +808,16 @@ namespace testNS
         };
         
         public static CanMessageType AmsStatus = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.AmsStatus__Ams_Watchdog,
-                CanSignalTypes.AmsStatus__Ams_Precharge_Time,
-                CanSignalTypes.AmsStatus__Ams_Accumulator_Errors,
                 CanSignalTypes.AmsStatus__Ams_Accumulator_SoC,
-                CanSignalTypes.AmsStatus__ams_status,
+                CanSignalTypes.AmsStatus__ams_state,
+                CanSignalTypes.AmsStatus__ams_relay_closed,
+                CanSignalTypes.AmsStatus__imd_relay_closed,
+                CanSignalTypes.AmsStatus__safestate_relay_closed,
+                CanSignalTypes.AmsStatus__bspd_relay_closed,
             })
         {
             Comment       = "",
-            DLC           =   5,
+            DLC           =   3,
             ID            =   175,
             Name          = "AmsStatus",
             QualifiedName = "AmsStatus",
@@ -805,11 +825,11 @@ namespace testNS
         };
         
         public static CanMessageType AccumulatorMinMaxTemperatures = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_AvgTemp,
-                CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MinTemp,
-                CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MinTemp_Pos_Stack,
-                CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MaxTemp,
-                CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MaxTemp_Pos_Stack,
+                CanSignalTypes.AccumulatorMinMaxTemperatures__avg_temperature,
+                CanSignalTypes.AccumulatorMinMaxTemperatures__min_temp,
+                CanSignalTypes.AccumulatorMinMaxTemperatures__min_temp_thermistor_index,
+                CanSignalTypes.AccumulatorMinMaxTemperatures__max_temp,
+                CanSignalTypes.AccumulatorMinMaxTemperatures__max_temp_thermistor_index,
             })
         {
             Comment       = "",
@@ -821,11 +841,11 @@ namespace testNS
         };
         
         public static CanMessageType AccumulatorMinMaxVoltages = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.AccumulatorMinMaxVoltages__Ams_AvgVoltage,
-                CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MinVoltage,
-                CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MinVoltage_Pos_Stack,
-                CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MaxVoltage,
-                CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MaxVoltage_Pos_Stack,
+                CanSignalTypes.AccumulatorMinMaxVoltages__avg_voltage,
+                CanSignalTypes.AccumulatorMinMaxVoltages__min_voltage,
+                CanSignalTypes.AccumulatorMinMaxVoltages__min_voltage_cell_index,
+                CanSignalTypes.AccumulatorMinMaxVoltages__max_voltage,
+                CanSignalTypes.AccumulatorMinMaxVoltages__max_voltage_cell_index,
             })
         {
             Comment       = "",
@@ -836,27 +856,41 @@ namespace testNS
             SendingNode   = "Ams",
         };
         
-        public static CanMessageType Ams_Cell_Voltages = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.Ams_Cell_Voltages__Ams_Voltage3,
+        public static CanMessageType AmsCellVoltages = new CanMessageType(new List<CanSignalType>{
+                CanSignalTypes.AmsCellVoltages__cell_offset,
+                CanSignalTypes.AmsCellVoltages__voltage_1,
+                CanSignalTypes.AmsCellVoltages__voltage_2,
+                CanSignalTypes.AmsCellVoltages__voltage_3,
+                CanSignalTypes.AmsCellVoltages__voltage_4,
+                CanSignalTypes.AmsCellVoltages__voltage_5,
+                CanSignalTypes.AmsCellVoltages__voltage_6,
+                CanSignalTypes.AmsCellVoltages__voltage_7,
             })
         {
             Comment       = "",
             DLC           =   8,
             ID            =   163,
-            Name          = "Ams_Cell_Voltages",
-            QualifiedName = "Ams_Cell_Voltages",
+            Name          = "AmsCellVoltages",
+            QualifiedName = "AmsCellVoltages",
             SendingNode   = "Ams",
         };
         
-        public static CanMessageType AmsCellTemperatures = new CanMessageType(new List<CanSignalType>{
-                CanSignalTypes.AmsCellTemperatures__Ams_Temp3,
+        public static CanMessageType AmsThermistorTemperatures = new CanMessageType(new List<CanSignalType>{
+                CanSignalTypes.AmsThermistorTemperatures__thermistor_offset,
+                CanSignalTypes.AmsThermistorTemperatures__temperature_1,
+                CanSignalTypes.AmsThermistorTemperatures__temperature_2,
+                CanSignalTypes.AmsThermistorTemperatures__temperature_3,
+                CanSignalTypes.AmsThermistorTemperatures__temperature_4,
+                CanSignalTypes.AmsThermistorTemperatures__temperature_5,
+                CanSignalTypes.AmsThermistorTemperatures__temperature_6,
+                CanSignalTypes.AmsThermistorTemperatures__temperature_7,
             })
         {
             Comment       = "",
             DLC           =   8,
             ID            =   162,
-            Name          = "AmsCellTemperatures",
-            QualifiedName = "AmsCellTemperatures",
+            Name          = "AmsThermistorTemperatures",
+            QualifiedName = "AmsThermistorTemperatures",
             SendingNode   = "Ams",
         };
         
@@ -1367,6 +1401,30 @@ namespace testNS
             SendingNode   = "PE_FL",
         };
         
+        public static CanMessageType FrontNodeRequests = new CanMessageType(new List<CanSignalType>{
+                CanSignalTypes.FrontNodeRequests__fn_request,
+            })
+        {
+            Comment       = "",
+            DLC           =   1,
+            ID            =   2,
+            Name          = "FrontNodeRequests",
+            QualifiedName = "FrontNodeRequests",
+            SendingNode   = "FrontNode",
+        };
+        
+        public static CanMessageType FrontNodeStatus = new CanMessageType(new List<CanSignalType>{
+                CanSignalTypes.FrontNodeStatus__fn_state,
+            })
+        {
+            Comment       = "",
+            DLC           =   1,
+            ID            =   3,
+            Name          = "FrontNodeStatus",
+            QualifiedName = "FrontNodeStatus",
+            SendingNode   = "FrontNode",
+        };
+        
         public static CanMessageType PrechargeRequest = new CanMessageType(new List<CanSignalType>{
             })
         {
@@ -1421,11 +1479,11 @@ namespace testNS
             AllCanSignalTypes.Add(RearNodeTemperatures__RN_Water_Motor_RL); 
             AllCanSignalTypes.Add(RearNodeTemperatures__RN_Water_Motor_Radiator); 
             AllCanSignalTypes.Add(RearNodeTemperatures__RN_Water_Motor_PE); 
-            AllCanSignalTypes.Add(FrontNodeState__fn_front_torque_scale); 
-            AllCanSignalTypes.Add(FrontNodeState__fn_speed_limit); 
-            AllCanSignalTypes.Add(FrontNodeState__fn_max_torque); 
-            AllCanSignalTypes.Add(FrontNodeState__fn_status); 
-            AllCanSignalTypes.Add(RearNodeStatus__rn_status); 
+            AllCanSignalTypes.Add(FrontNodeDriverInputs__fn_front_torque_scale); 
+            AllCanSignalTypes.Add(FrontNodeDriverInputs__fn_speed_limit); 
+            AllCanSignalTypes.Add(FrontNodeDriverInputs__fn_max_torque); 
+            AllCanSignalTypes.Add(FrontNodeDriverInputs__fn_flags); 
+            AllCanSignalTypes.Add(RearNodeStatus__rn_state); 
             AllCanSignalTypes.Add(AccumulatorStackErrors__stack6_errors); 
             AllCanSignalTypes.Add(AccumulatorStackErrors__stack5_errors); 
             AllCanSignalTypes.Add(AccumulatorStackErrors__stack4_errors); 
@@ -1440,30 +1498,46 @@ namespace testNS
             AllCanSignalTypes.Add(IVT_Msg_Result_W__IVT_MuxID_W); 
             AllCanSignalTypes.Add(AmsClientStatus__AmsClient_Trigger_Ams); 
             AllCanSignalTypes.Add(AmsClientStatus__AmsClient_Start_TS); 
-            AllCanSignalTypes.Add(AmsClientStatus__AmsClient_FN_Buttons); 
-            AllCanSignalTypes.Add(AmsClientStatus__AmsClient_FrontNode_Status); 
-            AllCanSignalTypes.Add(AmsClientStatus__AmsClient_Enable_Communication); 
-            AllCanSignalTypes.Add(PrechargeProgress__progress); 
+            AllCanSignalTypes.Add(PrechargeProgress__time_progress); 
             AllCanSignalTypes.Add(PrechargeProgress__fail_air1_open); 
             AllCanSignalTypes.Add(PrechargeProgress__fail_timeout); 
             AllCanSignalTypes.Add(PrechargeProgress__succeeded); 
-            AllCanSignalTypes.Add(AmsStatus__Ams_Watchdog); 
-            AllCanSignalTypes.Add(AmsStatus__Ams_Precharge_Time); 
-            AllCanSignalTypes.Add(AmsStatus__Ams_Accumulator_Errors); 
+            AllCanSignalTypes.Add(PrechargeProgress__voltage_progress); 
+            AllCanSignalTypes.Add(PrechargeProgress__fail_sdc_open); 
+            AllCanSignalTypes.Add(PrechargeProgress__fail_air2_open); 
+            AllCanSignalTypes.Add(PrechargeProgress__fail_communication); 
             AllCanSignalTypes.Add(AmsStatus__Ams_Accumulator_SoC); 
-            AllCanSignalTypes.Add(AmsStatus__ams_status); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__Ams_AvgTemp); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__Ams_MinTemp); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__Ams_MinTemp_Pos_Stack); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__Ams_MaxTemp); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__Ams_MaxTemp_Pos_Stack); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__Ams_AvgVoltage); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__Ams_MinVoltage); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__Ams_MinVoltage_Pos_Stack); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__Ams_MaxVoltage); 
-            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__Ams_MaxVoltage_Pos_Stack); 
-            AllCanSignalTypes.Add(Ams_Cell_Voltages__Ams_Voltage3); 
-            AllCanSignalTypes.Add(AmsCellTemperatures__Ams_Temp3); 
+            AllCanSignalTypes.Add(AmsStatus__ams_state); 
+            AllCanSignalTypes.Add(AmsStatus__ams_relay_closed); 
+            AllCanSignalTypes.Add(AmsStatus__imd_relay_closed); 
+            AllCanSignalTypes.Add(AmsStatus__safestate_relay_closed); 
+            AllCanSignalTypes.Add(AmsStatus__bspd_relay_closed); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__avg_temperature); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__min_temp); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__min_temp_thermistor_index); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__max_temp); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxTemperatures__max_temp_thermistor_index); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__avg_voltage); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__min_voltage); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__min_voltage_cell_index); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__max_voltage); 
+            AllCanSignalTypes.Add(AccumulatorMinMaxVoltages__max_voltage_cell_index); 
+            AllCanSignalTypes.Add(AmsCellVoltages__cell_offset); 
+            AllCanSignalTypes.Add(AmsCellVoltages__voltage_1); 
+            AllCanSignalTypes.Add(AmsCellVoltages__voltage_2); 
+            AllCanSignalTypes.Add(AmsCellVoltages__voltage_3); 
+            AllCanSignalTypes.Add(AmsCellVoltages__voltage_4); 
+            AllCanSignalTypes.Add(AmsCellVoltages__voltage_5); 
+            AllCanSignalTypes.Add(AmsCellVoltages__voltage_6); 
+            AllCanSignalTypes.Add(AmsCellVoltages__voltage_7); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__thermistor_offset); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__temperature_1); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__temperature_2); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__temperature_3); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__temperature_4); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__temperature_5); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__temperature_6); 
+            AllCanSignalTypes.Add(AmsThermistorTemperatures__temperature_7); 
             AllCanSignalTypes.Add(IVT_Msg_Result_U3__IVT_ResultState_And_MsgCount_U3); 
             AllCanSignalTypes.Add(IVT_Msg_Result_U3__IVT_Result_U3); 
             AllCanSignalTypes.Add(IVT_Msg_Result_U3__IVT_MuxID_U3); 
@@ -1586,6 +1660,8 @@ namespace testNS
             AllCanSignalTypes.Add(PE_RL_NMT__pe_rl_nmt); 
             AllCanSignalTypes.Add(PE_FR_NMT__pe_fr_nmt); 
             AllCanSignalTypes.Add(PE_FL_NMT__pe_fl_nmt); 
+            AllCanSignalTypes.Add(FrontNodeRequests__fn_request); 
+            AllCanSignalTypes.Add(FrontNodeStatus__fn_state); 
             foreach (var signal in AllCanSignalTypes)
             {
                 signal.CalculateBitMask();
@@ -2186,43 +2262,7 @@ namespace testNS
             Unit          = "",
         };
         
-        public static CanSignalType FrontNodeState__fn_front_torque_scale = new CanSignalType(new List<string>{
-            "FrontNode", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 102,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 0.4,
-            StartBit      = 40,
-            Comment       = "",
-            Name          = "fn_front_torque_scale",
-            QualifiedName = "FrontNodeState.fn_front_torque_scale",
-            Unit          = "",
-        };
-        
-        public static CanSignalType FrontNodeState__fn_speed_limit = new CanSignalType(new List<string>{
-            "FrontNode", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 25500,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 100,
-            StartBit      = 32,
-            Comment       = "",
-            Name          = "fn_speed_limit",
-            QualifiedName = "FrontNodeState.fn_speed_limit",
-            Unit          = "",
-        };
-        
-        public static CanSignalType FrontNodeState__fn_max_torque = new CanSignalType(new List<string>{
+        public static CanSignalType FrontNodeDriverInputs__fn_front_torque_scale = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
@@ -2235,30 +2275,66 @@ namespace testNS
             ScaleFactor   = 0.4,
             StartBit      = 24,
             Comment       = "",
-            Name          = "fn_max_torque",
-            QualifiedName = "FrontNodeState.fn_max_torque",
+            Name          = "fn_front_torque_scale",
+            QualifiedName = "FrontNodeDriverInputs.fn_front_torque_scale",
             Unit          = "",
         };
         
-        public static CanSignalType FrontNodeState__fn_status = new CanSignalType(new List<string>{
+        public static CanSignalType FrontNodeDriverInputs__fn_speed_limit = new CanSignalType(new List<string>{
+            "FrontNode", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 25500,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 100,
+            StartBit      = 16,
+            Comment       = "",
+            Name          = "fn_speed_limit",
+            QualifiedName = "FrontNodeDriverInputs.fn_speed_limit",
+            Unit          = "",
+        };
+        
+        public static CanSignalType FrontNodeDriverInputs__fn_max_torque = new CanSignalType(new List<string>{
+            "FrontNode", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 102,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 0.4,
+            StartBit      = 8,
+            Comment       = "",
+            Name          = "fn_max_torque",
+            QualifiedName = "FrontNodeDriverInputs.fn_max_torque",
+            Unit          = "",
+        };
+        
+        public static CanSignalType FrontNodeDriverInputs__fn_flags = new CanSignalType(new List<string>{
             "FrontNode", "Ams", "RearNode", 
         })
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 16,
+            Length        = 8,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
             StartBit      = 0,
             Comment       = "TS_Start,R2D,Fan,",
-            Name          = "fn_status",
-            QualifiedName = "FrontNodeState.fn_status",
+            Name          = "fn_flags",
+            QualifiedName = "FrontNodeDriverInputs.fn_flags",
             Unit          = "",
         };
         
-        public static CanSignalType RearNodeStatus__rn_status = new CanSignalType(new List<string>{
+        public static CanSignalType RearNodeStatus__rn_state = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
@@ -2270,9 +2346,9 @@ namespace testNS
             Offset        = 0,
             ScaleFactor   = 1,
             StartBit      = 0,
-            Comment       = "DRS,",
-            Name          = "rn_status",
-            QualifiedName = "RearNodeStatus.rn_status",
+            Comment       = "Idle=0,Ready=1,Drive=2",
+            Name          = "rn_state",
+            QualifiedName = "RearNodeStatus.rn_state",
             Unit          = "",
         };
         
@@ -2282,12 +2358,12 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 40,
+            StartBit      = 5,
             Comment       = "",
             Name          = "stack6_errors",
             QualifiedName = "AccumulatorStackErrors.stack6_errors",
@@ -2300,12 +2376,12 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 32,
+            StartBit      = 4,
             Comment       = "",
             Name          = "stack5_errors",
             QualifiedName = "AccumulatorStackErrors.stack5_errors",
@@ -2318,12 +2394,12 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 24,
+            StartBit      = 3,
             Comment       = "",
             Name          = "stack4_errors",
             QualifiedName = "AccumulatorStackErrors.stack4_errors",
@@ -2336,12 +2412,12 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 16,
+            StartBit      = 2,
             Comment       = "",
             Name          = "stack3_errors",
             QualifiedName = "AccumulatorStackErrors.stack3_errors",
@@ -2354,12 +2430,12 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 8,
+            StartBit      = 1,
             Comment       = "",
             Name          = "stack2_errors",
             QualifiedName = "AccumulatorStackErrors.stack2_errors",
@@ -2372,7 +2448,7 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
@@ -2498,12 +2574,12 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 32,
+            StartBit      = 0,
             Comment       = "",
             Name          = "AmsClient_Trigger_Ams",
             QualifiedName = "AmsClientStatus.AmsClient_Trigger_Ams",
@@ -2516,73 +2592,19 @@ namespace testNS
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 8,
+            Length        = 1,
             MaxValue      = 255,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 24,
+            StartBit      = 1,
             Comment       = "",
             Name          = "AmsClient_Start_TS",
             QualifiedName = "AmsClientStatus.AmsClient_Start_TS",
             Unit          = "",
         };
         
-        public static CanSignalType AmsClientStatus__AmsClient_FN_Buttons = new CanSignalType(new List<string>{
-            "Ams", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 0,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 1,
-            StartBit      = 16,
-            Comment       = "",
-            Name          = "AmsClient_FN_Buttons",
-            QualifiedName = "AmsClientStatus.AmsClient_FN_Buttons",
-            Unit          = "",
-        };
-        
-        public static CanSignalType AmsClientStatus__AmsClient_FrontNode_Status = new CanSignalType(new List<string>{
-            "Ams", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 0,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 1,
-            StartBit      = 8,
-            Comment       = "",
-            Name          = "AmsClient_FrontNode_Status",
-            QualifiedName = "AmsClientStatus.AmsClient_FrontNode_Status",
-            Unit          = "",
-        };
-        
-        public static CanSignalType AmsClientStatus__AmsClient_Enable_Communication = new CanSignalType(new List<string>{
-            "Ams", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 255,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 1,
-            StartBit      = 0,
-            Comment       = "",
-            Name          = "AmsClient_Enable_Communication",
-            QualifiedName = "AmsClientStatus.AmsClient_Enable_Communication",
-            Unit          = "",
-        };
-        
-        public static CanSignalType PrechargeProgress__progress = new CanSignalType(new List<string>{
+        public static CanSignalType PrechargeProgress__time_progress = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
@@ -2595,9 +2617,9 @@ namespace testNS
             ScaleFactor   = 1,
             StartBit      = 0,
             Comment       = "",
-            Name          = "progress",
-            QualifiedName = "PrechargeProgress.progress",
-            Unit          = "",
+            Name          = "time_progress",
+            QualifiedName = "PrechargeProgress.time_progress",
+            Unit          = "%",
         };
         
         public static CanSignalType PrechargeProgress__fail_air1_open = new CanSignalType(new List<string>{
@@ -2611,11 +2633,11 @@ namespace testNS
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 8,
+            StartBit      = 17,
             Comment       = "",
             Name          = "fail_air1_open",
             QualifiedName = "PrechargeProgress.fail_air1_open",
-            Unit          = "",
+            Unit          = "flag",
         };
         
         public static CanSignalType PrechargeProgress__fail_timeout = new CanSignalType(new List<string>{
@@ -2629,11 +2651,11 @@ namespace testNS
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 9,
+            StartBit      = 18,
             Comment       = "",
             Name          = "fail_timeout",
             QualifiedName = "PrechargeProgress.fail_timeout",
-            Unit          = "",
+            Unit          = "flag",
         };
         
         public static CanSignalType PrechargeProgress__succeeded = new CanSignalType(new List<string>{
@@ -2647,64 +2669,82 @@ namespace testNS
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 10,
+            StartBit      = 16,
             Comment       = "",
             Name          = "succeeded",
             QualifiedName = "PrechargeProgress.succeeded",
-            Unit          = "",
+            Unit          = "flag",
         };
         
-        public static CanSignalType AmsStatus__Ams_Watchdog = new CanSignalType(new List<string>{
+        public static CanSignalType PrechargeProgress__voltage_progress = new CanSignalType(new List<string>{
             "Vector__XXX", 
         })
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
             Length        = 8,
-            MaxValue      = 0,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 1,
-            StartBit      = 32,
-            Comment       = "",
-            Name          = "Ams_Watchdog",
-            QualifiedName = "AmsStatus.Ams_Watchdog",
-            Unit          = "",
-        };
-        
-        public static CanSignalType AmsStatus__Ams_Precharge_Time = new CanSignalType(new List<string>{
-            "Vector__XXX", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 0,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 1,
-            StartBit      = 16,
-            Comment       = "",
-            Name          = "Ams_Precharge_Time",
-            QualifiedName = "AmsStatus.Ams_Precharge_Time",
-            Unit          = "",
-        };
-        
-        public static CanSignalType AmsStatus__Ams_Accumulator_Errors = new CanSignalType(new List<string>{
-            "Vector__XXX", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 0,
+            MaxValue      = 100,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
             StartBit      = 8,
             Comment       = "",
-            Name          = "Ams_Accumulator_Errors",
-            QualifiedName = "AmsStatus.Ams_Accumulator_Errors",
+            Name          = "voltage_progress",
+            QualifiedName = "PrechargeProgress.voltage_progress",
+            Unit          = "%",
+        };
+        
+        public static CanSignalType PrechargeProgress__fail_sdc_open = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 1,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 19,
+            Comment       = "",
+            Name          = "fail_sdc_open",
+            QualifiedName = "PrechargeProgress.fail_sdc_open",
+            Unit          = "flag",
+        };
+        
+        public static CanSignalType PrechargeProgress__fail_air2_open = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 1,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 20,
+            Comment       = "",
+            Name          = "fail_air2_open",
+            QualifiedName = "PrechargeProgress.fail_air2_open",
+            Unit          = "",
+        };
+        
+        public static CanSignalType PrechargeProgress__fail_communication = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 1,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 21,
+            Comment       = "",
+            Name          = "fail_communication",
+            QualifiedName = "PrechargeProgress.fail_communication",
             Unit          = "",
         };
         
@@ -2719,32 +2759,104 @@ namespace testNS
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
-            StartBit      = 24,
+            StartBit      = 8,
             Comment       = "",
             Name          = "Ams_Accumulator_SoC",
             QualifiedName = "AmsStatus.Ams_Accumulator_SoC",
             Unit          = "",
         };
         
-        public static CanSignalType AmsStatus__ams_status = new CanSignalType(new List<string>{
+        public static CanSignalType AmsStatus__ams_state = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
             Length        = 8,
-            MaxValue      = 255,
+            MaxValue      = 3,
             MinValue      = 0,
             Offset        = 0,
             ScaleFactor   = 1,
             StartBit      = 0,
-            Comment       = "TS_On,",
-            Name          = "ams_status",
-            QualifiedName = "AmsStatus.ams_status",
+            Comment       = "Idle=0,",
+            Name          = "ams_state",
+            QualifiedName = "AmsStatus.ams_state",
             Unit          = "",
         };
         
-        public static CanSignalType AccumulatorMinMaxTemperatures__Ams_AvgTemp = new CanSignalType(new List<string>{
+        public static CanSignalType AmsStatus__ams_relay_closed = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 1,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 16,
+            Comment       = "",
+            Name          = "ams_relay_closed",
+            QualifiedName = "AmsStatus.ams_relay_closed",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AmsStatus__imd_relay_closed = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 1,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 17,
+            Comment       = "",
+            Name          = "imd_relay_closed",
+            QualifiedName = "AmsStatus.imd_relay_closed",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AmsStatus__safestate_relay_closed = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 1,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 18,
+            Comment       = "",
+            Name          = "safestate_relay_closed",
+            QualifiedName = "AmsStatus.safestate_relay_closed",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AmsStatus__bspd_relay_closed = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 1,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 19,
+            Comment       = "",
+            Name          = "bspd_relay_closed",
+            QualifiedName = "AmsStatus.bspd_relay_closed",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AccumulatorMinMaxTemperatures__avg_temperature = new CanSignalType(new List<string>{
             "Vector__XXX", 
         })
         {
@@ -2757,17 +2869,17 @@ namespace testNS
             ScaleFactor   = 1,
             StartBit      = 8,
             Comment       = "",
-            Name          = "Ams_AvgTemp",
-            QualifiedName = "AccumulatorMinMaxTemperatures.Ams_AvgTemp",
+            Name          = "avg_temperature",
+            QualifiedName = "AccumulatorMinMaxTemperatures.avg_temperature",
             Unit          = "",
         };
         
-        public static CanSignalType AccumulatorMinMaxTemperatures__Ams_MinTemp = new CanSignalType(new List<string>{
+        public static CanSignalType AccumulatorMinMaxTemperatures__min_temp = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
             Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
+            Type          = SignalType.Float,
             Length        = 16,
             MaxValue      = 655.35,
             MinValue      = 0,
@@ -2775,12 +2887,12 @@ namespace testNS
             ScaleFactor   = 0.01,
             StartBit      = 40,
             Comment       = "",
-            Name          = "Ams_MinTemp",
-            QualifiedName = "AccumulatorMinMaxTemperatures.Ams_MinTemp",
+            Name          = "min_temp",
+            QualifiedName = "AccumulatorMinMaxTemperatures.min_temp",
             Unit          = "",
         };
         
-        public static CanSignalType AccumulatorMinMaxTemperatures__Ams_MinTemp_Pos_Stack = new CanSignalType(new List<string>{
+        public static CanSignalType AccumulatorMinMaxTemperatures__min_temp_thermistor_index = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
@@ -2793,17 +2905,17 @@ namespace testNS
             ScaleFactor   = 1,
             StartBit      = 32,
             Comment       = "",
-            Name          = "Ams_MinTemp_Pos_Stack",
-            QualifiedName = "AccumulatorMinMaxTemperatures.Ams_MinTemp_Pos_Stack",
+            Name          = "min_temp_thermistor_index",
+            QualifiedName = "AccumulatorMinMaxTemperatures.min_temp_thermistor_index",
             Unit          = "",
         };
         
-        public static CanSignalType AccumulatorMinMaxTemperatures__Ams_MaxTemp = new CanSignalType(new List<string>{
+        public static CanSignalType AccumulatorMinMaxTemperatures__max_temp = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
             Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
+            Type          = SignalType.Float,
             Length        = 16,
             MaxValue      = 655.35,
             MinValue      = 0,
@@ -2811,12 +2923,12 @@ namespace testNS
             ScaleFactor   = 0.01,
             StartBit      = 16,
             Comment       = "",
-            Name          = "Ams_MaxTemp",
-            QualifiedName = "AccumulatorMinMaxTemperatures.Ams_MaxTemp",
+            Name          = "max_temp",
+            QualifiedName = "AccumulatorMinMaxTemperatures.max_temp",
             Unit          = "",
         };
         
-        public static CanSignalType AccumulatorMinMaxTemperatures__Ams_MaxTemp_Pos_Stack = new CanSignalType(new List<string>{
+        public static CanSignalType AccumulatorMinMaxTemperatures__max_temp_thermistor_index = new CanSignalType(new List<string>{
             "FrontNode", 
         })
         {
@@ -2829,17 +2941,107 @@ namespace testNS
             ScaleFactor   = 1,
             StartBit      = 0,
             Comment       = "",
-            Name          = "Ams_MaxTemp_Pos_Stack",
-            QualifiedName = "AccumulatorMinMaxTemperatures.Ams_MaxTemp_Pos_Stack",
+            Name          = "max_temp_thermistor_index",
+            QualifiedName = "AccumulatorMinMaxTemperatures.max_temp_thermistor_index",
             Unit          = "",
         };
         
-        public static CanSignalType AccumulatorMinMaxVoltages__Ams_AvgVoltage = new CanSignalType(new List<string>{
+        public static CanSignalType AccumulatorMinMaxVoltages__avg_voltage = new CanSignalType(new List<string>{
             "Vector__XXX", 
         })
         {
             Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Signed,
+            Type          = SignalType.Float,
+            Length        = 8,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.00509804,
+            StartBit      = 0,
+            Comment       = "",
+            Name          = "avg_voltage",
+            QualifiedName = "AccumulatorMinMaxVoltages.avg_voltage",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AccumulatorMinMaxVoltages__min_voltage = new CanSignalType(new List<string>{
+            "FrontNode", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 16,
+            MaxValue      = 65.535,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 0.001,
+            StartBit      = 40,
+            Comment       = "",
+            Name          = "min_voltage",
+            QualifiedName = "AccumulatorMinMaxVoltages.min_voltage",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AccumulatorMinMaxVoltages__min_voltage_cell_index = new CanSignalType(new List<string>{
+            "FrontNode", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 137,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 32,
+            Comment       = "",
+            Name          = "min_voltage_cell_index",
+            QualifiedName = "AccumulatorMinMaxVoltages.min_voltage_cell_index",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AccumulatorMinMaxVoltages__max_voltage = new CanSignalType(new List<string>{
+            "FrontNode", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 16,
+            MaxValue      = 65.535,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 0.001,
+            StartBit      = 16,
+            Comment       = "",
+            Name          = "max_voltage",
+            QualifiedName = "AccumulatorMinMaxVoltages.max_voltage",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AccumulatorMinMaxVoltages__max_voltage_cell_index = new CanSignalType(new List<string>{
+            "FrontNode", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 137,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 8,
+            Comment       = "",
+            Name          = "max_voltage_cell_index",
+            QualifiedName = "AccumulatorMinMaxVoltages.max_voltage_cell_index",
+            Unit          = "",
+        };
+        
+        public static CanSignalType AmsCellVoltages__cell_offset = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
             Length        = 8,
             MaxValue      = 0,
             MinValue      = 0,
@@ -2847,117 +3049,279 @@ namespace testNS
             ScaleFactor   = 1,
             StartBit      = 0,
             Comment       = "",
-            Name          = "Ams_AvgVoltage",
-            QualifiedName = "AccumulatorMinMaxVoltages.Ams_AvgVoltage",
+            Name          = "cell_offset",
+            QualifiedName = "AmsCellVoltages.cell_offset",
             Unit          = "",
         };
         
-        public static CanSignalType AccumulatorMinMaxVoltages__Ams_MinVoltage = new CanSignalType(new List<string>{
-            "FrontNode", 
+        public static CanSignalType AmsCellVoltages__voltage_1 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
         })
         {
             Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 16,
-            MaxValue      = 65.535,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 0.001,
-            StartBit      = 40,
-            Comment       = "",
-            Name          = "Ams_MinVoltage",
-            QualifiedName = "AccumulatorMinMaxVoltages.Ams_MinVoltage",
-            Unit          = "",
-        };
-        
-        public static CanSignalType AccumulatorMinMaxVoltages__Ams_MinVoltage_Pos_Stack = new CanSignalType(new List<string>{
-            "FrontNode", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
+            Type          = SignalType.Float,
             Length        = 8,
-            MaxValue      = 255,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 1,
-            StartBit      = 32,
-            Comment       = "",
-            Name          = "Ams_MinVoltage_Pos_Stack",
-            QualifiedName = "AccumulatorMinMaxVoltages.Ams_MinVoltage_Pos_Stack",
-            Unit          = "",
-        };
-        
-        public static CanSignalType AccumulatorMinMaxVoltages__Ams_MaxVoltage = new CanSignalType(new List<string>{
-            "FrontNode", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 16,
-            MaxValue      = 65.535,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 0.001,
-            StartBit      = 16,
-            Comment       = "",
-            Name          = "Ams_MaxVoltage",
-            QualifiedName = "AccumulatorMinMaxVoltages.Ams_MaxVoltage",
-            Unit          = "",
-        };
-        
-        public static CanSignalType AccumulatorMinMaxVoltages__Ams_MaxVoltage_Pos_Stack = new CanSignalType(new List<string>{
-            "FrontNode", 
-        })
-        {
-            Encoding      = SignalEncoding.Intel,
-            Type          = SignalType.Unsigned,
-            Length        = 8,
-            MaxValue      = 255,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 1,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.00509804,
             StartBit      = 8,
             Comment       = "",
-            Name          = "Ams_MaxVoltage_Pos_Stack",
-            QualifiedName = "AccumulatorMinMaxVoltages.Ams_MaxVoltage_Pos_Stack",
-            Unit          = "",
+            Name          = "voltage_1",
+            QualifiedName = "AmsCellVoltages.voltage_1",
+            Unit          = "Volt",
         };
         
-        public static CanSignalType Ams_Cell_Voltages__Ams_Voltage3 = new CanSignalType(new List<string>{
+        public static CanSignalType AmsCellVoltages__voltage_2 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 8,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.0050980392157,
+            StartBit      = 16,
+            Comment       = "",
+            Name          = "voltage_2",
+            QualifiedName = "AmsCellVoltages.voltage_2",
+            Unit          = "Volt",
+        };
+        
+        public static CanSignalType AmsCellVoltages__voltage_3 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 8,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.0050980392157,
+            StartBit      = 24,
+            Comment       = "",
+            Name          = "voltage_3",
+            QualifiedName = "AmsCellVoltages.voltage_3",
+            Unit          = "Volt",
+        };
+        
+        public static CanSignalType AmsCellVoltages__voltage_4 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 8,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.0050980392157,
+            StartBit      = 32,
+            Comment       = "",
+            Name          = "voltage_4",
+            QualifiedName = "AmsCellVoltages.voltage_4",
+            Unit          = "Volt",
+        };
+        
+        public static CanSignalType AmsCellVoltages__voltage_5 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 8,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.0050980392157,
+            StartBit      = 40,
+            Comment       = "",
+            Name          = "voltage_5",
+            QualifiedName = "AmsCellVoltages.voltage_5",
+            Unit          = "Volt",
+        };
+        
+        public static CanSignalType AmsCellVoltages__voltage_6 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 8,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.0050980392157,
+            StartBit      = 48,
+            Comment       = "",
+            Name          = "voltage_6",
+            QualifiedName = "AmsCellVoltages.voltage_6",
+            Unit          = "Volt",
+        };
+        
+        public static CanSignalType AmsCellVoltages__voltage_7 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Float,
+            Length        = 8,
+            MaxValue      = 4.2,
+            MinValue      = 2.9,
+            Offset        = 2.9,
+            ScaleFactor   = 0.0050980392157,
+            StartBit      = 56,
+            Comment       = "",
+            Name          = "voltage_7",
+            QualifiedName = "AmsCellVoltages.voltage_7",
+            Unit          = "Volt",
+        };
+        
+        public static CanSignalType AmsThermistorTemperatures__thermistor_offset = new CanSignalType(new List<string>{
             "Vector__XXX", 
         })
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 16,
-            MaxValue      = 65.535,
+            Length        = 8,
+            MaxValue      = 0,
             MinValue      = 0,
             Offset        = 0,
-            ScaleFactor   = 0.001,
-            StartBit      = 48,
+            ScaleFactor   = 1,
+            StartBit      = 0,
             Comment       = "",
-            Name          = "Ams_Voltage3",
-            QualifiedName = "Ams_Cell_Voltages.Ams_Voltage3",
+            Name          = "thermistor_offset",
+            QualifiedName = "AmsThermistorTemperatures.thermistor_offset",
             Unit          = "",
         };
         
-        public static CanSignalType AmsCellTemperatures__Ams_Temp3 = new CanSignalType(new List<string>{
+        public static CanSignalType AmsThermistorTemperatures__temperature_1 = new CanSignalType(new List<string>{
             "Vector__XXX", 
         })
         {
             Encoding      = SignalEncoding.Intel,
             Type          = SignalType.Unsigned,
-            Length        = 16,
-            MaxValue      = 655.35,
-            MinValue      = 0,
-            Offset        = 0,
-            ScaleFactor   = 0.01,
+            Length        = 8,
+            MaxValue      = 107.5,
+            MinValue      = -20,
+            Offset        = -20,
+            ScaleFactor   = 0.5,
+            StartBit      = 8,
+            Comment       = "",
+            Name          = "temperature_1",
+            QualifiedName = "AmsThermistorTemperatures.temperature_1",
+            Unit          = "Celsius",
+        };
+        
+        public static CanSignalType AmsThermistorTemperatures__temperature_2 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 107.5,
+            MinValue      = -20,
+            Offset        = -20,
+            ScaleFactor   = 0.5,
+            StartBit      = 16,
+            Comment       = "",
+            Name          = "temperature_2",
+            QualifiedName = "AmsThermistorTemperatures.temperature_2",
+            Unit          = "Celsius",
+        };
+        
+        public static CanSignalType AmsThermistorTemperatures__temperature_3 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 107.5,
+            MinValue      = -20,
+            Offset        = -20,
+            ScaleFactor   = 0.5,
+            StartBit      = 24,
+            Comment       = "",
+            Name          = "temperature_3",
+            QualifiedName = "AmsThermistorTemperatures.temperature_3",
+            Unit          = "Celsius",
+        };
+        
+        public static CanSignalType AmsThermistorTemperatures__temperature_4 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 107.5,
+            MinValue      = -20,
+            Offset        = -20,
+            ScaleFactor   = 0.5,
+            StartBit      = 32,
+            Comment       = "",
+            Name          = "temperature_4",
+            QualifiedName = "AmsThermistorTemperatures.temperature_4",
+            Unit          = "Celsius",
+        };
+        
+        public static CanSignalType AmsThermistorTemperatures__temperature_5 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 107.5,
+            MinValue      = -20,
+            Offset        = -20,
+            ScaleFactor   = 0.5,
+            StartBit      = 40,
+            Comment       = "",
+            Name          = "temperature_5",
+            QualifiedName = "AmsThermistorTemperatures.temperature_5",
+            Unit          = "Celsius",
+        };
+        
+        public static CanSignalType AmsThermistorTemperatures__temperature_6 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 107.5,
+            MinValue      = -20,
+            Offset        = -20,
+            ScaleFactor   = 0.5,
             StartBit      = 48,
             Comment       = "",
-            Name          = "Ams_Temp3",
-            QualifiedName = "AmsCellTemperatures.Ams_Temp3",
-            Unit          = "",
+            Name          = "temperature_6",
+            QualifiedName = "AmsThermistorTemperatures.temperature_6",
+            Unit          = "Celsius",
+        };
+        
+        public static CanSignalType AmsThermistorTemperatures__temperature_7 = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 107.5,
+            MinValue      = -20,
+            Offset        = -20,
+            ScaleFactor   = 0.5,
+            StartBit      = 56,
+            Comment       = "",
+            Name          = "temperature_7",
+            QualifiedName = "AmsThermistorTemperatures.temperature_7",
+            Unit          = "Celsius",
         };
         
         public static CanSignalType IVT_Msg_Result_U3__IVT_ResultState_And_MsgCount_U3 = new CanSignalType(new List<string>{
@@ -5156,6 +5520,42 @@ namespace testNS
             Unit          = "",
         };
         
+        public static CanSignalType FrontNodeRequests__fn_request = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 0,
+            Comment       = "bit1-r2d,bit2-ts0n-bit3-precharge,bit4-AppsImplausibility,bit5-Apps-BrakeImplausibility,bit6-Pumps,bit7-Fans",
+            Name          = "fn_request",
+            QualifiedName = "FrontNodeRequests.fn_request",
+            Unit          = "",
+        };
+        
+        public static CanSignalType FrontNodeStatus__fn_state = new CanSignalType(new List<string>{
+            "Vector__XXX", 
+        })
+        {
+            Encoding      = SignalEncoding.Intel,
+            Type          = SignalType.Unsigned,
+            Length        = 8,
+            MaxValue      = 0,
+            MinValue      = 0,
+            Offset        = 0,
+            ScaleFactor   = 1,
+            StartBit      = 0,
+            Comment       = "Idle=0,Ready=1,Drive=2",
+            Name          = "fn_state",
+            QualifiedName = "FrontNodeStatus.fn_state",
+            Unit          = "",
+        };
+        
     }
 
     
@@ -5199,16 +5599,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(latitude);
             // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
+            tempValue  *= 1f;
+            tempValue  += 0f;
             return tempValue;
         }
         
         public void Setlatitude(float value)
         {
             // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
+            value -= 0f;
+            value /= 1f;
             // Cats to integer and prepare for sending
             this.InsertBits(latitude, (UInt64)value);
         }
@@ -5218,16 +5618,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(longitude);
             // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
+            tempValue  *= 1f;
+            tempValue  += 0f;
             return tempValue;
         }
         
         public void Setlongitude(float value)
         {
             // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
+            value -= 0f;
+            value /= 1f;
             // Cats to integer and prepare for sending
             this.InsertBits(longitude, (UInt64)value);
         }
@@ -5312,16 +5712,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(acc_z);
             // Apply inverse transform to restore actual value
-            tempValue  /= 1000;
-            tempValue  -= 0;
+            tempValue  /= 1000f;
+            tempValue  -= 0f;
             return tempValue;
         }
         
         public void Setacc_z(float value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 1000;
+            value += 0f;
+            value *= 1000f;
             // Cats to integer and prepare for sending
             this.InsertBits(acc_z, (UInt64)value);
         }
@@ -5331,16 +5731,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(acc_y);
             // Apply inverse transform to restore actual value
-            tempValue  /= 1000;
-            tempValue  -= 0;
+            tempValue  /= 1000f;
+            tempValue  -= 0f;
             return tempValue;
         }
         
         public void Setacc_y(float value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 1000;
+            value += 0f;
+            value *= 1000f;
             // Cats to integer and prepare for sending
             this.InsertBits(acc_y, (UInt64)value);
         }
@@ -5350,16 +5750,16 @@ namespace testNS
             // Get bits from raw data storage and cast
             float tempValue = (float)ExtractBits(acc_x);
             // Apply inverse transform to restore actual value
-            tempValue  /= 1000;
-            tempValue  -= 0;
+            tempValue  /= 1000f;
+            tempValue  -= 0f;
             return tempValue;
         }
         
         public void Setacc_x(float value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 1000;
+            value += 0f;
+            value *= 1000f;
             // Cats to integer and prepare for sending
             this.InsertBits(acc_x, (UInt64)value);
         }
@@ -5867,13 +6267,13 @@ namespace testNS
     }
     
     
-    public class FrontNodeStateMessage : CanMessage<FrontNodeStateMessage>
+    public class FrontNodeDriverInputsMessage : CanMessage<FrontNodeDriverInputsMessage>
     {
-        public FrontNodeStateMessage()
+        public FrontNodeDriverInputsMessage()
         {
-            MessageType = CanMessageTypes.FrontNodeState;
+            MessageType = CanMessageTypes.FrontNodeDriverInputs;
         }
-        public static readonly CanSignalType fn_front_torque_scale = CanSignalTypes.FrontNodeState__fn_front_torque_scale;
+        public static readonly CanSignalType fn_front_torque_scale = CanSignalTypes.FrontNodeDriverInputs__fn_front_torque_scale;
         public sbyte Getfn_front_torque_scale()
         {
             // Get bits from raw data storage and cast
@@ -5892,7 +6292,7 @@ namespace testNS
             // Cats to integer and prepare for sending
             this.InsertBits(fn_front_torque_scale, (UInt64)value);
         }
-        public static readonly CanSignalType fn_speed_limit = CanSignalTypes.FrontNodeState__fn_speed_limit;
+        public static readonly CanSignalType fn_speed_limit = CanSignalTypes.FrontNodeDriverInputs__fn_speed_limit;
         public sbyte Getfn_speed_limit()
         {
             // Get bits from raw data storage and cast
@@ -5911,7 +6311,7 @@ namespace testNS
             // Cats to integer and prepare for sending
             this.InsertBits(fn_speed_limit, (UInt64)value);
         }
-        public static readonly CanSignalType fn_max_torque = CanSignalTypes.FrontNodeState__fn_max_torque;
+        public static readonly CanSignalType fn_max_torque = CanSignalTypes.FrontNodeDriverInputs__fn_max_torque;
         public sbyte Getfn_max_torque()
         {
             // Get bits from raw data storage and cast
@@ -5930,24 +6330,24 @@ namespace testNS
             // Cats to integer and prepare for sending
             this.InsertBits(fn_max_torque, (UInt64)value);
         }
-        public static readonly CanSignalType fn_status = CanSignalTypes.FrontNodeState__fn_status;
-        public UInt16 Getfn_status()
+        public static readonly CanSignalType fn_flags = CanSignalTypes.FrontNodeDriverInputs__fn_flags;
+        public sbyte Getfn_flags()
         {
             // Get bits from raw data storage and cast
-            UInt16 tempValue = (UInt16)ExtractBits(fn_status);
+            sbyte tempValue = (sbyte)ExtractBits(fn_flags);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void Setfn_status(UInt16 value)
+        public void Setfn_flags(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(fn_status, (UInt64)value);
+            this.InsertBits(fn_flags, (UInt64)value);
         }
     }
     
@@ -5958,24 +6358,24 @@ namespace testNS
         {
             MessageType = CanMessageTypes.RearNodeStatus;
         }
-        public static readonly CanSignalType rn_status = CanSignalTypes.RearNodeStatus__rn_status;
-        public sbyte Getrn_status()
+        public static readonly CanSignalType rn_state = CanSignalTypes.RearNodeStatus__rn_state;
+        public sbyte Getrn_state()
         {
             // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(rn_status);
+            sbyte tempValue = (sbyte)ExtractBits(rn_state);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void Setrn_status(sbyte value)
+        public void Setrn_state(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(rn_status, (UInt64)value);
+            this.InsertBits(rn_state, (UInt64)value);
         }
     }
     
@@ -6279,63 +6679,6 @@ namespace testNS
             // Cats to integer and prepare for sending
             this.InsertBits(AmsClient_Start_TS, (UInt64)value);
         }
-        public static readonly CanSignalType AmsClient_FN_Buttons = CanSignalTypes.AmsClientStatus__AmsClient_FN_Buttons;
-        public sbyte GetAmsClient_FN_Buttons()
-        {
-            // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(AmsClient_FN_Buttons);
-            // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
-            return tempValue;
-        }
-        
-        public void SetAmsClient_FN_Buttons(sbyte value)
-        {
-            // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
-            // Cats to integer and prepare for sending
-            this.InsertBits(AmsClient_FN_Buttons, (UInt64)value);
-        }
-        public static readonly CanSignalType AmsClient_FrontNode_Status = CanSignalTypes.AmsClientStatus__AmsClient_FrontNode_Status;
-        public sbyte GetAmsClient_FrontNode_Status()
-        {
-            // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(AmsClient_FrontNode_Status);
-            // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
-            return tempValue;
-        }
-        
-        public void SetAmsClient_FrontNode_Status(sbyte value)
-        {
-            // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
-            // Cats to integer and prepare for sending
-            this.InsertBits(AmsClient_FrontNode_Status, (UInt64)value);
-        }
-        public static readonly CanSignalType AmsClient_Enable_Communication = CanSignalTypes.AmsClientStatus__AmsClient_Enable_Communication;
-        public sbyte GetAmsClient_Enable_Communication()
-        {
-            // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(AmsClient_Enable_Communication);
-            // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
-            return tempValue;
-        }
-        
-        public void SetAmsClient_Enable_Communication(sbyte value)
-        {
-            // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
-            // Cats to integer and prepare for sending
-            this.InsertBits(AmsClient_Enable_Communication, (UInt64)value);
-        }
     }
     
     
@@ -6345,24 +6688,24 @@ namespace testNS
         {
             MessageType = CanMessageTypes.PrechargeProgress;
         }
-        public static readonly CanSignalType progress = CanSignalTypes.PrechargeProgress__progress;
-        public sbyte Getprogress()
+        public static readonly CanSignalType time_progress = CanSignalTypes.PrechargeProgress__time_progress;
+        public sbyte Gettime_progress()
         {
             // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(progress);
+            sbyte tempValue = (sbyte)ExtractBits(time_progress);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void Setprogress(sbyte value)
+        public void Settime_progress(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(progress, (UInt64)value);
+            this.InsertBits(time_progress, (UInt64)value);
         }
         public static readonly CanSignalType fail_air1_open = CanSignalTypes.PrechargeProgress__fail_air1_open;
         public sbyte Getfail_air1_open()
@@ -6421,6 +6764,82 @@ namespace testNS
             // Cats to integer and prepare for sending
             this.InsertBits(succeeded, (UInt64)value);
         }
+        public static readonly CanSignalType voltage_progress = CanSignalTypes.PrechargeProgress__voltage_progress;
+        public sbyte Getvoltage_progress()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(voltage_progress);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setvoltage_progress(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_progress, (UInt64)value);
+        }
+        public static readonly CanSignalType fail_sdc_open = CanSignalTypes.PrechargeProgress__fail_sdc_open;
+        public sbyte Getfail_sdc_open()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(fail_sdc_open);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setfail_sdc_open(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(fail_sdc_open, (UInt64)value);
+        }
+        public static readonly CanSignalType fail_air2_open = CanSignalTypes.PrechargeProgress__fail_air2_open;
+        public sbyte Getfail_air2_open()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(fail_air2_open);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setfail_air2_open(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(fail_air2_open, (UInt64)value);
+        }
+        public static readonly CanSignalType fail_communication = CanSignalTypes.PrechargeProgress__fail_communication;
+        public sbyte Getfail_communication()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(fail_communication);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setfail_communication(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(fail_communication, (UInt64)value);
+        }
     }
     
     
@@ -6429,63 +6848,6 @@ namespace testNS
         public AmsStatusMessage()
         {
             MessageType = CanMessageTypes.AmsStatus;
-        }
-        public static readonly CanSignalType Ams_Watchdog = CanSignalTypes.AmsStatus__Ams_Watchdog;
-        public sbyte GetAms_Watchdog()
-        {
-            // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(Ams_Watchdog);
-            // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
-            return tempValue;
-        }
-        
-        public void SetAms_Watchdog(sbyte value)
-        {
-            // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
-            // Cats to integer and prepare for sending
-            this.InsertBits(Ams_Watchdog, (UInt64)value);
-        }
-        public static readonly CanSignalType Ams_Precharge_Time = CanSignalTypes.AmsStatus__Ams_Precharge_Time;
-        public sbyte GetAms_Precharge_Time()
-        {
-            // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(Ams_Precharge_Time);
-            // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
-            return tempValue;
-        }
-        
-        public void SetAms_Precharge_Time(sbyte value)
-        {
-            // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
-            // Cats to integer and prepare for sending
-            this.InsertBits(Ams_Precharge_Time, (UInt64)value);
-        }
-        public static readonly CanSignalType Ams_Accumulator_Errors = CanSignalTypes.AmsStatus__Ams_Accumulator_Errors;
-        public sbyte GetAms_Accumulator_Errors()
-        {
-            // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(Ams_Accumulator_Errors);
-            // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
-            return tempValue;
-        }
-        
-        public void SetAms_Accumulator_Errors(sbyte value)
-        {
-            // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
-            // Cats to integer and prepare for sending
-            this.InsertBits(Ams_Accumulator_Errors, (UInt64)value);
         }
         public static readonly CanSignalType Ams_Accumulator_SoC = CanSignalTypes.AmsStatus__Ams_Accumulator_SoC;
         public sbyte GetAms_Accumulator_SoC()
@@ -6506,24 +6868,100 @@ namespace testNS
             // Cats to integer and prepare for sending
             this.InsertBits(Ams_Accumulator_SoC, (UInt64)value);
         }
-        public static readonly CanSignalType ams_status = CanSignalTypes.AmsStatus__ams_status;
-        public sbyte Getams_status()
+        public static readonly CanSignalType ams_state = CanSignalTypes.AmsStatus__ams_state;
+        public sbyte Getams_state()
         {
             // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(ams_status);
+            sbyte tempValue = (sbyte)ExtractBits(ams_state);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void Setams_status(sbyte value)
+        public void Setams_state(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(ams_status, (UInt64)value);
+            this.InsertBits(ams_state, (UInt64)value);
+        }
+        public static readonly CanSignalType ams_relay_closed = CanSignalTypes.AmsStatus__ams_relay_closed;
+        public sbyte Getams_relay_closed()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(ams_relay_closed);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setams_relay_closed(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(ams_relay_closed, (UInt64)value);
+        }
+        public static readonly CanSignalType imd_relay_closed = CanSignalTypes.AmsStatus__imd_relay_closed;
+        public sbyte Getimd_relay_closed()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(imd_relay_closed);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setimd_relay_closed(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(imd_relay_closed, (UInt64)value);
+        }
+        public static readonly CanSignalType safestate_relay_closed = CanSignalTypes.AmsStatus__safestate_relay_closed;
+        public sbyte Getsafestate_relay_closed()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(safestate_relay_closed);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setsafestate_relay_closed(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(safestate_relay_closed, (UInt64)value);
+        }
+        public static readonly CanSignalType bspd_relay_closed = CanSignalTypes.AmsStatus__bspd_relay_closed;
+        public sbyte Getbspd_relay_closed()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(bspd_relay_closed);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setbspd_relay_closed(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(bspd_relay_closed, (UInt64)value);
         }
     }
     
@@ -6534,100 +6972,100 @@ namespace testNS
         {
             MessageType = CanMessageTypes.AccumulatorMinMaxTemperatures;
         }
-        public static readonly CanSignalType Ams_AvgTemp = CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_AvgTemp;
-        public byte GetAms_AvgTemp()
+        public static readonly CanSignalType avg_temperature = CanSignalTypes.AccumulatorMinMaxTemperatures__avg_temperature;
+        public byte Getavg_temperature()
         {
             // Get bits from raw data storage and cast
-            byte tempValue = (byte)ExtractBits(Ams_AvgTemp);
+            byte tempValue = (byte)ExtractBits(avg_temperature);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void SetAms_AvgTemp(byte value)
+        public void Setavg_temperature(byte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_AvgTemp, (UInt64)value);
+            this.InsertBits(avg_temperature, (UInt64)value);
         }
-        public static readonly CanSignalType Ams_MinTemp = CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MinTemp;
-        public UInt16 GetAms_MinTemp()
+        public static readonly CanSignalType min_temp = CanSignalTypes.AccumulatorMinMaxTemperatures__min_temp;
+        public float Getmin_temp()
         {
             // Get bits from raw data storage and cast
-            UInt16 tempValue = (UInt16)ExtractBits(Ams_MinTemp);
+            float tempValue = (float)ExtractBits(min_temp);
             // Apply inverse transform to restore actual value
-            tempValue  /= 100;
-            tempValue  -= 0;
+            tempValue  /= 100f;
+            tempValue  -= 0f;
             return tempValue;
         }
         
-        public void SetAms_MinTemp(UInt16 value)
+        public void Setmin_temp(float value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 100;
+            value += 0f;
+            value *= 100f;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MinTemp, (UInt64)value);
+            this.InsertBits(min_temp, (UInt64)value);
         }
-        public static readonly CanSignalType Ams_MinTemp_Pos_Stack = CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MinTemp_Pos_Stack;
-        public sbyte GetAms_MinTemp_Pos_Stack()
+        public static readonly CanSignalType min_temp_thermistor_index = CanSignalTypes.AccumulatorMinMaxTemperatures__min_temp_thermistor_index;
+        public sbyte Getmin_temp_thermistor_index()
         {
             // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(Ams_MinTemp_Pos_Stack);
+            sbyte tempValue = (sbyte)ExtractBits(min_temp_thermistor_index);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void SetAms_MinTemp_Pos_Stack(sbyte value)
+        public void Setmin_temp_thermistor_index(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MinTemp_Pos_Stack, (UInt64)value);
+            this.InsertBits(min_temp_thermistor_index, (UInt64)value);
         }
-        public static readonly CanSignalType Ams_MaxTemp = CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MaxTemp;
-        public UInt16 GetAms_MaxTemp()
+        public static readonly CanSignalType max_temp = CanSignalTypes.AccumulatorMinMaxTemperatures__max_temp;
+        public float Getmax_temp()
         {
             // Get bits from raw data storage and cast
-            UInt16 tempValue = (UInt16)ExtractBits(Ams_MaxTemp);
+            float tempValue = (float)ExtractBits(max_temp);
             // Apply inverse transform to restore actual value
-            tempValue  /= 100;
-            tempValue  -= 0;
+            tempValue  /= 100f;
+            tempValue  -= 0f;
             return tempValue;
         }
         
-        public void SetAms_MaxTemp(UInt16 value)
+        public void Setmax_temp(float value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 100;
+            value += 0f;
+            value *= 100f;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MaxTemp, (UInt64)value);
+            this.InsertBits(max_temp, (UInt64)value);
         }
-        public static readonly CanSignalType Ams_MaxTemp_Pos_Stack = CanSignalTypes.AccumulatorMinMaxTemperatures__Ams_MaxTemp_Pos_Stack;
-        public sbyte GetAms_MaxTemp_Pos_Stack()
+        public static readonly CanSignalType max_temp_thermistor_index = CanSignalTypes.AccumulatorMinMaxTemperatures__max_temp_thermistor_index;
+        public sbyte Getmax_temp_thermistor_index()
         {
             // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(Ams_MaxTemp_Pos_Stack);
+            sbyte tempValue = (sbyte)ExtractBits(max_temp_thermistor_index);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void SetAms_MaxTemp_Pos_Stack(sbyte value)
+        public void Setmax_temp_thermistor_index(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MaxTemp_Pos_Stack, (UInt64)value);
+            this.InsertBits(max_temp_thermistor_index, (UInt64)value);
         }
     }
     
@@ -6638,156 +7076,422 @@ namespace testNS
         {
             MessageType = CanMessageTypes.AccumulatorMinMaxVoltages;
         }
-        public static readonly CanSignalType Ams_AvgVoltage = CanSignalTypes.AccumulatorMinMaxVoltages__Ams_AvgVoltage;
-        public byte GetAms_AvgVoltage()
+        public static readonly CanSignalType avg_voltage = CanSignalTypes.AccumulatorMinMaxVoltages__avg_voltage;
+        public float Getavg_voltage()
         {
             // Get bits from raw data storage and cast
-            byte tempValue = (byte)ExtractBits(Ams_AvgVoltage);
+            float tempValue = (float)ExtractBits(avg_voltage);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153815976336f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setavg_voltage(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153815976336f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(avg_voltage, (UInt64)value);
+        }
+        public static readonly CanSignalType min_voltage = CanSignalTypes.AccumulatorMinMaxVoltages__min_voltage;
+        public float Getmin_voltage()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(min_voltage);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 1000f;
+            tempValue  -= 0f;
+            return tempValue;
+        }
+        
+        public void Setmin_voltage(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += 0f;
+            value *= 1000f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(min_voltage, (UInt64)value);
+        }
+        public static readonly CanSignalType min_voltage_cell_index = CanSignalTypes.AccumulatorMinMaxVoltages__min_voltage_cell_index;
+        public sbyte Getmin_voltage_cell_index()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(min_voltage_cell_index);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void SetAms_AvgVoltage(byte value)
+        public void Setmin_voltage_cell_index(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_AvgVoltage, (UInt64)value);
+            this.InsertBits(min_voltage_cell_index, (UInt64)value);
         }
-        public static readonly CanSignalType Ams_MinVoltage = CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MinVoltage;
-        public UInt16 GetAms_MinVoltage()
+        public static readonly CanSignalType max_voltage = CanSignalTypes.AccumulatorMinMaxVoltages__max_voltage;
+        public float Getmax_voltage()
         {
             // Get bits from raw data storage and cast
-            UInt16 tempValue = (UInt16)ExtractBits(Ams_MinVoltage);
+            float tempValue = (float)ExtractBits(max_voltage);
             // Apply inverse transform to restore actual value
-            tempValue  /= 1000;
-            tempValue  -= 0;
+            tempValue  /= 1000f;
+            tempValue  -= 0f;
             return tempValue;
         }
         
-        public void SetAms_MinVoltage(UInt16 value)
+        public void Setmax_voltage(float value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 1000;
+            value += 0f;
+            value *= 1000f;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MinVoltage, (UInt64)value);
+            this.InsertBits(max_voltage, (UInt64)value);
         }
-        public static readonly CanSignalType Ams_MinVoltage_Pos_Stack = CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MinVoltage_Pos_Stack;
-        public sbyte GetAms_MinVoltage_Pos_Stack()
+        public static readonly CanSignalType max_voltage_cell_index = CanSignalTypes.AccumulatorMinMaxVoltages__max_voltage_cell_index;
+        public sbyte Getmax_voltage_cell_index()
         {
             // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(Ams_MinVoltage_Pos_Stack);
+            sbyte tempValue = (sbyte)ExtractBits(max_voltage_cell_index);
             // Apply inverse transform to restore actual value
             tempValue  *= 1;
             tempValue  += 0;
             return tempValue;
         }
         
-        public void SetAms_MinVoltage_Pos_Stack(sbyte value)
+        public void Setmax_voltage_cell_index(sbyte value)
         {
             // Scale and offset value according to signal specification
             value -= 0;
             value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MinVoltage_Pos_Stack, (UInt64)value);
-        }
-        public static readonly CanSignalType Ams_MaxVoltage = CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MaxVoltage;
-        public UInt16 GetAms_MaxVoltage()
-        {
-            // Get bits from raw data storage and cast
-            UInt16 tempValue = (UInt16)ExtractBits(Ams_MaxVoltage);
-            // Apply inverse transform to restore actual value
-            tempValue  /= 1000;
-            tempValue  -= 0;
-            return tempValue;
-        }
-        
-        public void SetAms_MaxVoltage(UInt16 value)
-        {
-            // Scale and offset value according to signal specification
-            value += 0;
-            value *= 1000;
-            // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MaxVoltage, (UInt64)value);
-        }
-        public static readonly CanSignalType Ams_MaxVoltage_Pos_Stack = CanSignalTypes.AccumulatorMinMaxVoltages__Ams_MaxVoltage_Pos_Stack;
-        public sbyte GetAms_MaxVoltage_Pos_Stack()
-        {
-            // Get bits from raw data storage and cast
-            sbyte tempValue = (sbyte)ExtractBits(Ams_MaxVoltage_Pos_Stack);
-            // Apply inverse transform to restore actual value
-            tempValue  *= 1;
-            tempValue  += 0;
-            return tempValue;
-        }
-        
-        public void SetAms_MaxVoltage_Pos_Stack(sbyte value)
-        {
-            // Scale and offset value according to signal specification
-            value -= 0;
-            value /= 1;
-            // Cats to integer and prepare for sending
-            this.InsertBits(Ams_MaxVoltage_Pos_Stack, (UInt64)value);
+            this.InsertBits(max_voltage_cell_index, (UInt64)value);
         }
     }
     
     
-    public class Ams_Cell_VoltagesMessage : CanMessage<Ams_Cell_VoltagesMessage>
+    public class AmsCellVoltagesMessage : CanMessage<AmsCellVoltagesMessage>
     {
-        public Ams_Cell_VoltagesMessage()
+        public AmsCellVoltagesMessage()
         {
-            MessageType = CanMessageTypes.Ams_Cell_Voltages;
+            MessageType = CanMessageTypes.AmsCellVoltages;
         }
-        public static readonly CanSignalType Ams_Voltage3 = CanSignalTypes.Ams_Cell_Voltages__Ams_Voltage3;
-        public UInt16 GetAms_Voltage3()
+        public static readonly CanSignalType cell_offset = CanSignalTypes.AmsCellVoltages__cell_offset;
+        public sbyte Getcell_offset()
         {
             // Get bits from raw data storage and cast
-            UInt16 tempValue = (UInt16)ExtractBits(Ams_Voltage3);
+            sbyte tempValue = (sbyte)ExtractBits(cell_offset);
             // Apply inverse transform to restore actual value
-            tempValue  /= 1000;
-            tempValue  -= 0;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
-        public void SetAms_Voltage3(UInt16 value)
+        public void Setcell_offset(sbyte value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 1000;
+            value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_Voltage3, (UInt64)value);
+            this.InsertBits(cell_offset, (UInt64)value);
+        }
+        public static readonly CanSignalType voltage_1 = CanSignalTypes.AmsCellVoltages__voltage_1;
+        public float Getvoltage_1()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(voltage_1);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153815976336f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setvoltage_1(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153815976336f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_1, (UInt64)value);
+        }
+        public static readonly CanSignalType voltage_2 = CanSignalTypes.AmsCellVoltages__voltage_2;
+        public float Getvoltage_2()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(voltage_2);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153846153318f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setvoltage_2(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153846153318f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_2, (UInt64)value);
+        }
+        public static readonly CanSignalType voltage_3 = CanSignalTypes.AmsCellVoltages__voltage_3;
+        public float Getvoltage_3()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(voltage_3);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153846153318f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setvoltage_3(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153846153318f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_3, (UInt64)value);
+        }
+        public static readonly CanSignalType voltage_4 = CanSignalTypes.AmsCellVoltages__voltage_4;
+        public float Getvoltage_4()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(voltage_4);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153846153318f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setvoltage_4(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153846153318f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_4, (UInt64)value);
+        }
+        public static readonly CanSignalType voltage_5 = CanSignalTypes.AmsCellVoltages__voltage_5;
+        public float Getvoltage_5()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(voltage_5);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153846153318f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setvoltage_5(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153846153318f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_5, (UInt64)value);
+        }
+        public static readonly CanSignalType voltage_6 = CanSignalTypes.AmsCellVoltages__voltage_6;
+        public float Getvoltage_6()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(voltage_6);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153846153318f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setvoltage_6(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153846153318f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_6, (UInt64)value);
+        }
+        public static readonly CanSignalType voltage_7 = CanSignalTypes.AmsCellVoltages__voltage_7;
+        public float Getvoltage_7()
+        {
+            // Get bits from raw data storage and cast
+            float tempValue = (float)ExtractBits(voltage_7);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 196.153846153318f;
+            tempValue  -= -2.9f;
+            return tempValue;
+        }
+        
+        public void Setvoltage_7(float value)
+        {
+            // Scale and offset value according to signal specification
+            value += -2.9f;
+            value *= 196.153846153318f;
+            // Cats to integer and prepare for sending
+            this.InsertBits(voltage_7, (UInt64)value);
         }
     }
     
     
-    public class AmsCellTemperaturesMessage : CanMessage<AmsCellTemperaturesMessage>
+    public class AmsThermistorTemperaturesMessage : CanMessage<AmsThermistorTemperaturesMessage>
     {
-        public AmsCellTemperaturesMessage()
+        public AmsThermistorTemperaturesMessage()
         {
-            MessageType = CanMessageTypes.AmsCellTemperatures;
+            MessageType = CanMessageTypes.AmsThermistorTemperatures;
         }
-        public static readonly CanSignalType Ams_Temp3 = CanSignalTypes.AmsCellTemperatures__Ams_Temp3;
-        public UInt16 GetAms_Temp3()
+        public static readonly CanSignalType thermistor_offset = CanSignalTypes.AmsThermistorTemperatures__thermistor_offset;
+        public sbyte Getthermistor_offset()
         {
             // Get bits from raw data storage and cast
-            UInt16 tempValue = (UInt16)ExtractBits(Ams_Temp3);
+            sbyte tempValue = (sbyte)ExtractBits(thermistor_offset);
             // Apply inverse transform to restore actual value
-            tempValue  /= 100;
-            tempValue  -= 0;
+            tempValue  *= 1;
+            tempValue  += 0;
             return tempValue;
         }
         
-        public void SetAms_Temp3(UInt16 value)
+        public void Setthermistor_offset(sbyte value)
         {
             // Scale and offset value according to signal specification
-            value += 0;
-            value *= 100;
+            value -= 0;
+            value /= 1;
             // Cats to integer and prepare for sending
-            this.InsertBits(Ams_Temp3, (UInt64)value);
+            this.InsertBits(thermistor_offset, (UInt64)value);
+        }
+        public static readonly CanSignalType temperature_1 = CanSignalTypes.AmsThermistorTemperatures__temperature_1;
+        public sbyte Gettemperature_1()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(temperature_1);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 2;
+            tempValue  -= 20;
+            return tempValue;
+        }
+        
+        public void Settemperature_1(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value += 20;
+            value *= 2;
+            // Cats to integer and prepare for sending
+            this.InsertBits(temperature_1, (UInt64)value);
+        }
+        public static readonly CanSignalType temperature_2 = CanSignalTypes.AmsThermistorTemperatures__temperature_2;
+        public sbyte Gettemperature_2()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(temperature_2);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 2;
+            tempValue  -= 20;
+            return tempValue;
+        }
+        
+        public void Settemperature_2(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value += 20;
+            value *= 2;
+            // Cats to integer and prepare for sending
+            this.InsertBits(temperature_2, (UInt64)value);
+        }
+        public static readonly CanSignalType temperature_3 = CanSignalTypes.AmsThermistorTemperatures__temperature_3;
+        public sbyte Gettemperature_3()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(temperature_3);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 2;
+            tempValue  -= 20;
+            return tempValue;
+        }
+        
+        public void Settemperature_3(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value += 20;
+            value *= 2;
+            // Cats to integer and prepare for sending
+            this.InsertBits(temperature_3, (UInt64)value);
+        }
+        public static readonly CanSignalType temperature_4 = CanSignalTypes.AmsThermistorTemperatures__temperature_4;
+        public sbyte Gettemperature_4()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(temperature_4);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 2;
+            tempValue  -= 20;
+            return tempValue;
+        }
+        
+        public void Settemperature_4(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value += 20;
+            value *= 2;
+            // Cats to integer and prepare for sending
+            this.InsertBits(temperature_4, (UInt64)value);
+        }
+        public static readonly CanSignalType temperature_5 = CanSignalTypes.AmsThermistorTemperatures__temperature_5;
+        public sbyte Gettemperature_5()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(temperature_5);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 2;
+            tempValue  -= 20;
+            return tempValue;
+        }
+        
+        public void Settemperature_5(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value += 20;
+            value *= 2;
+            // Cats to integer and prepare for sending
+            this.InsertBits(temperature_5, (UInt64)value);
+        }
+        public static readonly CanSignalType temperature_6 = CanSignalTypes.AmsThermistorTemperatures__temperature_6;
+        public sbyte Gettemperature_6()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(temperature_6);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 2;
+            tempValue  -= 20;
+            return tempValue;
+        }
+        
+        public void Settemperature_6(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value += 20;
+            value *= 2;
+            // Cats to integer and prepare for sending
+            this.InsertBits(temperature_6, (UInt64)value);
+        }
+        public static readonly CanSignalType temperature_7 = CanSignalTypes.AmsThermistorTemperatures__temperature_7;
+        public sbyte Gettemperature_7()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(temperature_7);
+            // Apply inverse transform to restore actual value
+            tempValue  /= 2;
+            tempValue  -= 20;
+            return tempValue;
+        }
+        
+        public void Settemperature_7(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value += 20;
+            value *= 2;
+            // Cats to integer and prepare for sending
+            this.InsertBits(temperature_7, (UInt64)value);
         }
     }
     
@@ -9421,6 +10125,62 @@ namespace testNS
             value /= 1;
             // Cats to integer and prepare for sending
             this.InsertBits(pe_fl_nmt, (UInt64)value);
+        }
+    }
+    
+    
+    public class FrontNodeRequestsMessage : CanMessage<FrontNodeRequestsMessage>
+    {
+        public FrontNodeRequestsMessage()
+        {
+            MessageType = CanMessageTypes.FrontNodeRequests;
+        }
+        public static readonly CanSignalType fn_request = CanSignalTypes.FrontNodeRequests__fn_request;
+        public sbyte Getfn_request()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(fn_request);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setfn_request(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(fn_request, (UInt64)value);
+        }
+    }
+    
+    
+    public class FrontNodeStatusMessage : CanMessage<FrontNodeStatusMessage>
+    {
+        public FrontNodeStatusMessage()
+        {
+            MessageType = CanMessageTypes.FrontNodeStatus;
+        }
+        public static readonly CanSignalType fn_state = CanSignalTypes.FrontNodeStatus__fn_state;
+        public sbyte Getfn_state()
+        {
+            // Get bits from raw data storage and cast
+            sbyte tempValue = (sbyte)ExtractBits(fn_state);
+            // Apply inverse transform to restore actual value
+            tempValue  *= 1;
+            tempValue  += 0;
+            return tempValue;
+        }
+        
+        public void Setfn_state(sbyte value)
+        {
+            // Scale and offset value according to signal specification
+            value -= 0;
+            value /= 1;
+            // Cats to integer and prepare for sending
+            this.InsertBits(fn_state, (UInt64)value);
         }
     }
     

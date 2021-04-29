@@ -27,22 +27,26 @@ namespace CanDB.CodeGenerationExtensions
 
             foreach (var CanSignalType in canMessageType.Signals.Values)
             {
+                string floatException = ""; // This is used to append 'f' for float literals
+                if (CanSignalType.Type == SignalType.Float)
+                    floatException = "f";
+
                 stringBuilder.AppendLine(n * (1 + o), $"public static readonly CanSignalType {CanSignalType.Name} = CanSignalTypes.{CanSignalType.QualifiedName.Replace(".", "__")};");
                 stringBuilder.AppendLine(n * (1 + o), $"public {CanSignalType.GetTypeName()} Get{CanSignalType.Name}()");
                 stringBuilder.AppendLine(n * (1 + o), $"{{");
                 stringBuilder.AppendLine(n * (2 + o), $"// Get bits from raw data storage and cast");
                 stringBuilder.AppendLine(n * (2 + o), $"{CanSignalType.GetTypeName()} tempValue = ({CanSignalType.GetTypeName()})ExtractBits({CanSignalType.Name});");
                 stringBuilder.AppendLine(n * (2 + o), $"// Apply inverse transform to restore actual value");
-                stringBuilder.AppendLine(n * (2 + o), $"tempValue  {CanSignalType.GetMultiplierOperator()};");
-                stringBuilder.AppendLine(n * (2 + o), $"tempValue  {CanSignalType.GetAdditionOperator()};");
+                stringBuilder.AppendLine(n * (2 + o), $"tempValue  {CanSignalType.GetMultiplierOperator() + floatException};");
+                stringBuilder.AppendLine(n * (2 + o), $"tempValue  {CanSignalType.GetAdditionOperator() + floatException};");
                 stringBuilder.AppendLine(n * (2 + o), $"return tempValue;");
                 stringBuilder.AppendLine(n * (1 + o), $"}}");
                 stringBuilder.AppendLine(n * (1 + o), $"");
                 stringBuilder.AppendLine(n * (1 + o), $"public void Set{CanSignalType.Name}({CanSignalType.GetTypeName()} value)");
                 stringBuilder.AppendLine(n * (1 + o), $"{{");
                 stringBuilder.AppendLine(n * (2 + o), $"// Scale and offset value according to signal specification");
-                stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetSubtractionOperator()};");
-                stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetDivisionOperator()};");
+                stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetSubtractionOperator() + floatException};");
+                stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetDivisionOperator() + floatException};");
                 stringBuilder.AppendLine(n * (2 + o), $"// Cats to integer and prepare for sending");
                 stringBuilder.AppendLine(n * (2 + o), $"this.InsertBits({CanSignalType.Name}, (UInt64)value);");
                 stringBuilder.AppendLine(n * (1 + o), $"}}");

@@ -28,39 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgvActivityIndicator = new System.Windows.Forms.DataGridView();
+            this.components = new System.ComponentModel.Container();
             this.btn_OpenBridge = new System.Windows.Forms.Button();
             this.dgv_stLinks = new System.Windows.Forms.DataGridView();
             this.btnEnumerate = new System.Windows.Forms.Button();
             this.cbSpeed = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.nudPollTime = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvActivityIndicator)).BeginInit();
+            this.timerUiUpdate = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_stLinks)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPollTime)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPollTime)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dgvActivityIndicator
-            // 
-            this.dgvActivityIndicator.AllowUserToAddRows = false;
-            this.dgvActivityIndicator.AllowUserToDeleteRows = false;
-            this.dgvActivityIndicator.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvActivityIndicator.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvActivityIndicator.Location = new System.Drawing.Point(3, 141);
-            this.dgvActivityIndicator.Name = "dgvActivityIndicator";
-            this.dgvActivityIndicator.ReadOnly = true;
-            this.dgvActivityIndicator.Size = new System.Drawing.Size(348, 73);
-            this.dgvActivityIndicator.TabIndex = 0;
             // 
             // btn_OpenBridge
             // 
+            this.btn_OpenBridge.Enabled = false;
             this.btn_OpenBridge.Location = new System.Drawing.Point(270, 3);
             this.btn_OpenBridge.Name = "btn_OpenBridge";
             this.btn_OpenBridge.Size = new System.Drawing.Size(75, 48);
@@ -71,13 +60,18 @@
             // 
             // dgv_stLinks
             // 
+            this.dgv_stLinks.AllowUserToAddRows = false;
+            this.dgv_stLinks.AllowUserToDeleteRows = false;
+            this.dgv_stLinks.AllowUserToResizeRows = false;
             this.dgv_stLinks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dgv_stLinks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_stLinks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_stLinks.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgv_stLinks.Location = new System.Drawing.Point(3, 63);
+            this.dgv_stLinks.MultiSelect = false;
             this.dgv_stLinks.Name = "dgv_stLinks";
             this.dgv_stLinks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_stLinks.Size = new System.Drawing.Size(348, 72);
+            this.dgv_stLinks.Size = new System.Drawing.Size(348, 151);
             this.dgv_stLinks.TabIndex = 4;
             // 
             // btnEnumerate
@@ -108,6 +102,36 @@
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.dgv_stLinks, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(354, 217);
+            this.tableLayoutPanel1.TabIndex = 10;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btn_OpenBridge);
+            this.panel1.Controls.Add(this.nudPollTime);
+            this.panel1.Controls.Add(this.btnEnumerate);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.cbSpeed);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(348, 54);
+            this.panel1.TabIndex = 5;
             // 
             // nudPollTime
             // 
@@ -149,36 +173,9 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Baudrate [kbit/s]";
             // 
-            // tableLayoutPanel1
+            // timerUiUpdate
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.dgvActivityIndicator, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.dgv_stLinks, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(354, 217);
-            this.tableLayoutPanel1.TabIndex = 10;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btn_OpenBridge);
-            this.panel1.Controls.Add(this.nudPollTime);
-            this.panel1.Controls.Add(this.btnEnumerate);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.cbSpeed);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(348, 54);
-            this.panel1.TabIndex = 5;
+            this.timerUiUpdate.Tick += new System.EventHandler(this.timerUiUpdate_Tick);
             // 
             // CanBridgeControl
             // 
@@ -188,20 +185,17 @@
             this.MinimumSize = new System.Drawing.Size(360, 0);
             this.Name = "CanBridgeControl";
             this.Size = new System.Drawing.Size(360, 236);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvActivityIndicator)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_stLinks)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudPollTime)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPollTime)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView dgvActivityIndicator;
         private System.Windows.Forms.Button btn_OpenBridge;
         private System.Windows.Forms.DataGridView dgv_stLinks;
         private System.Windows.Forms.Button btnEnumerate;
@@ -212,5 +206,6 @@
         private System.Windows.Forms.NumericUpDown nudPollTime;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Timer timerUiUpdate;
     }
 }

@@ -58,10 +58,8 @@ STLinkBridgeWrapperCpp::!STLinkBridgeWrapperCpp()
 	// Disconnect
 	if (Bridge != NULL)
 	{
-        if (TransmissionRunning)
-            StopTransmission();
-		Bridge->CloseBridge(COM_UNDEF_ALL);
-		Bridge->CloseStlink();
+        CloseBridge();
+
 		delete Bridge;
 		Bridge = NULL;
 	}
@@ -72,6 +70,16 @@ STLinkBridgeWrapperCpp::!STLinkBridgeWrapperCpp()
 		delete sTLinkInterface;
 		sTLinkInterface = NULL;
 	}
+}
+
+void STLinkBridgeWrapperCpp::CloseBridge()
+{
+    if (TransmissionRunning)
+        StopTransmission();
+    Bridge->CloseBridge(COM_UNDEF_ALL);
+    Bridge->CloseStlink();
+    //delete Bridge;
+    //Bridge = NULL;
 }
 
 
@@ -185,7 +193,7 @@ Brg_StatusT STLinkBridgeWrapperCpp::OpenBridge(DeviceInfo^ device)
     }
 
     // Open the STLink connection
-    Bridge->SetOpenModeExclusive(true);
+    Bridge->SetOpenModeExclusive(true); // TODO: Research exclusive mode and consider setting to false
 
 	char* tempChar = (char*)(void*)Marshal::StringToHGlobalAnsi(device->EnumUniqueId);
     BridgeStatus = Bridge->OpenStlink(tempChar, true);
@@ -524,7 +532,6 @@ Brg_StatusT STLinkBridgeWrapperCpp::StopTransmission()
 
     TransmissionRunning = false;
     NotifyTransmissionChanged();
-
 
     return BridgeStatus;
 }

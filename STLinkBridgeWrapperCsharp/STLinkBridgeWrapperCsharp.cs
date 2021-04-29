@@ -19,7 +19,19 @@ namespace STLinkBridgeWrapper
         public event EventHandler CanTransmissionStatusChanged;
         public event EventHandler<CanMessageReceivedEventArgs> CanMessageReceived;
         protected Timer CanPollingTimer = new Timer();
-        
+
+        /// <summary>
+        /// This property sets the target number of CAN messages in the buffer
+        /// for each poll. If the number of messages in the buffer exceed this
+        /// value, the poll rate will be increased.
+        /// </summary>
+        public int TargetMessageBufferUsage { get; set; } = 15;
+
+        public double CurrentPollInterval
+        {
+            get { return CanPollingTimer.Interval; }
+        }
+
         public STLinkBridgeWrapper()
         {
             CanPollingTimer.Elapsed += CanPollingTimer_Elapsed;
@@ -47,9 +59,15 @@ namespace STLinkBridgeWrapper
         {
             var receivedMessages = CanRead();
 
+            if (receivedMessages.Count > TargetMessageBufferUsage)
+                CanPollingTimer.Interval /= 1.2;
+
             CanMessageReceivedEventArgs canMessageReceivedEventArgs = new CanMessageReceivedEventArgs();
-            // TODO: Increase sample rate if there are too many messages in the buffer
+
+
             // Check for overrun
+            // Note: This code deos not seem to work because of an issue in the firmware of the STLink.
+            // This code is kept for future possibilties of using it. 
             foreach (var message in receivedMessages)
             {
                 if (message.OverrunBuffer || message.Fifo) 
