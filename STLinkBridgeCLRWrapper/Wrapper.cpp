@@ -409,7 +409,7 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanInit(uint32_t RequestedBaudrate, Brg_CanI
     return BridgeStatus;
 }
 
-Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanBridgeMessageRx^>^% results)
+Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanMessage^>^% results, [Out] bool OverrunDetected)
 {
     // Perform safety checks
     if (Bridge == NULL)
@@ -430,27 +430,30 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanBridgeMessageRx^>^% 
     Brg_CanRxMsgT msg;
     uint8_t data[8]; // Allocate enough space. Note that some might go unused, depending on how many DLCs are used.
     uint16_t numberOfReceivedDataBytes;
+    
 
     for (int i = 0; i < canMsgNum; i++)
     {
         BridgeStatus = Bridge->GetRxMsgCAN(&msg, 1, data, 8, &numberOfReceivedDataBytes); // Fetch one message at a time
         Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
-        CanBridgeMessageRx^ tempMessage = gcnew CanBridgeMessageRx();
+        if ((msg.Overrun != CAN_RX_NO_OVERRUN))
+        {
+            OverrunDetected = true;
+        }
+
+        CanMessage^ tempMessage = gcnew CanMessage();
         tempMessage->CanTimeStamp  =  msg.TimeStamp;
         tempMessage->DLC           =  msg.DLC;
-        tempMessage->ID            =  msg.ID;
+        tempMessage->Id            =  msg.ID;
         tempMessage->Fifo          = (msg.Fifo    == CAN_MSG_RX_FIFO1    ? true : false);
         tempMessage->IdExtended    = (msg.IDE     == CAN_ID_EXTENDED     ? true : false);
-        tempMessage->OverrunBuffer = (msg.Overrun == CAN_RX_BUFF_OVERRUN ? true : false);
-        tempMessage->OverrunFIFO   = (msg.Overrun == CAN_RX_FIFO_OVERRUN ? true : false);
         tempMessage->RTR           = (msg.RTR     == CAN_REMOTE_FRAME    ? true : false);
-        tempMessage->TimeStamp     =  System::DateTime::Now.Ticks;
 
         // Copy data using a temporary holder
         uint64_t tempData;
         memcpy((uint8_t*)&(tempData), data, msg.DLC);
-        tempMessage->data = tempData;
+        tempMessage->Data = tempData;
 
         results->Add(tempMessage);
     }
@@ -458,11 +461,11 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanBridgeMessageRx^>^% 
     return BridgeStatus;
 }
 
-Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanBridgeMessageTx^ message)
+Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanMessage^ message)
 {
     Brg_CanTxMsgT tempMessage;
     tempMessage.IDE = message->IdExtended ? CAN_ID_EXTENDED : CAN_ID_STANDARD;
-    tempMessage.ID  = message->ID;
+    tempMessage.ID  = message->Id;
     tempMessage.RTR = message->RTR ? CAN_REMOTE_FRAME : CAN_DATA_FRAME;
     tempMessage.DLC = message->DLC;
 
@@ -470,7 +473,7 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanBridgeMessageTx^ message)
     uint8_t* dataArray = new uint8_t[tempMessage.DLC];
 
     // Copy data to array
-    uint64_t tempData = message->data;
+    uint64_t tempData = message->Data;
     memcpy(dataArray, (uint8_t*)&tempData, tempMessage.DLC);
 
     // Write message

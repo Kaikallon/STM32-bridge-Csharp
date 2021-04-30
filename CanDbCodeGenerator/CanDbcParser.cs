@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using CanDefinitions;
 
-namespace CanDB
+
+namespace CanDbCodeGenerator
 {
     // Note: This library does not support signal multiplexing
 

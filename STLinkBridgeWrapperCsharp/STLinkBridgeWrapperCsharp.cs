@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using CanDefinitions;
 
 namespace STLinkBridgeWrapper
 {
     public class CanMessageReceivedEventArgs : EventArgs
     {
-        public List<CanBridgeMessageRx> ReceivedMessages { get; set; } = new List<CanBridgeMessageRx>();
+        public List<CanMessage> ReceivedMessages { get; set; } = new List<CanMessage>();
         public bool BufferOverrunDetected { get; set; } = false;
     }
 
@@ -57,38 +58,34 @@ namespace STLinkBridgeWrapper
 
         private void CanPollingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            var receivedMessages = CanRead();
-
-            if (receivedMessages.Count > TargetMessageBufferUsage)
-                CanPollingTimer.Interval /= 1.05;
-
-            CanMessageReceivedEventArgs canMessageReceivedEventArgs = new CanMessageReceivedEventArgs();
-
+            List<CanMessage> receivedMessages = new List<CanMessage>();
 
             // Check for overrun
-            // Note: This code deos not seem to work because of an issue in the firmware of the STLink.
+            // Note: Overrun detection does not seem to work because of an issue in the firmware of the STLink.
             // This code is kept for future possibilties of using it. 
-            foreach (var message in receivedMessages)
-            {
-                if (message.OverrunBuffer || message.Fifo) 
-                {
-                    CanPollingTimer.Interval /= 1.2; // Polling was too slow. Poll faster
-                    canMessageReceivedEventArgs.BufferOverrunDetected = true;
-                }
-            }
+            bool OverrunDetected = false;
+            base.CanReadLL(out receivedMessages, OverrunDetected);
+
+            if ((receivedMessages.Count > TargetMessageBufferUsage) || OverrunDetected)
+                CanPollingTimer.Interval /= 1.05;
 
             if (receivedMessages.Count > 0)
             {
-                canMessageReceivedEventArgs.ReceivedMessages = receivedMessages;
+                CanMessageReceivedEventArgs canMessageReceivedEventArgs = new CanMessageReceivedEventArgs()
+                {
+                    BufferOverrunDetected = OverrunDetected,
+                    ReceivedMessages = receivedMessages,
+                };
                 //CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
                 CanMessageReceived?.Invoke(this, canMessageReceivedEventArgs);
             }
         }
 
-        public List<CanBridgeMessageRx> CanRead()
+        public List<CanMessage> CanRead()
         {
-            List<CanBridgeMessageRx> receivedMessages = new List<CanBridgeMessageRx>(); ;
-            base.CanReadLL(out receivedMessages);
+            List<CanMessage> receivedMessages = new List<CanMessage>();
+            bool OverrunDetected = false;
+            base.CanReadLL(out receivedMessages, OverrunDetected);
             return receivedMessages;
         }
 

@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CanDB;
+using CanDefinitions;
 
 namespace testNS
 {
@@ -27,7 +27,7 @@ namespace testNS
                 Type type;
                 if (CanMessageMap.TryGetValue((int)canMessage.ID, out type))
                 {
-                    CanMessage instance = (CanMessage)Activator.CreateInstance(type);
+                    CanMessageExtended instance = (CanMessageExtended)Activator.CreateInstance(type);
                     instance.Data = canMessage.data;
                     instance.SystemTimeStamp = DateTime.Now.Ticks;
                     instance.NotifySubscribers();

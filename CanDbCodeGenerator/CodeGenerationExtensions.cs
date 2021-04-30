@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CanDefinitions;
 
 /// <summary>
 /// In this namespace are a number of extensions methods that are useful for 
 /// generating code.
 /// </summary>
-namespace CanDB.CodeGenerationExtensions
+namespace CanDbCodeGenerator.CodeGenerationExtensions
 {
     public static class CanDbCSharpCodeGeneration
     {

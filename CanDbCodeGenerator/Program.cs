@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using CanDB;
-using CanDB.CodeGenerationExtensions;
+using CanDefinitions;
+using CanDbCodeGenerator.CodeGenerationExtensions;
 
 namespace CanDbCodeGenerator
 {
@@ -41,7 +41,7 @@ namespace CanDbCodeGenerator
             // Set culture info to invariant. This is important for handling decimal separators as dots
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-            var canDatabase = CanDB.CanDbcParser.OpenCanDB(canDbcLocation);
+            var canDatabase = CanDbcParser.OpenCanDB(canDbcLocation);
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileNameAndPath))
             {
@@ -69,7 +69,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CanDB;
+using CanDefinitions;
 
 ");
 

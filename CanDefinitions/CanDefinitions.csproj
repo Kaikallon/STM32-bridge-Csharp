@@ -7,8 +7,8 @@
     <ProjectGuid>{FEE5CB1F-CC58-42B1-8665-F407CBD5843A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CanDB</RootNamespace>
-    <AssemblyName>CanDB</AssemblyName>
+    <RootNamespace>CanDefinitions</RootNamespace>
+    <AssemblyName>CanDefinitions</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -43,11 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanDbcParser.cs" />
     <Compile Include="CanDbTypes.cs" />
     <Compile Include="CanMessage.cs" />
     <Compile Include="CanMessageReceiver.cs" />
-    <Compile Include="CoodeGenerationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CanDB;
+using CanDefinitions;
 using STLinkBridgeWrapper;
 using System.Diagnostics;
 using System.Reflection;
@@ -18,8 +18,8 @@ namespace WinFormsControls
     {
         #region Storage
 
-        readonly Dictionary<int, CanActivityDisplayData> ReceivedDataSummary = new Dictionary<int, CanActivityDisplayData>();
-        public Dictionary<int, CanMessageType> CanMessagesDatabase { get; set; }
+        readonly Dictionary<UInt32, CanActivityDisplayData> ReceivedDataSummary = new Dictionary<UInt32, CanActivityDisplayData>();
+        public Dictionary<UInt32, CanMessageType> CanMessagesDatabase { get; set; }
         public STLinkBridgeWrapper.STLinkBridgeWrapper StLinkBridge { get; private set; }
 
         /// <summary>
@@ -53,16 +53,16 @@ namespace WinFormsControls
             //nudPollTime.Value = (decimal)StLinkBridge.CurrentPollInterval;
         }
 
-        private void AddMessageToActivityIndicator(CanBridgeMessageRx receivedMessage)
+        private void AddMessageToActivityIndicator(CanMessage receivedMessage)
         {
-            int id = (int)receivedMessage.ID;
+            UInt32 id = receivedMessage.Id;
             if (ReceivedDataSummary.ContainsKey(id))
             {
                 CanActivityDisplayData temp = ReceivedDataSummary[id];
                 temp.Count++;
-                temp.Data = receivedMessage.data;
+                temp.Data = receivedMessage.Data;
                 temp.Length = receivedMessage.DLC;
-                temp.RcvTime = new DateTime(receivedMessage.TimeStamp);
+                temp.RcvTime = new DateTime(receivedMessage.SystemTimeStamp);
             }
             else
             {
@@ -70,9 +70,9 @@ namespace WinFormsControls
                 {
                     Id = id,
                     Type = CanMessagesDatabase[id]?.Name,
-                    Data = receivedMessage.data,
+                    Data = receivedMessage.Data,
                     Length = receivedMessage.DLC,
-                    RcvTime = new DateTime(receivedMessage.TimeStamp),
+                    RcvTime = new DateTime(receivedMessage.SystemTimeStamp),
                 });
             }
         }
@@ -209,9 +209,9 @@ namespace WinFormsControls
         #endregion
     }
 
-    public class CanActivityDisplayData
+    class CanActivityDisplayData
     {
-        public int Id { get; set; }
+        public UInt32 Id { get; set; }
         public string Type { get; set; }      = "";
         public int Length { get; set; }       = 0;
         public int Count { get; set; }        = 1;

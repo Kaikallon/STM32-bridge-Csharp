@@ -8,7 +8,7 @@ namespace WinFormsControls
 {
     public interface ICanAdapter
     {
-        void Broadcast(CanDB.CanMessage message);
+        void Broadcast(CanDefinitions.CanMessage message);
         event EventHandler<STLinkBridgeWrapper.CanMessageReceivedEventArgs> CanMessageReceived;
 
 

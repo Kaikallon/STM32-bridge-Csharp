@@ -181,6 +181,11 @@
   <ItemGroup>
     <None Include="..\Dependencies\STLinkUSBDriver.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CanDB\CanDefinitions.csproj">
+      <Project>{fee5cb1f-cc58-42b1-8665-f407cbd5843a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

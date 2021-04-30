@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CanDB
+namespace CanDefinitions
 {
     public interface ICanSignal
     {
@@ -74,23 +74,49 @@ namespace CanDB
         }
     }
 
-    public abstract class CanMessage
-    {
-        public int            ID                        { get; set; }
-        public UInt64         Data                      { get; set; }
-        public UInt16         CanTimeStamp              { get; set; }
-        public Int64          SystemTimeStamp           { get; set; } = DateTime.Now.Ticks;
-        public static CanMessageType MessageType        { get; protected set; } 
 
-        public void InsertBits(CanSignalType signal, UInt64 bits)
+    public class CanMessage
+    {
+        public bool           IdExtended         { get; set; }     // Specifies if ID is standard (11-bit) or extended (29-bit) identifier.
+
+        public UInt32         Id                 { get; set; }     // Identifier of the message (11bit or 29bit according to IDE).
+        public bool           RTR                { get; set; }     // Remote Frame Request or data frame message type.
+        public byte           DLC                { get; set; }     // Data Length Code is the number of data bytes in the received message 
+                                                                   // or number of data bytes requested by RTR.
+        public bool           Fifo               { get; set; }     // Fifo in which the message was received (according to Filter initialization)
+        public UInt64         Data               { get; set; }     // Raw data for transport on the bus
+        public UInt16         CanTimeStamp       { get; set; }     
+        public Int64          SystemTimeStamp    { get; set; } = DateTime.Now.Ticks; // Computer time at receival
+
+        public void InsertBits(int startBit, UInt64 bitmask, UInt64 bits)
         {
             // Get the bits, trim and shift according to specification
-            bits <<= signal.StartBit;
-            bits &= signal.BitMask; // Trim
+            bits <<= startBit;
+            bits &= bitmask; // Trim
 
             // Add to payload
             Data |= bits;
         }
+
+        public UInt64 ExtractBits(int startBit, UInt64 bitmask)
+        {
+            // TODO: Check if the bitmask has been calculated
+            // Isolate relevant bits using precalculated bitmask
+            UInt64 bits = Data;
+            bits &= bitmask;
+
+            // Shift back to original state according to specification
+            bits >>= startBit;
+
+            return bits;
+        }
+    }
+
+    public abstract class CanMessageExtended : CanMessage
+    {
+        abstract public void NotifySubscribers();
+
+        public static CanMessageType MessageType { get; protected set; }
 
         public UInt64 ExtractBits(CanSignalType signal)
         {
@@ -98,21 +124,17 @@ namespace CanDB
             {
                 throw new Exception("Motorola byte order not supported");
             }
-            // TODO: Check if the bitmask has been calculated
-            // Isolate relevant bits using precalculated bitmask
-            UInt64 bits = Data;
-            bits &= signal.BitMask;
-
-            // Shift back to original state according to specification
-            bits >>= signal.StartBit;
-
-            return bits;
+            return ExtractBits(signal.StartBit, signal.BitMask);
         }
 
-        abstract public void NotifySubscribers();
+        public void InsertBits(CanSignalType signal, UInt64 bits)
+        {
+            InsertBits(signal.StartBit, signal.BitMask, bits);
+        }
+
     }
 
-    public abstract class CanMessage<T> : CanMessage where T : CanMessage<T>
+    public abstract class CanMessageExtended<T> : CanMessageExtended where T : CanMessageExtended<T>
     {
         public static event EventHandler<CanMessageReceivedEventArgs<T>> CanMessageReceived;
         override public void NotifySubscribers()
@@ -147,7 +169,7 @@ namespace CanDB
         public T ReceivedMessage { get; set; }
     }
 
-    class TestMessage : CanMessage<TestMessage>
+    class TestMessage : CanMessageExtended<TestMessage>
     {
         public readonly CanSignalType CanSignal = new CanSignalType
         {

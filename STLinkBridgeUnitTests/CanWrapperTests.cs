@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using STLinkBridgeWrapper;
 using System.Linq;
 using System.Diagnostics;
-using CanDB;
+using CanDefinitions;
 
 namespace STLinkBridgeUnitTests
 {
