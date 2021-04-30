@@ -85,7 +85,6 @@ namespace CanDefinitions
                                                                    // or number of data bytes requested by RTR.
         public bool           Fifo               { get; set; }     // Fifo in which the message was received (according to Filter initialization)
         public UInt64         Data               { get; set; }     // Raw data for transport on the bus
-        public UInt16         CanTimeStamp       { get; set; }     
         public Int64          SystemTimeStamp    { get; set; } = DateTime.Now.Ticks; // Computer time at receival
 
         public void InsertBits(int startBit, UInt64 bitmask, UInt64 bits)

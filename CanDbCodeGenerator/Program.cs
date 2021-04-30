@@ -24,6 +24,9 @@ namespace CanDbCodeGenerator
             string canDbcLocation = args[0];
             string fileNameAndPath = args[1];
             string nameSpace = args[2];
+            string receivingNode = "";
+            if (args.Length > 3)
+                receivingNode = args[3];
 
             System.IO.FileInfo fileInfo = null;
             try
@@ -42,17 +45,33 @@ namespace CanDbCodeGenerator
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
             var canDatabase = CanDbcParser.OpenCanDB(canDbcLocation);
+            var canMessageTypes = new List<CanMessageType>();
+            if (receivingNode != "")
+            {
+                // Filter our CanMessageTypes that are relevant for this receiveing node
+                foreach (var canMessageType in canDatabase.CanMessageTypes.Values)
+                {
+                    if (canMessageType.Signals.Any(x => x.Value.ReceivingNodes.Contains(receivingNode)))
+                    {
+                        canMessageTypes.Add(canMessageType);
+                    }
+                }
+            }
+            else
+            {
+                canMessageTypes = canDatabase.CanMessageTypes.Values.ToList();
+            }
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileNameAndPath))
             {
-                string code = GenerateCanMessageTypesCode(canDatabase.CanMessageTypes, nameSpace);
+                string code = GenerateCanMessageTypesCode(canMessageTypes, nameSpace);
                 file.Write(code);
             }
         }
         // TODO: Modify code such that the CanMessageReceiver class is not static. 
         // The constructor should enforce setting the event listener
         // TODO: Make generated classes partial such that they can be extended
-        private static string GenerateCanMessageTypesCode(Dictionary<int, CanMessageType> canMessageTypes, string namespaceName)
+        private static string GenerateCanMessageTypesCode(IEnumerable<CanMessageType> canMessageTypes, string namespaceName)
         {
             const int n = 4;
             int o = 0;
@@ -73,38 +92,42 @@ using CanDefinitions;
 
 ");
 
-            string canMessageReceiverBody = GenerateMessageReceiverBody(canMessageTypes.Values);
-            string canMessageReceiverClass = CanDbCSharpCodeGeneration.GenerateClass("public static", "CanMessageReceiver", canMessageReceiverBody);
+            string canMessageReceiverBody = GenerateMessageReceiverBody(canMessageTypes);
+            string canMessageReceiverClass = CanDbCSharpCodeGeneration.GenerateClass("public static partial", "CanMessageReceiver", canMessageReceiverBody);
 
-            string canMessageTypesBody = GenerateCanMessageTypesBody(canMessageTypes.Values);
-            string canMessageTypesClass = CanDbCSharpCodeGeneration.GenerateClass("public static", "CanMessageTypes", canMessageTypesBody);
+            string canMessageTypesBody = GenerateCanMessageTypesBody(canMessageTypes);
+            string canMessageTypesClass = CanDbCSharpCodeGeneration.GenerateClass("public static partial", "CanMessageTypes", canMessageTypesBody);
 
-            IEnumerable<CanSignalType> allSignals = canMessageTypes.Values.SelectMany(x => x.Signals.Values);
+            IEnumerable<CanSignalType> allSignals = canMessageTypes.SelectMany(x => x.Signals.Values);
             string canSignalTypesBody = GenerateCanSignalTypesTypesBody(allSignals);
-            string canSignalTypesClass = CanDbCSharpCodeGeneration.GenerateClass("public static", "CanSignalTypes", canSignalTypesBody);
+            string canSignalTypesClass = CanDbCSharpCodeGeneration.GenerateClass("public static partial", "CanSignalTypes", canSignalTypesBody);
 
             var classes = new List<string>
             {
                 canMessageReceiverClass,
                 canMessageTypesClass,
                 canSignalTypesClass,
-                GenerateCanExtractionAndInsertionCode(canMessageTypes)
+                
             };
-            string nameSpace = CanDbCSharpCodeGeneration.GenerateNameSpace(namespaceName, classes);
+            string nameSpaceBase = CanDbCSharpCodeGeneration.GenerateNameSpace(namespaceName, classes);
+            string nameSpaceMessages = CanDbCSharpCodeGeneration.GenerateNameSpace(namespaceName + ".Messages", 
+                new List<string> { GenerateCanExtractionAndInsertionCode(canMessageTypes) });
 
-            stringBuilder.Append(nameSpace);
-            
-            
+
+            stringBuilder.Append(nameSpaceBase);
+            stringBuilder.Append(nameSpaceMessages);
+
+
             return stringBuilder.ToString();
         }
 
 
 
 
-        private static string GenerateCanExtractionAndInsertionCode(Dictionary<int, CanMessageType> canMessageTypes)
+        private static string GenerateCanExtractionAndInsertionCode(IEnumerable<CanMessageType> canMessageTypes)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (var CanMessageType in canMessageTypes.Values)
+            foreach (var CanMessageType in canMessageTypes)
             {
                 stringBuilder.Append(CanDbCSharpCodeGeneration.GenerateMessageCode(CanMessageType, 1));
             }
@@ -199,7 +222,7 @@ using CanDefinitions;
                 StringBuilder canMessageNotification = new StringBuilder();
                 canMessageNotification.AppendLine(n * (2 + o), $"if (canMessage.Id == CanMessageTypes.{canMessageType.Name}.Id)");
                 canMessageNotification.AppendLine(n * (2 + o), $"{{");
-                canMessageNotification.AppendLine(n * (3 + o), $"{canMessageType.Name}Message message = new {canMessageType.Name}Message();");
+                canMessageNotification.AppendLine(n * (3 + o), $"Messages.{canMessageType.Name}Message message = new Messages.{canMessageType.Name}Message();");
                 canMessageNotification.AppendLine(n * (3 + o), $"message.Data = canMessage.Data;");
                 canMessageNotification.AppendLine(n * (3 + o), $"message.NotifySubscribers();");
                 canMessageNotification.AppendLine(n * (2 + o), $"}}");

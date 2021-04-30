@@ -35,6 +35,7 @@ BS_:
 
 BU_: IVT AmsClient Ams PE_FR PE_FL PE_RR FrontNode PE_RL RearNode
 
+
 BO_ 1 GpsState: 1 RearNode
  SG_ gps_ok : 0|1@1+ (1,0) [0|0] ""  RearNode
 
@@ -96,108 +97,108 @@ BO_ 191 RearNodeStatus: 4 RearNode
  SG_ rn_state : 0|8@1+ (1,0) [0|0] ""  FrontNode
 
 BO_ 161 AccumulatorStackErrors: 1 Ams
- SG_ stack6_errors : 5|1@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack5_errors : 4|1@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack4_errors : 3|1@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack3_errors : 2|1@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack2_errors : 1|1@1+ (1,0) [0|0] ""  FrontNode
- SG_ stack1_errors : 0|1@1+ (1,0) [0|0] ""  FrontNode
+ SG_ stack6_errors : 5|1@1+ (1,0) [0|0] ""  FrontNode,AmsClient
+ SG_ stack5_errors : 4|1@1+ (1,0) [0|0] ""  FrontNode,AmsClient
+ SG_ stack4_errors : 3|1@1+ (1,0) [0|0] ""  FrontNode,AmsClient
+ SG_ stack3_errors : 2|1@1+ (1,0) [0|0] ""  FrontNode,AmsClient
+ SG_ stack2_errors : 1|1@1+ (1,0) [0|0] ""  FrontNode,AmsClient
+ SG_ stack1_errors : 0|1@1+ (1,0) [0|0] ""  FrontNode,AmsClient
 
 BO_ 1320 IVT_Msg_Result_Wh: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_Wh : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_Wh : 16|32@1- (1,0) [0|0] ""  Ams
- SG_ IVT_MuxID_Wh : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_Wh : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_Wh : 16|32@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_MuxID_Wh : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 1318 IVT_Msg_Result_W: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_W : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_W : 16|32@1- (1,0) [0|0] ""  Ams
- SG_ IVT_MuxID_W : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_W : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_W : 16|32@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_MuxID_W : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 241 AmsClientStatus: 1 AmsClient
  SG_ AmsClient_Trigger_Ams : 0|1@1+ (1,0) [0|0] ""  Ams
  SG_ AmsClient_Start_TS : 1|1@1+ (1,0) [0|255] ""  Ams
 
 BO_ 168 PrechargeProgress: 3 Ams
- SG_ time_progress : 0|8@1+ (1,0) [0|100] "%"  FrontNode
- SG_ fail_air1_open : 17|1@1+ (1,0) [0|0] "flag"  FrontNode
- SG_ fail_timeout : 18|1@1+ (1,0) [0|0] "flag"  FrontNode
- SG_ succeeded : 16|1@1+ (1,0) [0|0] "flag"  FrontNode
- SG_ voltage_progress : 8|8@1+ (1,0) [0|100] "%" Vector__XXX
- SG_ fail_sdc_open : 19|1@1+ (1,0) [0|0] "flag" Vector__XXX
- SG_ fail_air2_open : 20|1@1+ (1,0) [0|0] "" Vector__XXX
- SG_ fail_communication : 21|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ time_progress : 0|8@1+ (1,0) [0|100] "%"  FrontNode,AmsClient
+ SG_ fail_air1_open : 17|1@1+ (1,0) [0|0] "flag"  FrontNode,AmsClient
+ SG_ fail_timeout : 18|1@1+ (1,0) [0|0] "flag"  FrontNode,AmsClient
+ SG_ succeeded : 16|1@1+ (1,0) [0|0] "flag"  FrontNode,AmsClient
+ SG_ voltage_progress : 8|8@1+ (1,0) [0|100] "%"  AmsClient
+ SG_ fail_sdc_open : 19|1@1+ (1,0) [0|0] "flag"  AmsClient
+ SG_ fail_air2_open : 20|1@1+ (1,0) [0|0] ""  AmsClient
+ SG_ fail_communication : 21|1@1+ (1,0) [0|0] ""  AmsClient
 
 BO_ 175 AmsStatus: 3 Ams
- SG_ Ams_Accumulator_SoC : 8|8@1+ (1,0) [0|255] ""  FrontNode
- SG_ ams_state : 0|8@1+ (1,0) [0|3] ""  FrontNode
- SG_ ams_relay_closed : 16|1@1+ (1,0) [0|0] "" Vector__XXX
- SG_ imd_relay_closed : 17|1@1+ (1,0) [0|0] "" Vector__XXX
- SG_ safestate_relay_closed : 18|1@1+ (1,0) [0|0] "" Vector__XXX
- SG_ bspd_relay_closed : 19|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Ams_Accumulator_SoC : 8|8@1+ (1,0) [0|255] ""  FrontNode,AmsClient
+ SG_ ams_state : 0|8@1+ (1,0) [0|3] ""  FrontNode,AmsClient
+ SG_ ams_relay_closed : 16|1@1+ (1,0) [0|0] ""  AmsClient
+ SG_ imd_relay_closed : 17|1@1+ (1,0) [0|0] ""  AmsClient
+ SG_ safestate_relay_closed : 18|1@1+ (1,0) [0|0] ""  AmsClient
+ SG_ bspd_relay_closed : 19|1@1+ (1,0) [0|0] ""  AmsClient
 
 BO_ 167 AccumulatorMinMaxTemperatures: 7 Ams
- SG_ avg_temperature : 8|8@1- (1,0) [0|0] "" Vector__XXX
- SG_ min_temp : 40|16@1- (0.01,0) [0|655.35] ""  FrontNode
- SG_ min_temp_thermistor_index : 32|8@1+ (1,0) [0|255] ""  FrontNode
- SG_ max_temp : 16|16@1- (0.01,0) [0|655.35] ""  FrontNode
- SG_ max_temp_thermistor_index : 0|8@1+ (1,0) [0|255] ""  FrontNode
+ SG_ avg_temperature : 8|8@1- (1,0) [0|0] ""  AmsClient
+ SG_ min_temp : 40|16@1- (0.01,0) [0|655.35] ""  FrontNode,AmsClient
+ SG_ min_temp_thermistor_index : 32|8@1+ (1,0) [0|255] ""  FrontNode,AmsClient
+ SG_ max_temp : 16|16@1- (0.01,0) [0|655.35] ""  FrontNode,AmsClient
+ SG_ max_temp_thermistor_index : 0|8@1+ (1,0) [0|255] ""  FrontNode,AmsClient
 
 BO_ 166 AccumulatorMinMaxVoltages: 7 Ams
- SG_ avg_voltage : 0|8@1- (0.00509804,2.9) [2.9|4.2] "" Vector__XXX
- SG_ min_voltage : 40|16@1- (0.001,0) [0|65.535] ""  FrontNode
- SG_ min_voltage_cell_index : 32|8@1+ (1,0) [0|137] ""  FrontNode
- SG_ max_voltage : 16|16@1- (0.001,0) [0|65.535] ""  FrontNode
- SG_ max_voltage_cell_index : 8|8@1+ (1,0) [0|137] ""  FrontNode
+ SG_ avg_voltage : 0|8@1- (0.00509804,2.9) [2.9|4.2] ""  AmsClient
+ SG_ min_voltage : 40|16@1- (0.001,0) [0|65.535] ""  FrontNode,AmsClient
+ SG_ min_voltage_cell_index : 32|8@1+ (1,0) [0|137] ""  FrontNode,AmsClient
+ SG_ max_voltage : 16|16@1- (0.001,0) [0|65.535] ""  FrontNode,AmsClient
+ SG_ max_voltage_cell_index : 8|8@1+ (1,0) [0|137] ""  FrontNode,AmsClient
 
 BO_ 163 AmsCellVoltages: 8 Ams
- SG_ cell_offset M : 0|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ voltage_1 : 8|8@1- (0.00509804,2.9) [2.9|4.2] "Volt" Vector__XXX
- SG_ voltage_2 : 16|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
- SG_ voltage_3 : 24|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
- SG_ voltage_4 : 32|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
- SG_ voltage_5 : 40|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
- SG_ voltage_6 : 48|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
- SG_ voltage_7 : 56|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt" Vector__XXX
+ SG_ cell_offset M : 0|8@1+ (1,0) [0|0] ""  AmsClient
+ SG_ voltage_1 : 8|8@1- (0.00509804,2.9) [2.9|4.2] "Volt"  AmsClient
+ SG_ voltage_2 : 16|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt"  AmsClient
+ SG_ voltage_3 : 24|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt"  AmsClient
+ SG_ voltage_4 : 32|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt"  AmsClient
+ SG_ voltage_5 : 40|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt"  AmsClient
+ SG_ voltage_6 : 48|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt"  AmsClient
+ SG_ voltage_7 : 56|8@1- (0.0050980392157,2.9) [2.9|4.2] "Volt"  AmsClient
 
 BO_ 162 AmsThermistorTemperatures: 8 Ams
- SG_ thermistor_offset : 0|8@1+ (1,0) [0|0] "" Vector__XXX
- SG_ temperature_1 : 8|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
- SG_ temperature_2 : 16|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
- SG_ temperature_3 : 24|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
- SG_ temperature_4 : 32|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
- SG_ temperature_5 : 40|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
- SG_ temperature_6 : 48|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
- SG_ temperature_7 : 56|8@1+ (0.5,-20) [-20|107.5] "Celsius" Vector__XXX
+ SG_ thermistor_offset : 0|8@1+ (1,0) [0|0] ""  AmsClient
+ SG_ temperature_1 : 8|8@1+ (0.5,-20) [-20|107.5] "Celsius"  AmsClient
+ SG_ temperature_2 : 16|8@1+ (0.5,-20) [-20|107.5] "Celsius"  AmsClient
+ SG_ temperature_3 : 24|8@1+ (0.5,-20) [-20|107.5] "Celsius"  AmsClient
+ SG_ temperature_4 : 32|8@1+ (0.5,-20) [-20|107.5] "Celsius"  AmsClient
+ SG_ temperature_5 : 40|8@1+ (0.5,-20) [-20|107.5] "Celsius"  AmsClient
+ SG_ temperature_6 : 48|8@1+ (0.5,-20) [-20|107.5] "Celsius"  AmsClient
+ SG_ temperature_7 : 56|8@1+ (0.5,-20) [-20|107.5] "Celsius"  AmsClient
 
 BO_ 1316 IVT_Msg_Result_U3: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_U3 : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_U3 : 16|32@1- (0.001,0) [-32000|32000] ""  Ams
- SG_ IVT_MuxID_U3 : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_U3 : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_U3 : 16|32@1- (0.001,0) [-32000|32000] ""  Ams,AmsClient
+ SG_ IVT_MuxID_U3 : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 1315 IVT_Msg_Result_U2: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_U2 : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_U2 : 16|32@1- (0.001,0) [-32000|32000] ""  Ams
- SG_ IVT_MuxID_U2 : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_U2 : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_U2 : 16|32@1- (0.001,0) [-32000|32000] ""  Ams,AmsClient
+ SG_ IVT_MuxID_U2 : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 1314 IVT_Msg_Result_U1: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_U1 : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_U1 : 16|32@1- (0.001,0) [-32000|32000] ""  Ams
- SG_ IVT_MuxID_U1 : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_U1 : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_U1 : 16|32@1- (0.001,0) [-32000|32000] ""  Ams,AmsClient
+ SG_ IVT_MuxID_U1 : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 1317 IVT_Msg_Result_T: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_T : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_T : 16|32@1- (0.1,0) [-214748364.8|214748364.7] ""  Ams
- SG_ IVT_MuxID_T : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_T : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_T : 16|32@1- (0.1,0) [-214748364.8|214748364.7] ""  Ams,AmsClient
+ SG_ IVT_MuxID_T : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 1313 IVT_Msg_Result_I: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_I : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_I : 16|32@1- (0.001,0) [-32000|32000] ""  Ams
- SG_ IVT_MuxID_I : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_I : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_I : 16|32@1- (0.001,0) [-32000|32000] ""  Ams,AmsClient
+ SG_ IVT_MuxID_I : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 1319 IVT_Msg_Result_As: 6 IVT
- SG_ IVT_ResultState_And_MsgCount_As : 8|8@1- (1,0) [0|0] ""  Ams
- SG_ IVT_Result_As : 16|32@1- (0.001,0) [-2147483.648|2147483.647] ""  Ams
- SG_ IVT_MuxID_As : 0|8@1+ (1,0) [0|0] ""  Ams
+ SG_ IVT_ResultState_And_MsgCount_As : 8|8@1- (1,0) [0|0] ""  Ams,AmsClient
+ SG_ IVT_Result_As : 16|32@1- (0.001,0) [-2147483.648|2147483.647] ""  Ams,AmsClient
+ SG_ IVT_MuxID_As : 0|8@1+ (1,0) [0|0] ""  Ams,AmsClient
 
 BO_ 179 PowerElectronicsErrors: 8 RearNode
  SG_ pe_rr_errors : 48|16@1- (1,0) [0|0] ""  FrontNode

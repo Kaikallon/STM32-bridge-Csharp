@@ -443,7 +443,6 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanMessage^>^% results,
         }
 
         CanMessage^ tempMessage = gcnew CanMessage();
-        tempMessage->CanTimeStamp  =  msg.TimeStamp;
         tempMessage->DLC           =  msg.DLC;
         tempMessage->Id            =  msg.ID;
         tempMessage->Fifo          = (msg.Fifo    == CAN_MSG_RX_FIFO1    ? true : false);
