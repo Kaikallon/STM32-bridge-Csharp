@@ -19,12 +19,12 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(n * (0 + o), $"");
 
-            stringBuilder.AppendLine(n * (0 + o), $"public class {canMessageType.Name }Message : CanMessage<{canMessageType.Name }Message>");
+            stringBuilder.AppendLine(n * (0 + o), $"public class {canMessageType.Name }Message : CanMessageExtended<{canMessageType.Name }Message>");
             stringBuilder.AppendLine(n * (0 + o), $"{{");
             stringBuilder.AppendLine(n * (1 + o), $"public {canMessageType.Name }Message()");
             stringBuilder.AppendLine(n * (1 + o), $"{{");
             stringBuilder.AppendLine(n * (2 + o), $"MessageType = CanMessageTypes.{canMessageType.Name};");
-            stringBuilder.AppendLine(n * (2 + o), $"ID = {canMessageType.ID};");
+            stringBuilder.AppendLine(n * (2 + o), $"Id = {canMessageType.Id};");
             stringBuilder.AppendLine(n * (1 + o), $"}}");
 
             foreach (var CanSignalType in canMessageType.Signals.Values)
@@ -109,7 +109,7 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
             stringBuilder.AppendLine(n * (0 + o), $"{{");
             stringBuilder.AppendLine(n * (1 + o), $"Comment       = \"{canMessageType.Comment        }\",");
             stringBuilder.AppendLine(n * (1 + o), $"DLC           =   {canMessageType.DLC.ToString() },");
-            stringBuilder.AppendLine(n * (1 + o), $"ID            =   {canMessageType.ID.ToString()  },");
+            stringBuilder.AppendLine(n * (1 + o), $"Id            =   {canMessageType.Id.ToString()  },");
             stringBuilder.AppendLine(n * (1 + o), $"Name          = \"{canMessageType.Name           }\",");
             stringBuilder.AppendLine(n * (1 + o), $"QualifiedName = \"{canMessageType.QualifiedName  }\",");
             stringBuilder.AppendLine(n * (1 + o), $"SendingNode   = \"{canMessageType.SendingNode    }\",");

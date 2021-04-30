@@ -45,7 +45,7 @@ namespace CanDbCodeGenerator
                 if (enumerator.Current.StartsWith("BO_"))
                 {
                     CanMessageType temp = ParseDbcMessageDefinition(enumerator);
-                    canDatabaseType.CanMessageTypes.Add(temp.ID, temp);
+                    canDatabaseType.CanMessageTypes.Add(temp.Id, temp);
                 }
                 if (enumerator.Current.StartsWith("CM_"))
                     ParseDbcCommentField(enumerator.Current, canDatabaseType.CanMessageTypes);
@@ -100,7 +100,7 @@ namespace CanDbCodeGenerator
 
             int id;
             if (Int32.TryParse(segments[1], out id))
-                canMessageType.ID = id;
+                canMessageType.Id = id;
             // TODO: Handle the else-part. What should we do if the parsing fails?
 
             string name = segments[2].TrimEnd(':');

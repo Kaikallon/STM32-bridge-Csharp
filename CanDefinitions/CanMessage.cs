@@ -184,7 +184,7 @@ namespace CanDefinitions
         {
             MessageType = new CanMessageType
             {
-                ID = 305419896,
+                Id = 305419896,
                 DLC = 4,
                 //Flags = MESSAGE.EXT,
                 Name = "TestMessage1",

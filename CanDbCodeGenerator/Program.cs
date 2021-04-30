@@ -197,11 +197,10 @@ using CanDefinitions;
             string GenerateNotificationCode(CanMessageType canMessageType)
             {
                 StringBuilder canMessageNotification = new StringBuilder();
-                canMessageNotification.AppendLine(n * (2 + o), $"if (canMessage.ID == CanMessageTypes.{canMessageType.Name}.ID)");
+                canMessageNotification.AppendLine(n * (2 + o), $"if (canMessage.Id == CanMessageTypes.{canMessageType.Name}.Id)");
                 canMessageNotification.AppendLine(n * (2 + o), $"{{");
                 canMessageNotification.AppendLine(n * (3 + o), $"{canMessageType.Name}Message message = new {canMessageType.Name}Message();");
-                canMessageNotification.AppendLine(n * (3 + o), $"message.Data = canMessage.data;");
-                canMessageNotification.AppendLine(n * (3 + o), $"message.SystemTimeStamp = DateTime.Now.Ticks;");
+                canMessageNotification.AppendLine(n * (3 + o), $"message.Data = canMessage.Data;");
                 canMessageNotification.AppendLine(n * (3 + o), $"message.NotifySubscribers();");
                 canMessageNotification.AppendLine(n * (2 + o), $"}}");
 
@@ -220,7 +219,7 @@ using CanDefinitions;
             canMessageTypesBody.AppendLine(n * (0 + o), $"{{");
             foreach (var canMessageType in canMessageTypes)
             {
-                canMessageTypesBody.AppendLine(n * (1 + o), $"AllCanMessageTypes.Add({canMessageType.ID}, {canMessageType.Name});");
+                canMessageTypesBody.AppendLine(n * (1 + o), $"AllCanMessageTypes.Add({canMessageType.Id}, {canMessageType.Name});");
             }
             canMessageTypesBody.AppendLine(n * (0 + o), $"}}");
             canMessageTypesBody.AppendLine(n * (0 + o), $"");

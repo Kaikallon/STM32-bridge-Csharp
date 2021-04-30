@@ -42,7 +42,7 @@ namespace CanDefinitions
         public string Name { get; set; } = "";
         public string QualifiedName { get; set; } = "";
         public string Comment { get; set; } = "";
-        public int ID { get; set; }
+        public int Id { get; set; }
         //public MESSAGE Flags { get; set; }
         public int DLC { get; set; }
 

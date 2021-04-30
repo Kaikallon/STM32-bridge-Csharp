@@ -57,7 +57,7 @@ namespace STLinkBridgeUnitTests
 
             var ReceivedMessages = wrapper.CanRead();
             var listOfMessages = new SortedList<uint, CanMessageType>();
-            listOfMessages.Add((uint)canMessage.ID, canMessage);
+            listOfMessages.Add((uint)canMessage.Id, canMessage);
             //var dataPoints = CanDB.CanDbcParser.ParseReceivedCanMessagesRx(ReceivedMessages, listOfMessages);
 
             //Assert.AreEqual(3, dataPoints.Count);
@@ -148,7 +148,7 @@ namespace STLinkBridgeUnitTests
             };
             return new CanMessageType(signals)
             {
-                ID = 305419896,
+                Id = 305419896,
                 DLC = 4,
                 //Flags = MESSAGE.EXT,
                 Name = "TestMessage1",
