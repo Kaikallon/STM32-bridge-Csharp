@@ -510,7 +510,7 @@ namespace testNS
             AllCanMessageTypes.Add(300, PrechargeRequest);
         }
         
-        public static Dictionary<int, CanMessageType> AllCanMessageTypes = new Dictionary<int, CanMessageType>();
+        public static Dictionary<UInt32, CanMessageType> AllCanMessageTypes = new Dictionary<UInt32, CanMessageType>();
         
         public static CanMessageType GpsState = new CanMessageType(new List<CanSignalType>{
                 CanSignalTypes.GpsState__gps_ok,

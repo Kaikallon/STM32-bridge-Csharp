@@ -223,7 +223,7 @@ using CanDefinitions;
             }
             canMessageTypesBody.AppendLine(n * (0 + o), $"}}");
             canMessageTypesBody.AppendLine(n * (0 + o), $"");
-            canMessageTypesBody.AppendLine(n * (0 + o), $"public static Dictionary<int, CanMessageType> AllCanMessageTypes = new Dictionary<int, CanMessageType>();");
+            canMessageTypesBody.AppendLine(n * (0 + o), $"public static Dictionary<UInt32, CanMessageType> AllCanMessageTypes = new Dictionary<UInt32, CanMessageType>();");
             canMessageTypesBody.AppendLine(n * (0 + o), $"");
 
 
