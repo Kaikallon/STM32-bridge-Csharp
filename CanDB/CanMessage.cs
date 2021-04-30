@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace CanDB
 {
-    //public static class Receiver
-    //{
-    //    static void MessageReceived(CanMessage canMessage)
-    //    {
-    //
-    //    }
-    //}
-
     public interface ICanSignal
     {
         UInt64 ExtractBits(CanSignalType signal);
@@ -82,7 +74,7 @@ namespace CanDB
         }
     }
 
-    public abstract class CanMessage<T> where T : CanMessage<T>
+    public abstract class CanMessage
     {
         public int            ID                        { get; set; }
         public UInt64         Data                      { get; set; }
@@ -117,9 +109,13 @@ namespace CanDB
             return bits;
         }
 
+        abstract public void NotifySubscribers();
+    }
 
+    public abstract class CanMessage<T> : CanMessage where T : CanMessage<T>
+    {
         public static event EventHandler<CanMessageReceivedEventArgs<T>> CanMessageReceived;
-        public void NotifySubscribers()
+        override public void NotifySubscribers()
         {
             CanMessageReceivedEventArgs<T> canMessageReceivedEventArgs = new CanMessageReceivedEventArgs<T>();
             canMessageReceivedEventArgs.ReceivedMessage = (T)this;
@@ -127,6 +123,8 @@ namespace CanDB
             CanMessageReceived?.Invoke(this, canMessageReceivedEventArgs); // TODO: Consider changing to BeginInvoke to utilize multiple threads
             //CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
         }
+
+        // TODO: Investigate if something like this should be implemented
         //protected void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
         //{
         //    var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
@@ -144,12 +142,12 @@ namespace CanDB
         //}
     }
 
-    public class CanMessageReceivedEventArgs<T> where T : CanMessage<T>
+    public class CanMessageReceivedEventArgs<T> where T : CanMessage
     {
         public T ReceivedMessage { get; set; }
     }
 
-    public class TestMessage : CanMessage<TestMessage>
+    class TestMessage : CanMessage<TestMessage>
     {
         public readonly CanSignalType CanSignal = new CanSignalType
         {

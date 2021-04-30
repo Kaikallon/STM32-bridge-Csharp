@@ -35,11 +35,13 @@ namespace WinFormsControls
             cbSpeed.DataSource = new List<uint> { 1000, 750, 500, 250, 125, 100 };
             cbSpeed.SelectedIndex = 0;
             StLinkBridge.CanTransmissionStatusChanged += StLinkBridge_CanTransmissionStatusChanged;
-            dgv_stLinks.SelectionChanged += Dgv_stLinks_SelectionChanged;
+            dgv_stLinks.SelectionChanged += dgv_stLinks_SelectionChanged;
+            StLinkBridge.CanMessageReceived += StLinkBridge_CanMessageReceived;
+
+
+            // Populate datagrid
             btnEnumerate_Click(this, null);
         }
-
-
 
         public void PerformPeriodicUiUpdate()
         {
@@ -82,7 +84,6 @@ namespace WinFormsControls
                 throw new Exception("No STLink device found");
 
             Brg_StatusT bridgeStatus = StLinkBridge.OpenBridge(selectedDevice);
-            StLinkBridge.CanMessageReceived += StLinkBridge_CanMessageReceived;
 
             Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
 
@@ -142,6 +143,7 @@ namespace WinFormsControls
         {
             if (!StLinkBridge.TransmissionRunning)
             {
+                ReceivedDataSummary.Clear();
                 // Open bridge
                 if (dgv_stLinks.CurrentRow != null)
                 {
@@ -158,6 +160,8 @@ namespace WinFormsControls
             else
             {
                 // Close bridge
+                StLinkBridge.StopTransmission();
+                System.Threading.Thread.Sleep(100); // TODO: This is a bit hacky, but seems to be enough to ensure that any ongoing polling is finished. Better would be to wait for a flag or something
                 StLinkBridge.CloseBridge();
             }
             
@@ -192,7 +196,7 @@ namespace WinFormsControls
             // TODO: Consider enumerating devices periodically
         }
 
-        private void Dgv_stLinks_SelectionChanged(object sender, EventArgs e)
+        private void dgv_stLinks_SelectionChanged(object sender, EventArgs e)
         {
             if (!StLinkBridge.TransmissionRunning)
             {

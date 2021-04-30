@@ -222,7 +222,7 @@ using CanDB;
             {
                 canMessageTypesBody.AppendLine(n * (1 + o), $"AllCanMessageTypes.Add({canMessageType.ID}, {canMessageType.Name});");
             }
-             canMessageTypesBody.AppendLine(n * (0 + o), $"}}");
+            canMessageTypesBody.AppendLine(n * (0 + o), $"}}");
             canMessageTypesBody.AppendLine(n * (0 + o), $"");
             canMessageTypesBody.AppendLine(n * (0 + o), $"public static Dictionary<int, CanMessageType> AllCanMessageTypes = new Dictionary<int, CanMessageType>();");
             canMessageTypesBody.AppendLine(n * (0 + o), $"");

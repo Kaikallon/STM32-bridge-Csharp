@@ -39,7 +39,7 @@
             this.canBridgeControl.MinimumSize = new System.Drawing.Size(360, 0);
             this.canBridgeControl.Name = "canBridgeControl";
             this.canBridgeControl.RefreshTime = ((long)(300));
-            this.canBridgeControl.Size = new System.Drawing.Size(544, 305);
+            this.canBridgeControl.Size = new System.Drawing.Size(544, 453);
             this.canBridgeControl.TabIndex = 0;
             // 
             // Form1

@@ -141,16 +141,11 @@
             0,
             0});
             this.nudPollTime.Location = new System.Drawing.Point(114, 20);
-            this.nudPollTime.Minimum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
             this.nudPollTime.Name = "nudPollTime";
             this.nudPollTime.Size = new System.Drawing.Size(69, 20);
             this.nudPollTime.TabIndex = 9;
             this.nudPollTime.Value = new decimal(new int[] {
-            100,
+            50,
             0,
             0,
             0});
@@ -175,6 +170,7 @@
             // 
             // timerUiUpdate
             // 
+            this.timerUiUpdate.Interval = 200;
             this.timerUiUpdate.Tick += new System.EventHandler(this.timerUiUpdate_Tick);
             // 
             // CanBridgeControl

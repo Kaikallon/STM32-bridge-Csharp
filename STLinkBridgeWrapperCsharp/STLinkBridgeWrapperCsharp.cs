@@ -25,7 +25,7 @@ namespace STLinkBridgeWrapper
         /// for each poll. If the number of messages in the buffer exceed this
         /// value, the poll rate will be increased.
         /// </summary>
-        public int TargetMessageBufferUsage { get; set; } = 15;
+        public int TargetMessageBufferUsage { get; set; } = 50;
 
         public double CurrentPollInterval
         {
@@ -60,7 +60,7 @@ namespace STLinkBridgeWrapper
             var receivedMessages = CanRead();
 
             if (receivedMessages.Count > TargetMessageBufferUsage)
-                CanPollingTimer.Interval /= 1.2;
+                CanPollingTimer.Interval /= 1.05;
 
             CanMessageReceivedEventArgs canMessageReceivedEventArgs = new CanMessageReceivedEventArgs();
 
@@ -100,6 +100,14 @@ namespace STLinkBridgeWrapper
         new public bool TransmissionRunning
         {
             get { return base.TransmissionRunning; }
+        }
+
+        new public Brg_StatusT CloseBridge()
+        {
+            if (TransmissionRunning)
+                StopTransmission();
+            base.CloseBridge();
+            return this.BridgeStatus;
         }
 
 

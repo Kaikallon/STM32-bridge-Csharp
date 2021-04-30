@@ -411,10 +411,15 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanInit(uint32_t RequestedBaudrate, Brg_CanI
 
 Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanBridgeMessageRx^>^% results)
 {
+    // Perform safety checks
     if (Bridge == NULL)
-    {
         throw gcnew Exception("Error: Bridge not initialized.");
-    }
+
+    //uint32_t numDevices;
+    //BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices(&numDevices, false)); // Calling a EnumDevices seems to be a hack in order to get the lates status
+    //
+    //if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
+    //    return BridgeStatus;
 
     // Get the number of available messages
     uint16_t canMsgNum;

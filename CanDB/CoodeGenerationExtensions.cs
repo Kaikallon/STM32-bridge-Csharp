@@ -23,6 +23,7 @@ namespace CanDB.CodeGenerationExtensions
             stringBuilder.AppendLine(n * (1 + o), $"public {canMessageType.Name }Message()");
             stringBuilder.AppendLine(n * (1 + o), $"{{");
             stringBuilder.AppendLine(n * (2 + o), $"MessageType = CanMessageTypes.{canMessageType.Name};");
+            stringBuilder.AppendLine(n * (2 + o), $"ID = {canMessageType.ID};");
             stringBuilder.AppendLine(n * (1 + o), $"}}");
 
             foreach (var CanSignalType in canMessageType.Signals.Values)

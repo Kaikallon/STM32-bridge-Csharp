@@ -46,6 +46,7 @@
     <Compile Include="CanDbcParser.cs" />
     <Compile Include="CanDbTypes.cs" />
     <Compile Include="CanMessage.cs" />
+    <Compile Include="CanMessageReceiver.cs" />
     <Compile Include="CoodeGenerationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
