@@ -47,7 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CanDB\CanDefinitions.csproj">
+    <ProjectReference Include="..\CanDefinitions\CanDefinitions.csproj">
       <Project>{fee5cb1f-cc58-42b1-8665-f407cbd5843a}</Project>
       <Name>CanDefinitions</Name>
     </ProjectReference>

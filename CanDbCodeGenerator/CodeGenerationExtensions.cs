@@ -13,7 +13,7 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
 {
     public static class CanDbCSharpCodeGeneration
     {
-
+        
         public static string GenerateMessageCode(CanMessageType canMessageType, int o, int n = 4)
         {
             StringBuilder stringBuilder = new StringBuilder();

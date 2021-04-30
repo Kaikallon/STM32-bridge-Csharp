@@ -61,7 +61,7 @@
       <Project>{c5d7aef9-a300-4236-9b62-3ea97f854a4e}</Project>
       <Name>CanDbCodeGenerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CanDB\CanDefinitions.csproj">
+    <ProjectReference Include="..\CanDefinitions\CanDefinitions.csproj">
       <Project>{fee5cb1f-cc58-42b1-8665-f407cbd5843a}</Project>
       <Name>CanDefinitions</Name>
     </ProjectReference>

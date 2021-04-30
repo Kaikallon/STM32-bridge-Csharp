@@ -53,8 +53,8 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CanDB\CanDefinitions.csproj">
-      <Project>{FEE5CB1F-CC58-42B1-8665-F407CBD5843A}</Project>
+    <ProjectReference Include="..\CanDefinitions\CanDefinitions.csproj">
+      <Project>{fee5cb1f-cc58-42b1-8665-f407cbd5843a}</Project>
       <Name>CanDefinitions</Name>
     </ProjectReference>
     <ProjectReference Include="..\STLinkBridgeCLRWrapper\STLinkBridgeCLRWrapper.vcxproj">

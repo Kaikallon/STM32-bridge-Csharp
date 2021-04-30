@@ -47,7 +47,7 @@ namespace STLinkBridgeUnitTests
             double value2 =  1.4;
             double value3 =  5;
             //var message = canMessage.GenerateCanMessageTx((signal1, value1), (signal2, value2), (signal3, value3));
-            var message = new CanBridgeMessageTx();
+            var message = new CanMessage();
 
 
             wrapper.CanWriteLL(message);
