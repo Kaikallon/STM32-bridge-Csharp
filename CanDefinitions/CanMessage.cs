@@ -163,6 +163,12 @@ namespace CanDefinitions
         //}
     }
 
+    public class CanMessageReceivedEventArgs : EventArgs
+    {
+        public List<CanMessage> ReceivedMessages { get; set; } = new List<CanMessage>();
+        public bool BufferOverrunDetected { get; set; } = false;
+    }
+
     public class CanMessageReceivedEventArgs<T> where T : CanMessage
     {
         public T ReceivedMessage { get; set; }

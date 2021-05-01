@@ -24,7 +24,7 @@ namespace CanDefinitions
         public string Name { get; set; } = "";
         public Dictionary<int, CanMessageType> CanMessageTypes { get; private set; } = new Dictionary<int, CanMessageType>();
         public HashSet<string> Nodes { get; private set; } = new HashSet<string>();
-        //public HashSet<string> Buses { get; private set; } = new HashSet<string>();
+        public HashSet<string> Buses { get; private set; } = new HashSet<string>();
     }
     public class CanMessageType
     {

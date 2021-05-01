@@ -8,7 +8,7 @@ namespace CanDefinitions
 {
     class CanMessageReceiver
     {
-        //public static void CanMessageReceivedCallback(object sender, STLinkBridgeWrapper.CanMessageReceivedEventArgs e)
+        //public static void CanMessageReceivedCallback(object sender, CanMessageReceivedEventArgs e)
         //{
         //    foreach (var canMessage in e.ReceivedMessages)
         //    {
