@@ -46,6 +46,7 @@
     <Compile Include="CanDbTypes.cs" />
     <Compile Include="CanMessage.cs" />
     <Compile Include="CanMessageReceiver.cs" />
+    <Compile Include="ICanNetworkConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
