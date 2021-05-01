@@ -113,6 +113,26 @@ namespace CanDefinitions
 
     public abstract class CanMessageExtended : CanMessage
     {
+        //public CanMessageExtended(CanMessage canMessage)
+        //{
+        //    this.Data            = canMessage.Data;
+        //    this.DLC             = canMessage.DLC;
+        //    this.Fifo            = canMessage.Fifo;
+        //    this.Id              = canMessage.Id;
+        //    this.RTR             = canMessage.RTR;
+        //    this.SystemTimeStamp = canMessage.SystemTimeStamp;
+        //}
+
+        public void SetFields(CanMessage canMessage)
+        {
+            this.Data            = canMessage.Data;
+            this.DLC             = canMessage.DLC;
+            this.Fifo            = canMessage.Fifo;
+            this.Id              = canMessage.Id;
+            this.RTR             = canMessage.RTR;
+            this.SystemTimeStamp = canMessage.SystemTimeStamp;
+        }
+
         abstract public void NotifySubscribers();
 
         public static CanMessageType MessageType { get; protected set; }
@@ -163,11 +183,6 @@ namespace CanDefinitions
         //}
     }
 
-    public class CanMessageReceivedEventArgs : EventArgs
-    {
-        public List<CanMessage> ReceivedMessages { get; set; } = new List<CanMessage>();
-        public bool BufferOverrunDetected { get; set; } = false;
-    }
 
     public class CanMessageReceivedEventArgs<T> where T : CanMessage
     {
