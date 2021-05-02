@@ -51,7 +51,11 @@ namespace CanDbCodeGenerator
                 // Filter our CanMessageTypes that are relevant for this receiveing node
                 foreach (var canMessageType in canDatabase.CanMessageTypes.Values)
                 {
-                    if (canMessageType.Signals.Any(x => x.Value.ReceivingNodes.Contains(receivingNode)))
+                    if (canMessageType.SendingNode == receivingNode)
+                    {
+                        canMessageTypes.Add(canMessageType);
+                    }
+                    else if (canMessageType.Signals.Any(x => x.Value.ReceivingNodes.Contains(receivingNode)))
                     {
                         canMessageTypes.Add(canMessageType);
                     }

@@ -82,27 +82,6 @@ void STLinkBridgeWrapperCpp::CloseBridge()
     //Bridge = NULL;
 }
 
-
-Brg_StatusT STLinkBridgeWrapperCpp::InitBridge(DeviceInfo^ device)
-{
-	Console::WriteLine("Is StLink connected?: " + Bridge->GetIsStlinkConnected().ToString());
-	BridgeStatus = OpenBridge(device);
-	Console::WriteLine(BridgeStatus.ToString());
-	Console::WriteLine("Is StLink connected?: " + Bridge->GetIsStlinkConnected().ToString());
-	Console::WriteLine("");
-
-	float result;
-	BridgeStatus = TestVoltage(result);
-	Console::WriteLine(result.ToString());
-	Console::WriteLine("");
-
-	TestGetClock();
-	Console::WriteLine(BridgeStatus.ToString());
-	Console::WriteLine("");
-
-	return BridgeStatus;
-}
-
 STLinkIf_StatusT STLinkBridgeWrapperCpp::GetInterfaceStatus()
 {
     return this->InterfaceStatus;
@@ -435,11 +414,12 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanMessage^>^% results,
     for (int i = 0; i < canMsgNum; i++)
     {
         BridgeStatus = Bridge->GetRxMsgCAN(&msg, 1, data, 8, &numberOfReceivedDataBytes); // Fetch one message at a time
-        Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
+        //Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
         if ((msg.Overrun != CAN_RX_NO_OVERRUN))
         {
             OverrunDetected = true;
+            continue;
         }
 
         CanMessage^ tempMessage = gcnew CanMessage();
@@ -460,6 +440,71 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanMessage^>^% results,
     return BridgeStatus;
 }
 
+Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL2([Out] List<CanMessage^>^% results, [Out] bool OverrunDetected)
+{
+    // Perform safety checks
+    if (Bridge == NULL)
+        throw gcnew Exception("Error: Bridge not initialized.");
+
+    //uint32_t numDevices;
+    //BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices(&numDevices, false)); // Calling a EnumDevices seems to be a hack in order to get the lates status
+    //
+    //if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
+    //    return BridgeStatus;
+
+    // Get the number of available messages
+    uint16_t canMsgNum;
+    BridgeStatus = Bridge->GetRxMsgNbCAN(&canMsgNum);
+    Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
+
+    // Allocate space, and get the messages
+
+    Brg_CanRxMsgT* messages = new Brg_CanRxMsgT[canMsgNum];
+    uint8_t* dataBuffer = new uint8_t[8*canMsgNum]; // Allocate enough space. Note that some might go unused, depending on how many DLCs are used.
+    uint16_t numberOfReceivedDataBytes;
+    uint8_t* dataPointer = dataBuffer;
+
+    // Read all messages
+    BridgeStatus = Bridge->GetRxMsgCAN(messages, canMsgNum, dataBuffer, 8 * canMsgNum, &numberOfReceivedDataBytes);
+
+    for (int i = 0; i < canMsgNum; i++)
+    {
+        Brg_CanRxMsgT& msg = messages[i];
+
+        if ((msg.Overrun != CAN_RX_NO_OVERRUN))
+        {
+            OverrunDetected = true;
+            continue;
+        }
+
+        // Copy data
+        CanMessage^ tempMessage = gcnew CanMessage();
+        tempMessage->DLC = msg.DLC;
+        tempMessage->Id = msg.ID;
+        tempMessage->Fifo = (msg.Fifo == CAN_MSG_RX_FIFO1 ? true : false);
+        tempMessage->IdExtended = (msg.IDE == CAN_ID_EXTENDED ? true : false);
+        tempMessage->RTR = (msg.RTR == CAN_REMOTE_FRAME ? true : false);
+
+        // Copy data using a temporary holder
+        uint64_t tempData;
+        memcpy((uint8_t*)&(tempData), dataBuffer, msg.DLC);
+        tempMessage->Data = tempData;
+
+        results->Add(tempMessage);
+
+        // Advance pointer
+        dataPointer += msg.DLC;
+    }
+
+    // Clean up
+    delete[] messages;
+    delete[] dataBuffer;
+
+    messages = NULL;
+    dataBuffer = NULL;
+
+    return BridgeStatus;
+}
 Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanMessage^ message)
 {
     Brg_CanTxMsgT tempMessage;

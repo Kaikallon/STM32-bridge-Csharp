@@ -34,7 +34,7 @@ namespace WinFormsControls
             StLinkBridge = new STLinkBridgeWrapper.STLinkBridgeWrapper();
             cbSpeed.DataSource = new List<uint> { 1000, 750, 500, 250, 125, 100 };
             cbSpeed.SelectedIndex = 0;
-            StLinkBridge.CanTransmissionStatusChanged += StLinkBridge_CanTransmissionStatusChanged;
+            StLinkBridge.CanConnectionStatusChanged += StLinkBridge_CanConnectionStatusChanged;
             dgv_stLinks.SelectionChanged += dgv_stLinks_SelectionChanged;
             StLinkBridge.CanMessageReceived += StLinkBridge_CanMessageReceived;
 
@@ -56,9 +56,9 @@ namespace WinFormsControls
         private void AddMessageToActivityIndicator(CanMessage receivedMessage)
         {
             UInt32 id = receivedMessage.Id;
-            if (ReceivedDataSummary.ContainsKey(id))
+            CanActivityDisplayData temp;
+            if (ReceivedDataSummary.TryGetValue(id, out temp))
             {
-                CanActivityDisplayData temp = ReceivedDataSummary[id];
                 temp.Count++;
                 temp.Data = receivedMessage.Data;
                 temp.Length = receivedMessage.DLC;
@@ -66,10 +66,15 @@ namespace WinFormsControls
             }
             else
             {
+                string name = "Unknown type";
+                CanMessageType canMessageType;
+                if (CanMessagesDatabase.TryGetValue(id, out canMessageType))
+                    name = canMessageType.Name;
+
                 ReceivedDataSummary.Add(id, new CanActivityDisplayData
                 {
                     Id = id,
-                    Type = CanMessagesDatabase[id]?.Name,
+                    Type = name,
                     Data = receivedMessage.Data,
                     Length = receivedMessage.DLC,
                     RcvTime = new DateTime(receivedMessage.SystemTimeStamp),
@@ -141,7 +146,7 @@ namespace WinFormsControls
 
         private void btn_OpenBridge_Click(object sender, EventArgs e)
         {
-            if (!StLinkBridge.TransmissionRunning)
+            if (!StLinkBridge.CanConnectionRunning)
             {
                 ReceivedDataSummary.Clear();
                 // Open bridge
@@ -160,16 +165,14 @@ namespace WinFormsControls
             else
             {
                 // Close bridge
-                StLinkBridge.StopTransmission();
-                System.Threading.Thread.Sleep(100); // TODO: This is a bit hacky, but seems to be enough to ensure that any ongoing polling is finished. Better would be to wait for a flag or something
-                StLinkBridge.CloseBridge();
+                StLinkBridge.CloseConnection();
             }
             
         }
 
-        private void StLinkBridge_CanTransmissionStatusChanged(object sender, EventArgs e)
+        private void StLinkBridge_CanConnectionStatusChanged(object sender, CanConnectionChangedEventArgs e)
         {
-            if (StLinkBridge.TransmissionRunning)
+            if (e.CanConnectionRunning)
             {
                 cbSpeed.Enabled = false;
                 nudPollTime.Enabled = false;
@@ -180,7 +183,7 @@ namespace WinFormsControls
             else
             {
                 cbSpeed.Enabled = true;
-                nudPollTime.Enabled = false;
+                nudPollTime.Enabled = true;
                 btnEnumerate.Enabled = true;
                 btn_OpenBridge.Text = "Open Bridge";
                 timerUiUpdate.Stop();
@@ -198,7 +201,7 @@ namespace WinFormsControls
 
         private void dgv_stLinks_SelectionChanged(object sender, EventArgs e)
         {
-            if (!StLinkBridge.TransmissionRunning)
+            if (!StLinkBridge.CanConnectionRunning)
             {
                 if (dgv_stLinks.SelectedRows.Count > 0)
                     btn_OpenBridge.Enabled = true;

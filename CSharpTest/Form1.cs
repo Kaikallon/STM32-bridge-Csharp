@@ -20,7 +20,7 @@ namespace CSharpTest
         {
             InitializeComponent();
 
-            canBridgeControl.CanMessagesDatabase = testNS.CanMessageTypes.AllCanMessageTypes;
+            canBridgeControl.CanMessagesDatabase = AmsClient.CanTypes.CanMessageTypes.AllCanMessageTypes;
         }
 
 

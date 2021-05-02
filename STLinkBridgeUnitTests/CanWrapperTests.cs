@@ -50,7 +50,7 @@ namespace STLinkBridgeUnitTests
             var message = new CanMessage();
 
 
-            wrapper.CanWriteLL(message);
+            wrapper.WriteMessage(message);
             Assert.IsTrue(wrapper.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
 
             System.Threading.Thread.Sleep(1000);

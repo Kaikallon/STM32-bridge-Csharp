@@ -11,7 +11,8 @@ using CanDefinitions;
 
 namespace CanDbCodeGenerator
 {
-    // Note: This library does not support signal multiplexing
+    // Note: This library does not provide any special support for signal multiplexing
+    // TODO: Implement bus parsing
 
     public class CanDbcParser
     {
@@ -334,7 +335,12 @@ namespace CanDbCodeGenerator
 
             if (Int32.TryParse(segments[1], out id))
             {
-                var message = canMessageTypes[id];
+                CanMessageType message;
+                if (!canMessageTypes.TryGetValue(id, out message))
+                {
+                    // TODO: Notify user of unexpected input
+                    return;
+                }
                 var signal = message.Signals[segments[2]];
                 switch (segments[4])
                 {
@@ -351,57 +357,5 @@ namespace CanDbCodeGenerator
 
             }
         }
-
-        //public static List<DataPoint> ParseReceivedCanMessagesRx(List<CanBridgeMessageRx> receivedMessages, SortedList<uint, CanMessageType> canMessageTypes)
-        //{
-        //    List<DataPoint> values = new List<DataPoint>();
-        //
-        //    foreach (var message in receivedMessages)
-        //    {
-        //        CanMessageType canMessage = canMessageTypes[message.ID];
-        //        if (canMessage == null)
-        //        {
-        //            continue;
-        //        }
-        //
-        //        if (canMessage.DLC != message.DLC)
-        //        {
-        //            throw new Exception("Error: DLC of received message did not match expected DLC from database."); // TODO: Handle more gracefully
-        //        }
-        //
-        //        foreach (var signalType in canMessage.Signals.Values)
-        //        {
-        //            if (signalType.Encoding == SignalEncoding.Motorola)
-        //            {
-        //                throw new Exception("Motorola byte order not supported");
-        //            }
-        //            // TODO: Check if the bitmask has been calculated
-        //            // Isolate relevant bits using precalculated bitmask
-        //            UInt64 bits = message.data;
-        //            bits &= signalType.BitMask;
-        //
-        //            // Shift back to original state according to specification
-        //            bits >>= signalType.StartBit;
-        //
-        //
-        //            double tempValue = (double)bits;
-        //
-        //            // Apply inverse transform to restore actual value
-        //            tempValue -= signalType.Offset;
-        //            tempValue /= signalType.ScaleFactor;
-        //
-        //            values.Add(new DataPoint
-        //            {
-        //                Ticks = message.TimeStamp,
-        //                CanTimeStamp = message.CanTimeStamp,
-        //                data = tempValue,
-        //                SignalType = signalType,
-        //            });
-        //
-        //        }
-        //    }
-        //
-        //    return values;
-        //}
     }
 }

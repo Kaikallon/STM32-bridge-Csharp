@@ -14,10 +14,10 @@ namespace CanDefinitions
         void OpenConnection(int baudrate);
         void CloseConnection();
 
-        event EventHandler<CanConnectionChangedEventArgs> CanTransmissionStatusChanged;
+        event EventHandler<CanConnectionChangedEventArgs> CanConnectionStatusChanged;
         event EventHandler<CanMessageReceivedEventArgs> CanMessageReceived;
 
-        bool CanConnectionRunning { get; set; }
+        bool CanConnectionRunning { get; }
     }
 
     public class CanConnectionChangedEventArgs : EventArgs

@@ -9,15 +9,9 @@ using CanDefinitions;
 
 namespace STLinkBridgeWrapper
 {
-    public class CanMessageReceivedEventArgs : EventArgs
+    public class STLinkBridgeWrapper : STLinkBridgeWrapperCpp, ICanNetworkConnection
     {
-        public List<CanMessage> ReceivedMessages { get; set; } = new List<CanMessage>();
-        public bool BufferOverrunDetected { get; set; } = false;
-    }
-
-    public class STLinkBridgeWrapper : STLinkBridgeWrapperCpp
-    {
-        public event EventHandler CanTransmissionStatusChanged;
+        public event EventHandler<CanConnectionChangedEventArgs> CanConnectionStatusChanged;
         public event EventHandler<CanMessageReceivedEventArgs> CanMessageReceived;
         protected Timer CanPollingTimer = new Timer();
 
@@ -40,12 +34,12 @@ namespace STLinkBridgeWrapper
         }
         public Brg_StatusT StartTransmission(Nullable<double> pollrate)
         {
-            base.StartTransmission();
             if (pollrate != null)
             {
                 CanPollingTimer.Interval = (double)pollrate;
                 CanPollingTimer.Start();
             }
+            base.StartTransmission();
             return this.BridgeStatus;
         }
 
@@ -91,20 +85,45 @@ namespace STLinkBridgeWrapper
 
         protected override void NotifyTransmissionChanged()
         {
-            CanTransmissionStatusChanged?.Invoke(this, new EventArgs());
+            CanConnectionStatusChanged?.Invoke(this, 
+                new CanConnectionChangedEventArgs { CanConnectionRunning = this.TransmissionRunning});
         }
 
-        new public bool TransmissionRunning
+        public bool CanConnectionRunning
         {
-            get { return base.TransmissionRunning; }
+            get { return TransmissionRunning; }
         }
+
 
         new public Brg_StatusT CloseBridge()
         {
             if (TransmissionRunning)
+            {
                 StopTransmission();
+                System.Threading.Thread.Sleep(100); // TODO: This is a bit hacky, but seems to be enough to ensure that any ongoing polling is finished. Better would be to wait for a flag or something
+            }
             base.CloseBridge();
             return this.BridgeStatus;
+        }
+
+        public void WriteMessage(CanMessage message)
+        {
+            if (!CanConnectionRunning)
+            {
+                // TODO: Do something? Throw exception, or just return quietly?
+            }
+            base.CanWriteLL(message);
+        }
+
+        public void OpenConnection(int baudrate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseConnection()
+        {
+            StopTransmission();
+            CloseBridge();
         }
 
 

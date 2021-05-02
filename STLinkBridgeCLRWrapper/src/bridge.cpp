@@ -2370,14 +2370,14 @@ Brg_StatusT Brg::GetRxMsgNbCAN(uint16_t *pMsgNb)
  * The number of available messages (MsgNb) MUST be retrieved first with Brg::GetRxMsgNbCAN().
  * @param[out]  pCanMsg pointer on array of at least MsgNb message "header": #Brg_CanRxMsgT.
  *                       Each message fields are updated as described in #Brg_CanRxMsgT.
- * @param[in]  MsgNb MUST be the value returned by Brg::GetRxMsgNbCAN(). 
+ * @param[in]   MsgNb MUST be the value returned by Brg::GetRxMsgNbCAN(). 
  *                    It may be less than the value returned by Brg::GetRxMsgNbCAN()
  *                    only if the messages are retrieved with several call to Brg::GetRxMsgCAN().\n
  *                    pCanMsg must point on a #Brg_CanRxMsgT array with at least MsgNb element.\n
  * @warning     If MsgNb > Brg::GetRxMsgNbCAN(), firmware will return status error (2bytes) instead of requested 
  *              messages this may break the USB com.
  * @param[out]  pBuffer  Data buffer for read data (filled only for data frame with DLC>0).
- * @param[out]  BufSizeInBytes  Is less or equal to real data buffer size in bytes.
+ * @param[in]   BufSizeInBytes  Is less or equal to real data buffer size in bytes.
  *                              It indicates pBuffer available size for read data.\n
  *                Note: data size that can be received is less or equal to MsgNb*8 (DLC max =8).\n
  *                If BufSizeInBytes is smaller than the sum of all DLC only BufSizeInBytes are copied into pBuffer.
