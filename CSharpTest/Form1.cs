@@ -21,9 +21,8 @@ namespace CSharpTest
             InitializeComponent();
 
             canBridgeControl.CanMessagesDatabase = AmsClient.CanTypes.CanMessageTypes.AllCanMessageTypes;
+            sendManualMessage1.CanNetworkConnection = canBridgeControl.StLinkBridge;
         }
-
-
 
 
          private delegate void SetControlPropertyThreadSafeDelegate(
@@ -52,6 +51,5 @@ namespace CSharpTest
                     new object[] { propertyValue });
             }
         }
-
     }
 }

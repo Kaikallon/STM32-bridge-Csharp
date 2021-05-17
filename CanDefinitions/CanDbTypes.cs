@@ -8,16 +8,16 @@ namespace CanDefinitions
 {
     public enum SignalEncoding
     {
-        Intel = 0,
-        Motorola = 1
+        Intel    = 0,
+        Motorola = 1,
     }
     public enum SignalType
     {
-        Invalid = 0,
-        Signed = 1,
+        Invalid  = 0,
+        Signed   = 1,
         Unsigned = 2,
-        Float = 3,
-        Double = 4
+        Float    = 3,
+        Double   = 4,
     }
     public class CanDatabaseType
     {

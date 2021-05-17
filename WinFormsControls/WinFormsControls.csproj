@@ -49,6 +49,12 @@
       <DependentUpon>CanBridgeControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SendManualMessage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SendManualMessage.Designer.cs">
+      <DependentUpon>SendManualMessage.cs</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +74,9 @@
   <ItemGroup>
     <EmbeddedResource Include="CanBridgeControl.resx">
       <DependentUpon>CanBridgeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SendManualMessage.resx">
+      <DependentUpon>SendManualMessage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
