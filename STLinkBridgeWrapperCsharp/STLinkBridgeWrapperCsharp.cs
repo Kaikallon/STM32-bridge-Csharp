@@ -27,7 +27,7 @@ namespace STLinkBridgeWrapper
             get { return CanPollingTimer.Interval; }
         }
 
-        public STLinkBridgeWrapper()
+        public STLinkBridgeWrapper() : base()
         {
             CanPollingTimer.Elapsed += CanPollingTimer_Elapsed;
 
@@ -55,8 +55,6 @@ namespace STLinkBridgeWrapper
             List<CanMessage> receivedMessages = new List<CanMessage>();
 
             // Check for overrun
-            // Note: Overrun detection does not seem to work because of an issue in the firmware of the STLink.
-            // This code is kept for future possibilties of using it. 
             bool OverrunDetected = false;
             base.CanReadLL(out receivedMessages, OverrunDetected);
 
@@ -70,8 +68,12 @@ namespace STLinkBridgeWrapper
                     BufferOverrunDetected = OverrunDetected,
                     ReceivedMessages = receivedMessages,
                 };
+                //CanMessageReceived?.Invoke(this, canMessageReceivedEventArgs);
                 //CanMessageReceived?.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
-                CanMessageReceived?.Invoke(this, canMessageReceivedEventArgs);
+                foreach(EventHandler<CanMessageReceivedEventArgs> receiver in CanMessageReceived.GetInvocationList())
+                {
+                    receiver.BeginInvoke(this, canMessageReceivedEventArgs, CanMessageReceivedEndAsyncEvent, null);
+                }
             }
         }
 
@@ -79,7 +81,11 @@ namespace STLinkBridgeWrapper
         {
             List<CanMessage> receivedMessages = new List<CanMessage>();
             bool OverrunDetected = false;
-            base.CanReadLL(out receivedMessages, OverrunDetected);
+            Brg_StatusT status = base.CanReadLL(out receivedMessages, OverrunDetected);
+
+            if (status == Brg_StatusT.BRG_USB_COMM_ERR || status == Brg_StatusT.BRG_CONNECT_ERR)
+                this.CloseConnection(); // TODO: Consider allowing a few errors for increased robustness
+
             return receivedMessages;
         }
 
@@ -112,7 +118,9 @@ namespace STLinkBridgeWrapper
             {
                 // TODO: Do something? Throw exception, or just return quietly?
             }
-            base.CanWriteLL(message);
+            if (base.CanWriteLL(message) != Brg_StatusT.BRG_NO_ERR)
+                this.CloseConnection(); // TODO: Consider allowing a few errors for increased robustness
+
         }
 
         public void OpenConnection(int baudrate)
@@ -126,54 +134,21 @@ namespace STLinkBridgeWrapper
             CloseBridge();
         }
 
+        private void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
+        {
+            var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
+            var invokedMethod = (EventHandler<CanMessageReceivedEventArgs>)ar.AsyncDelegate;
 
-        //public Brg_StatusT CanWrite(CanMessageType canMessageType)
-        //{
-        //    CanBridgeMessageTx message = new CanBridgeMessageTx
-        //    {
-        //        ID = (uint)canMessageType.ID,
-        //        IdExtended = canMessageType.Flags == MESSAGE.EXT,
-        //        RTR = false,
-        //        DLC = (byte)canMessageType.DLC,
-        //    };
-        //
-        //    UInt64 payload = 0;
-        //    foreach(var signal in canMessageType.Signals)
-        //    {
-        //        // Scale and offset value according to signal secification
-        //        double tranformedValue = signal.WriteValue * signal.ScaleFactor;
-        //        tranformedValue += signal.Offset;
-        //
-        //        // Cast to integer. The scaling should have been chosen such that this casting is okay.
-        //        var bits = (UInt64)tranformedValue;
-        //
-        //        // Get the bits, trim and shift according to specification
-        //        bits <<= signal.StartBit;
-        //        bits &= signal.BitMask; // Trim
-        //
-        //        // Add to payload
-        //        payload |= bits;
-        //    }
-        //    message.data = payload;
-        //
-        //    return base.CanWriteLL(message);
-        //}
-
-        //private void CanMessageReceivedEndAsyncEvent(IAsyncResult iar)
-        //{
-        //    var ar = (System.Runtime.Remoting.Messaging.AsyncResult)iar;
-        //    var invokedMethod = (CanMessageReceivedHandler)ar.AsyncDelegate;
-        //
-        //    try
-        //    {
-        //        invokedMethod.EndInvoke(iar);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        // Handle any exceptions that were thrown by the invoked method
-        //        // Console.WriteLine("An event listener went kaboom!");
-        //        // TODO: Handle this?
-        //    }
-        //}
+            try
+            {
+                invokedMethod.EndInvoke(iar);
+            }
+            catch
+            {
+                // Some kind of logging system would be nice for situations like this
+                // Handle any exceptions that were thrown by the invoked method
+                Console.WriteLine("An event listener went kaboom!");
+            }
+        }
     }
 }

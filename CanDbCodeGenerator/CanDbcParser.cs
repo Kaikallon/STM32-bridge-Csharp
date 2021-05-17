@@ -12,7 +12,6 @@ using CanDefinitions;
 namespace CanDbCodeGenerator
 {
     // Note: This library does not provide any special support for signal multiplexing
-    // TODO: Implement bus parsing
 
     public class CanDbcParser
     {
@@ -51,7 +50,7 @@ namespace CanDbCodeGenerator
                 if (enumerator.Current.StartsWith("CM_"))
                     ParseDbcCommentField(enumerator.Current, canDatabaseType.CanMessageTypes);
                 if (enumerator.Current.StartsWith("BA_DEF_"))
-                    ParseDbcAttributeDefinition(enumerator.Current, canDatabaseType.CanMessageTypes);
+                    ParseDbcAttributeDefinition(enumerator.Current, canDatabaseType);
                 if (enumerator.Current.StartsWith("SIG_VALTYPE_"))
                     ParseDbcTypeDefinition(enumerator.Current, canDatabaseType.CanMessageTypes);
 
@@ -306,14 +305,24 @@ namespace CanDbCodeGenerator
 
         }
 
-        protected static void ParseDbcAttributeDefinition(string line, Dictionary<int, CanMessageType> canMessageTypes)
+        protected static void ParseDbcAttributeDefinition(string line, CanDatabaseType canDatabaseType)
         {
-            var segments = line.Split(new char[] { ' ' }, StringSplitOptions.None);
+            var segments = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             switch (segments[1])
             {
                 case "BU_":
                     break;
                 case "BO_":
+                    if (segments[2] == "\"Bus\"" && segments[3] == "ENUM")
+                    {
+                        var buses = segments[4].Replace(";", "") // Filter semi-colons
+                            .Replace("\"", "") // Filter quoute marks
+                            .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries); // Split on comma
+                        foreach (var bus in buses)
+                        {
+                            canDatabaseType.Buses.Add(bus);
+                        }
+                    }
                     break;
                 case "SG_":
                     break;

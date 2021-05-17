@@ -28,7 +28,7 @@ namespace WinFormsControls
         public Int64 RefreshTime { get; set; } = 300;
         #endregion
 
-        public CanBridgeControl()
+        public CanBridgeControl() : base()
         {
             InitializeComponent();
             StLinkBridge = new STLinkBridgeWrapper.STLinkBridgeWrapper();
@@ -43,14 +43,22 @@ namespace WinFormsControls
             btnEnumerate_Click(this, null);
         }
 
+
         public void PerformPeriodicUiUpdate()
         {
             // Perform thread safe UI update
-            SetControlPropertyThreadSafe(dgv_stLinks, "DataSource", ReceivedDataSummary.Values.ToList());
+            //SetControlPropertyThreadSafe(dgv_stLinks, "DataSource", ReceivedDataSummary.Values.ToList());
+            var table = CanActivityDisplayDatas2StringTable(ReceivedDataSummary.Values);
+            SetControlPropertyThreadSafe(richTextBox1, "Text", table);
             //dgvActivityIndicator.DataSource = ReceivedDataSummary.Values.ToList();
 
             SetControlPropertyThreadSafe(nudPollTime, "Value", (decimal)StLinkBridge.CurrentPollInterval);
             //nudPollTime.Value = (decimal)StLinkBridge.CurrentPollInterval;
+
+            float voltage = 0;
+            StLinkBridge.GetTargetVoltage(out voltage);
+            SetControlPropertyThreadSafe(textBoxTargetVoltage, "Text", voltage.ToString("0.00") + " V");
+
         }
 
         private void AddMessageToActivityIndicator(CanMessage receivedMessage)
@@ -87,13 +95,22 @@ namespace WinFormsControls
         {
             if (selectedDevice == null)
                 throw new Exception("No STLink device found");
-
             Brg_StatusT bridgeStatus = StLinkBridge.OpenBridge(selectedDevice);
-
             Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
-
-            StLinkBridge.CanInit(baudrate, false);
-            Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
+            try
+            {
+                StLinkBridge.CanInit(baudrate, false);
+                Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"{e.Message}\n\n{e.StackTrace}", 
+                    e.Message, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+                return;
+            }
+            // TODO: Handle the other errors in a similar manner
 
             StLinkBridge.StartTransmission(polltime);
             Debug.Assert(StLinkBridge.GetBridgeStatus() == Brg_StatusT.BRG_NO_ERR);
@@ -150,17 +167,17 @@ namespace WinFormsControls
             {
                 ReceivedDataSummary.Clear();
                 // Open bridge
-                if (dgv_stLinks.CurrentRow != null)
-                {
-                    var deviceInfo = dgv_stLinks.CurrentRow.DataBoundItem as DeviceInfo;
-                    if (deviceInfo != null)
-                    {
-                        var baudrate = (uint)cbSpeed.SelectedItem * 1000;
-                        var polltime = nudPollTime.Value;
-                        InitializeCAN(deviceInfo, baudrate, (double)polltime);
+                if (dgv_stLinks.CurrentRow == null)
+                    return;
+                var deviceInfo = dgv_stLinks.CurrentRow.DataBoundItem as DeviceInfo;
+                if (deviceInfo == null)
+                    return;
 
-                    }
-                }
+                var baudrate = (uint)cbSpeed.SelectedItem * 1000;
+                var polltime = nudPollTime.Value;
+
+                InitializeCAN(deviceInfo, baudrate, (double)polltime);
+
             }
             else
             {
@@ -179,6 +196,8 @@ namespace WinFormsControls
                 btnEnumerate.Enabled = false;
                 btn_OpenBridge.Text = "Close Bridge";
                 timerUiUpdate.Start();
+                richTextBox1.Visible = true;
+                dgv_stLinks.Visible = false;
             }
             else
             {
@@ -188,14 +207,14 @@ namespace WinFormsControls
                 btn_OpenBridge.Text = "Open Bridge";
                 timerUiUpdate.Stop();
                 btnEnumerate_Click(this, null);
-
+                richTextBox1.Visible = false;
+                dgv_stLinks.Visible = true;
             }
         }
 
         private void timerUiUpdate_Tick(object sender, EventArgs e)
         {
             PerformPeriodicUiUpdate();
-            // TODO: Implement showing target voltage
             // TODO: Consider enumerating devices periodically
         }
 
@@ -209,8 +228,38 @@ namespace WinFormsControls
                     btn_OpenBridge.Enabled = false;
             }
         }
+
+        private string CanActivityDisplayDatas2StringTable(IEnumerable<CanActivityDisplayData> canActivityDisplayDatas)
+        {
+            StringBuilder sb = new StringBuilder();
+            var linePattern = "{0,-5} {1,-30} {2,-3} {3,-8} {4,-8} {5, -16}";
+
+            var header = String.Format(linePattern,
+                "Id",
+                "Type",
+                "DLC",
+                "Count",
+                "RcvTime",
+                "Data");
+            sb.AppendLine(header);
+
+
+            foreach (var canActivityDisplayData in canActivityDisplayDatas)
+            {
+                var line = String.Format(linePattern,
+                    canActivityDisplayData.Id,
+                    canActivityDisplayData.Type,
+                canActivityDisplayData.Length,
+                canActivityDisplayData.Count,
+                canActivityDisplayData.RcvTime.ToShortTimeString(),
+                canActivityDisplayData.Data.ToString("X16"));
+                sb.AppendLine(line);
+            }
+            return sb.ToString();
+        }
         #endregion
     }
+
 
     class CanActivityDisplayData
     {

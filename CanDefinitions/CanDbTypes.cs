@@ -49,54 +49,6 @@ namespace CanDefinitions
         public string SendingNode { get; set; } = "";
 
         public Dictionary<string, CanSignalType> Signals { get; private set; } = new Dictionary<string, CanSignalType>();
-
-        //public CanBridgeMessageTx GenerateCanMessageTx(params (CanSignalType, double)[] signalsAndData)
-        //{
-        //    if (signalsAndData.Length != Signals.Count)
-        //    {
-        //        throw new Exception("Wrong number of paramteres in parameter list.");
-        //    }
-        //
-        //    foreach (var signal in Signals.Values)
-        //    {
-        //        if (!signalsAndData.Any((x => x.Item1 == signal)))
-        //        {
-        //            throw new Exception("Parameter list must contain exatcly the same signals as in this can message.");
-        //        }
-        //    }
-        //
-        //    CanBridgeMessageTx message = new CanBridgeMessageTx
-        //    {
-        //        ID = (uint)this.ID,
-        //        //IdExtended = this.Flags == MESSAGE.EXT,
-        //        IdExtended = true, // TODO: Figure out how this works!
-        //        RTR = false,
-        //        DLC = (byte)this.DLC,
-        //    };
-        //
-        //    UInt64 payload = 0;
-        //    foreach (var tuple in signalsAndData)
-        //    {
-        //        var signal = tuple.Item1;
-        //        var data = tuple.Item2;
-        //        // Scale and offset value according to signal secification
-        //        double tranformedValue = data * signal.ScaleFactor;
-        //        tranformedValue += signal.Offset;
-        //
-        //        // Cast to integer. The scaling should have been chosen such that this casting is okay.
-        //        var bits = (UInt64)tranformedValue;
-        //
-        //        // Get the bits, trim and shift according to specification
-        //        bits <<= signal.StartBit;
-        //        bits &= signal.BitMask; // Trim
-        //
-        //        // Add to payload
-        //        payload |= bits;
-        //    }
-        //    message.data = payload;
-        //
-        //    return message;
-        //}
     }
 
     public class CanSignalType
@@ -132,5 +84,32 @@ namespace CanDefinitions
                 BitMask = BitMask | ((UInt64)1 << i);
             }
         }
+
+        /// <summary>
+        /// This function calculated the minimum number of bits needed to represent a signal in a 
+        /// native type (16, 32 or 64). Let's say you have a signal that uses 12 bits and is signed. To convert 
+        /// this into a usable form it needs to be cast into Int16, but this would not retain
+        /// the two's complement bits for negative numbers. With this information you can 
+        /// compensate for that. 
+        /// </summary>
+        /// <returns>Minimum number of bits needed to represent a signal in a native type.</returns>
+        //private int GetLeastNumberOfBitsForNativeRepresentation()
+        //{
+        //    var temp = 64 / this.Length;
+
+        //    if (temp == 0)
+        //        throw new Exception($"Property Length is more than 64 for signal {this.QualifiedName}.");
+
+        //    if (temp > 4)
+        //        return 8;
+        //    else if (temp > 2)
+        //        return 16;
+        //    else if (temp == 2)
+        //        return 32;
+        //    if (temp == 1)
+        //        return 64;
+
+        //    throw new Exception("Unexpected error in function GetLeastNumberOfBitsForNativeRepresentation");
+        //}
     }
 }

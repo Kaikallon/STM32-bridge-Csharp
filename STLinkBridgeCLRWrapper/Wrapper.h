@@ -54,6 +54,7 @@ namespace STLinkBridgeWrapper
         Brg_StatusT      CanWriteLL(CanMessage^ message);
         Brg_StatusT      CanReadLL([Out] List<CanMessage^>^% results, [Out] bool OverrunDetected);
         Brg_StatusT      CanReadLL2([Out] List<CanMessage^>^% results, [Out] bool OverrunDetected);
+        bool             CheckComError(Brg_StatusT status);
 
         virtual void NotifyTransmissionChanged() = 0;
         
@@ -68,7 +69,7 @@ namespace STLinkBridgeWrapper
 
 		STLinkIf_StatusT EnumerateDevices([Out] List<DeviceInfo^>^% results);
         Brg_StatusT      OpenBridge(DeviceInfo^ device);
-        Brg_StatusT      TestVoltage([Out] float% result);
+        Brg_StatusT      GetTargetVoltage([Out] float% result);
 		Brg_StatusT      TestGetClock();
 		Brg_StatusT		 GPIOInit();
 		Brg_StatusT		 GPIOWrite();

@@ -99,6 +99,8 @@ namespace STLinkBridgeUnitTests
             
         }
 
+
+
         private void Wrapper_CanMessageReceived(object sender, CanMessageReceivedEventArgs e)
         {
             //var canMessage = GenerateSimpleCanMessageType();
@@ -116,6 +118,14 @@ namespace STLinkBridgeUnitTests
             //Assert.AreEqual(value3, dataPoints[2].data);
         }
 
+        [TestMethod]
+        public void ExtractBitsTest()
+        {
+            AmsClient.CanTypes.Messages.AmsThermistorTemperaturesMessage amsCellVoltages = new AmsClient.CanTypes.Messages.AmsThermistorTemperaturesMessage();
+            amsCellVoltages.Data = 0xFFFFFFFF;
+            ulong test = amsCellVoltages.ExtractBits(AmsClient.CanTypes.CanSignalTypes.AmsThermistorTemperatures__temperature_2);
+
+        }
         public CanMessageType GenerateSimpleCanMessageType()
         {
 
@@ -132,10 +142,11 @@ namespace STLinkBridgeUnitTests
                 new CanSignalType
                 {
                     StartBit = 8,
-                    Length = 16,
+                    Length = 10,
                     Offset = 50,
                     ScaleFactor = 10,
                     Name = "TestSignal2",
+                    Type = SignalType.Signed,
                 },
                 new CanSignalType
                 {

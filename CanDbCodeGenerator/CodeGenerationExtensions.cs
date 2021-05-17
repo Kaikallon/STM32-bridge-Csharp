@@ -21,36 +21,58 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
 
             stringBuilder.AppendLine(n * (0 + o), $"public class {canMessageType.Name }Message : CanMessageExtended<{canMessageType.Name }Message>");
             stringBuilder.AppendLine(n * (0 + o), $"{{");
-            stringBuilder.AppendLine(n * (1 + o), $"public {canMessageType.Name }Message()");
+            stringBuilder.AppendLine(n * (1 + o), $"public {canMessageType.Name }Message() : base()");
             stringBuilder.AppendLine(n * (1 + o), $"{{");
             stringBuilder.AppendLine(n * (2 + o), $"MessageType = CanMessageTypes.{canMessageType.Name};");
             stringBuilder.AppendLine(n * (2 + o), $"Id = {canMessageType.Id};");
             stringBuilder.AppendLine(n * (1 + o), $"}}");
 
+            // TODO: Implement support for IEEE floats
             foreach (var CanSignalType in canMessageType.Signals.Values)
             {
+                string type = CanSignalType.GetTypeName();
+
                 string floatException = ""; // This is used to append 'f' for float literals
                 if (CanSignalType.Type == SignalType.Float)
                     floatException = "f";
 
-                stringBuilder.AppendLine(n * (1 + o), $"public static readonly CanSignalType {CanSignalType.Name} = CanSignalTypes.{CanSignalType.QualifiedName.Replace(".", "__")};");
-                stringBuilder.AppendLine(n * (1 + o), $"public {CanSignalType.GetTypeName()} Get{CanSignalType.Name}()");
+                // Check if any scaling or offsetting is performed. If so, then it only makes sense 
+                // to treat it as float. 
+                string originalType = type;
+                if (CanSignalType.Offset != 0 || CanSignalType.ScaleFactor != 1)
+                {
+                    type = "float";
+                }
+                string boolException1 = "";
+                string boolException2 = "";
+                if (type == "bool")
+                {
+                    boolException1 = "!= 0";
+                    boolException2 = "? 1 : 0";
+                }
+                
+                stringBuilder.AppendLine(n * (1 + o), $"public {type} {CanSignalType.Name}()");
                 stringBuilder.AppendLine(n * (1 + o), $"{{");
                 stringBuilder.AppendLine(n * (2 + o), $"// Get bits from raw data storage and cast");
-                stringBuilder.AppendLine(n * (2 + o), $"{CanSignalType.GetTypeName()} tempValue = ({CanSignalType.GetTypeName()})ExtractBits({CanSignalType.Name});");
+                stringBuilder.AppendLine(n * (2 + o), $"{originalType} tempValue1 = ({originalType})(ExtractBits(CanSignalTypes.{CanSignalType.QualifiedName.Replace(".", "__")}) {boolException1});");
+                stringBuilder.AppendLine(n * (2 + o), $"{type} tempValue2 = ({type}) tempValue1;");
                 stringBuilder.AppendLine(n * (2 + o), $"// Apply inverse transform to restore actual value");
-                stringBuilder.AppendLine(n * (2 + o), $"tempValue  {CanSignalType.GetMultiplierOperator() + floatException};");
-                stringBuilder.AppendLine(n * (2 + o), $"tempValue  {CanSignalType.GetAdditionOperator() + floatException};");
-                stringBuilder.AppendLine(n * (2 + o), $"return tempValue;");
+                if (CanSignalType.ScaleFactor != 1)
+                    stringBuilder.AppendLine(n * (2 + o), $"tempValue2  {CanSignalType.GetMultiplierOperator()}{floatException};");
+                if (CanSignalType.Offset != 0)
+                    stringBuilder.AppendLine(n * (2 + o), $"tempValue2  {CanSignalType.GetAdditionOperator() }{floatException};");
+                stringBuilder.AppendLine(n * (2 + o), $"return tempValue2;");
                 stringBuilder.AppendLine(n * (1 + o), $"}}");
                 stringBuilder.AppendLine(n * (1 + o), $"");
-                stringBuilder.AppendLine(n * (1 + o), $"public void Set{CanSignalType.Name}({CanSignalType.GetTypeName()} value)");
+                stringBuilder.AppendLine(n * (1 + o), $"public void {CanSignalType.Name}({type} value)");
                 stringBuilder.AppendLine(n * (1 + o), $"{{");
                 stringBuilder.AppendLine(n * (2 + o), $"// Scale and offset value according to signal specification");
-                stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetSubtractionOperator() + floatException};");
-                stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetDivisionOperator() + floatException};");
-                stringBuilder.AppendLine(n * (2 + o), $"// Cats to integer and prepare for sending");
-                stringBuilder.AppendLine(n * (2 + o), $"this.InsertBits({CanSignalType.Name}, (UInt64)value);");
+                if (CanSignalType.Offset != 0)
+                    stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetSubtractionOperator() }{floatException};");
+                if (CanSignalType.ScaleFactor != 1)
+                    stringBuilder.AppendLine(n * (2 + o), $"value {CanSignalType.GetDivisionOperator() }{floatException};");
+                stringBuilder.AppendLine(n * (2 + o), $"// Cast to integer and prepare for sending");
+                stringBuilder.AppendLine(n * (2 + o), $"this.InsertBits(CanSignalTypes.{CanSignalType.QualifiedName.Replace(".", "__")}, (UInt64)(value {boolException2}));");
                 stringBuilder.AppendLine(n * (1 + o), $"}}");
             }
             //stringBuilder.AppendLine(n * (1 + o), $"");
@@ -162,15 +184,19 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
         {
             int numberOfBits = canSignalType.Length;
 
+            if (numberOfBits == 1)
+                return "bool";
+
             switch (canSignalType.Type)
             {
+                
                 case SignalType.Invalid:
                     throw new NotImplementedException();
                     break;
 
                 case SignalType.Signed: // TODO: Add support for booleans
                     if (numberOfBits <= 8)
-                        return "byte";
+                        return "sbyte";
                     else if (numberOfBits <= 16)
                         return "Int16";
                     else if (numberOfBits <= 32)
@@ -182,7 +208,7 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
 
                 case SignalType.Unsigned:
                     if (numberOfBits <= 8)
-                        return "sbyte";
+                        return "byte";
                     else if (numberOfBits <= 16)
                         return "UInt16";
                     else if (numberOfBits <= 32)

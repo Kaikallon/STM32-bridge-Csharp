@@ -65,6 +65,10 @@
       <Project>{fee5cb1f-cc58-42b1-8665-f407cbd5843a}</Project>
       <Name>CanDefinitions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSharpTest\CSharpTest.csproj">
+      <Project>{d89f3aaa-b2d2-4f51-ad40-e727fb817769}</Project>
+      <Name>CSharpTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\STLinkBridgeCLRWrapper\STLinkBridgeCLRWrapper.vcxproj">
       <Project>{1765041a-710b-4085-8aba-e1f618901390}</Project>
       <Name>STLinkBridgeCLRWrapper</Name>

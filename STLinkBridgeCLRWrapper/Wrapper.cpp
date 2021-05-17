@@ -89,6 +89,9 @@ STLinkIf_StatusT STLinkBridgeWrapperCpp::GetInterfaceStatus()
 
 Brg_StatusT STLinkBridgeWrapperCpp::GetBridgeStatus()
 {
+    uint32_t numDevices;
+    // Calling a EnumDevices seems to be a hack in order to get the lates status
+    BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices(&numDevices, false)); 
     return this->BridgeStatus;
 }
 
@@ -116,6 +119,11 @@ STLinkIf_StatusT STLinkBridgeWrapperCpp::EnumerateDevices([Out] List<DeviceInfo^
         break;
     }
 
+    //DeviceInfo^ mock = gcnew DeviceInfo();
+    //mock->DeviceUsed = false;
+    //mock->EnumUniqueId = "Mock adapter";
+    //results->Add(mock);
+
     // Do the enumeration, find the total number of devices
     InterfaceStatus = sTLinkInterface->EnumDevices(&numDevices, false);
 
@@ -141,17 +149,8 @@ STLinkIf_StatusT STLinkBridgeWrapperCpp::EnumerateDevices([Out] List<DeviceInfo^
         devInfo->StLinkUsbId = tempDeviceInfo.DeviceUsed;
         devInfo->VendorId = tempDeviceInfo.VendorId;
         results->Add(devInfo);
-        
-        //String^ temp = String::Format("Bridge {0:d} PID: 0X{1:04hx} SN:{2:s}", (int)i, (unsigned short)tempDeviceInfo.ProductId, gcnew String(tempDeviceInfo.EnumUniqueId));
-        //Console::WriteLine(temp);
-
-        //if ((firstDevNotInUse == -1) && (tempDeviceInfo->DeviceUsed == false))
-        //{
-        //    firstDevNotInUse = i;
-        //    memcpy(m_serialNumber, &(tempDeviceInfo->EnumUniqueId), SERIAL_NUM_STR_MAX_LEN);
-        //    Console::WriteLine(String::Format(" SELECTED BRIDGE Stlink SN:%s", gcnew String(m_serialNumber)));
-        //}
     }
+
 
     BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(InterfaceStatus);
     return InterfaceStatus;
@@ -166,13 +165,15 @@ Brg_StatusT STLinkBridgeWrapperCpp::OpenBridge(DeviceInfo^ device)
     }
 
     // Check for errors
-    if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
+    if (GetBridgeStatus() != Brg_StatusT::BRG_NO_ERR)
     {
         return BridgeStatus;
     }
 
     // Open the STLink connection
     Bridge->SetOpenModeExclusive(true); // TODO: Research exclusive mode and consider setting to false
+                                        // Note: Exclusive mode is recommended by ST when running the 
+                                        // link in bridge mode, but it is not clear why.
 
 	char* tempChar = (char*)(void*)Marshal::StringToHGlobalAnsi(device->EnumUniqueId);
     BridgeStatus = Bridge->OpenStlink(tempChar, true);
@@ -181,9 +182,9 @@ Brg_StatusT STLinkBridgeWrapperCpp::OpenBridge(DeviceInfo^ device)
     if (BridgeStatus == Brg_StatusT::BRG_NOT_SUPPORTED)
     {
 		uint32_t numDevices;
-        BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices(&numDevices, false)); // Calling a EnumDevices seems to be a hack in order to get the lates status
-        Console::WriteLine(String::Format("BRIDGE not supported PID: 0X{0} SN:%{1}", device->ProductId, device->EnumUniqueId));
-		// TODO: Throw exception //TODO: Convert to hex
+        BridgeStatus = GetBridgeStatus();
+        Console::WriteLine(String::Format("BRIDGE not supported PID: 0x{0} SN:%{1}", device->ProductId.ToString("X"), device->EnumUniqueId));
+		// TODO: Throw exception 
     }
 
     if (BridgeStatus == Brg_StatusT::BRG_OLD_FIRMWARE_WARNING)
@@ -194,7 +195,7 @@ Brg_StatusT STLinkBridgeWrapperCpp::OpenBridge(DeviceInfo^ device)
     return BridgeStatus;
 }
 
-Brg_StatusT STLinkBridgeWrapperCpp::TestVoltage([Out] float% result) 
+Brg_StatusT STLinkBridgeWrapperCpp::GetTargetVoltage([Out] float% result) 
 {
     if (Bridge == NULL)
     {
@@ -202,19 +203,12 @@ Brg_StatusT STLinkBridgeWrapperCpp::TestVoltage([Out] float% result)
         return BridgeStatus;
     }
     // Test Voltage command
-    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR)
+    if (GetBridgeStatus() == Brg_StatusT::BRG_NO_ERR)
     {
         float voltage = 0;
         // T_VCC pin must be connected to target voltage on debug connector
         BridgeStatus = Bridge->GetTargetVoltage(&voltage);
         result = voltage;
-        if ((BridgeStatus != Brg_StatusT::BRG_NO_ERR) || (voltage == 0)) 
-		{
-            Console::WriteLine("BRIDGE get voltage error (check if T_VCC pin is connected to target voltage on debug connector)");
-        }
-        else {
-            Console::WriteLine(String::Format("BRIDGE get voltage: {0} V", voltage));
-        }
     }
 
     return BridgeStatus;
@@ -223,7 +217,8 @@ Brg_StatusT STLinkBridgeWrapperCpp::TestVoltage([Out] float% result)
 Brg_StatusT STLinkBridgeWrapperCpp::TestGetClock()
 {
 	// Test GET CLOCK command
-	if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
+	if (GetBridgeStatus() == Brg_StatusT::BRG_NO_ERR) 
+    {
 		uint32_t StlHClkKHz, comInputClkKHz;
 		// Get the current bridge input Clk for all com:
 		BridgeStatus = Bridge->GetClk(COM_SPI, (uint32_t*)&comInputClkKHz, (uint32_t*)&StlHClkKHz);
@@ -394,16 +389,12 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanMessage^>^% results,
     if (Bridge == NULL)
         throw gcnew Exception("Error: Bridge not initialized.");
 
-    //uint32_t numDevices;
-    //BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices(&numDevices, false)); // Calling a EnumDevices seems to be a hack in order to get the lates status
-    //
-    //if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
-    //    return BridgeStatus;
-
     // Get the number of available messages
     uint16_t canMsgNum;
     BridgeStatus = Bridge->GetRxMsgNbCAN(&canMsgNum);
-    Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
+    if (CheckComError(BridgeStatus))
+        return BridgeStatus;
+    //Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
     // Allocate space, and get the messages
     Brg_CanRxMsgT msg;
@@ -414,6 +405,8 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL([Out] List<CanMessage^>^% results,
     for (int i = 0; i < canMsgNum; i++)
     {
         BridgeStatus = Bridge->GetRxMsgCAN(&msg, 1, data, 8, &numberOfReceivedDataBytes); // Fetch one message at a time
+        if (CheckComError(BridgeStatus))
+            return BridgeStatus;
         //Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
         if ((msg.Overrun != CAN_RX_NO_OVERRUN))
@@ -446,16 +439,12 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL2([Out] List<CanMessage^>^% results
     if (Bridge == NULL)
         throw gcnew Exception("Error: Bridge not initialized.");
 
-    //uint32_t numDevices;
-    //BridgeStatus = Brg::ConvSTLinkIfToBrgStatus(sTLinkInterface->EnumDevices(&numDevices, false)); // Calling a EnumDevices seems to be a hack in order to get the lates status
-    //
-    //if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
-    //    return BridgeStatus;
-
     // Get the number of available messages
     uint16_t canMsgNum;
     BridgeStatus = Bridge->GetRxMsgNbCAN(&canMsgNum);
-    Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
+    if (CheckComError(BridgeStatus))
+        return BridgeStatus;
+    //Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
     // Allocate space, and get the messages
 
@@ -466,7 +455,8 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL2([Out] List<CanMessage^>^% results
 
     // Read all messages
     BridgeStatus = Bridge->GetRxMsgCAN(messages, canMsgNum, dataBuffer, 8 * canMsgNum, &numberOfReceivedDataBytes);
-
+    if (CheckComError(BridgeStatus))
+        return BridgeStatus;
     for (int i = 0; i < canMsgNum; i++)
     {
         Brg_CanRxMsgT& msg = messages[i];
@@ -487,13 +477,14 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL2([Out] List<CanMessage^>^% results
 
         // Copy data using a temporary holder
         uint64_t tempData;
-        memcpy((uint8_t*)&(tempData), dataBuffer, msg.DLC);
+        memcpy((uint8_t*)&(tempData), dataPointer, msg.DLC);
         tempMessage->Data = tempData;
 
         results->Add(tempMessage);
 
         // Advance pointer
-        dataPointer += msg.DLC;
+        //dataPointer += msg.DLC;
+        dataPointer += 8;
     }
 
     // Clean up
@@ -504,6 +495,14 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanReadLL2([Out] List<CanMessage^>^% results
     dataBuffer = NULL;
 
     return BridgeStatus;
+}
+
+bool STLinkBridgeWrapperCpp::CheckComError(Brg_StatusT status)
+{
+    if ((status == Brg_StatusT::BRG_CONNECT_ERR)
+        || (status == Brg_StatusT::BRG_USB_COMM_ERR))
+        return true;
+    return false;
 }
 Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanMessage^ message)
 {
@@ -522,7 +521,7 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanMessage^ message)
 
     // Write message
     BridgeStatus = Bridge->WriteMsgCAN(&tempMessage, dataArray, tempMessage.DLC);
-    Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
+    //Debug::Assert(BridgeStatus == Brg_StatusT::BRG_NO_ERR);
 
     // Clean up
     delete[] dataArray;
@@ -533,9 +532,9 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanWriteLL(CanMessage^ message)
 Brg_StatusT STLinkBridgeWrapperCpp::StartTransmission()
 {
     BridgeStatus = Bridge->StartMsgReceptionCAN();
-    if (BridgeStatus != Brg_StatusT::BRG_NO_ERR)
+    if (GetBridgeStatus() != Brg_StatusT::BRG_NO_ERR)
     {
-        throw gcnew Exception("CAN StartMsgReceptionCAN failed");
+        throw gcnew Exception("CAN StartMsgReceptionCAN failed because of a pre-existing error");
     }
 
     // Receive all messages (no filter) with all DLC possible size (0->8)
@@ -559,11 +558,12 @@ Brg_StatusT STLinkBridgeWrapperCpp::StartTransmission()
         filterConf.Mask[i].IDE = CAN_ID_STANDARD;
         filterConf.Mask[i].RTR = CAN_DATA_FRAME;
     }
-    if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) 
+    if (GetBridgeStatus() == Brg_StatusT::BRG_NO_ERR) 
     {
         BridgeStatus = Bridge->InitFilterCAN(&filterConf);
         if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) 
         {
+            // TODO: Check for COM error to allow for more finess
             throw gcnew Exception("CAN filter init failed. Check the filter configuration.");
         }
     }
@@ -715,7 +715,7 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, ui
     if (BridgeStatus == Brg_StatusT::BRG_NO_ERR) {
         BridgeStatus = Bridge->WriteMsgCAN(pCanTxMsg, pDataTx, size);
         if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
-            Console::WriteLine("CAN Write Message error (Tx ID: 0x{0})", (unsigned int)pCanTxMsg->ID); // TODO: Throw exception // TODO: Convert to hex
+            Console::WriteLine("CAN Write Message error (Tx ID: 0x{0})", pCanTxMsg->ID.ToString("X")); // TODO: Throw exception
         }
     }
     // Receive message
@@ -736,11 +736,11 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, ui
             BridgeStatus = Bridge->GetRxMsgCAN(pCanRxMsg, 1, pDataRx, 8, &dataSize);
         }
         if (BridgeStatus != Brg_StatusT::BRG_NO_ERR) {
-            Console::WriteLine("CAN Read Message error (Tx ID: 0x{0}, nb of Rx msg available: {1})", (unsigned int)pCanTxMsg->ID, (int)msgNb);// TODO: Throw exception // TODO: Convert to hex
+            Console::WriteLine("CAN Read Message error (Tx ID: 0x{0}, nb of Rx msg available: {1})", pCanTxMsg->ID.ToString("X"), (int)msgNb);// TODO: Throw exception
         }
         else {
             if (pCanRxMsg->Fifo != rxFifo) {
-                Console::WriteLine("CAN Read Message FIFO error (Tx ID: 0x{0} in FIFO%d instead of {1})", (unsigned int)pCanTxMsg->ID, (int)pCanRxMsg->Fifo, (int)rxFifo);// TODO: Throw exception // TODO: Convert to hex
+                Console::WriteLine("CAN Read Message FIFO error (Tx ID: 0x{0} in FIFO%d instead of {1})", pCanTxMsg->ID.ToString("X"), (int)pCanRxMsg->Fifo, (int)rxFifo);// TODO: Throw exception
                 BridgeStatus = Brg_StatusT::BRG_VERIF_ERR;
             }
         }
@@ -750,12 +750,12 @@ Brg_StatusT STLinkBridgeWrapperCpp::CanMsgTxRxVerif(Brg_CanTxMsgT *pCanTxMsg, ui
         if ((pCanRxMsg->ID != pCanTxMsg->ID) || (pCanRxMsg->IDE != pCanTxMsg->IDE) || (pCanRxMsg->DLC != size) ||
             (pCanRxMsg->Overrun != CAN_RX_NO_OVERRUN)) {
             BridgeStatus = Brg_StatusT::BRG_CAN_ERR;
-            Console::WriteLine("CAN ERROR ID Rx: 0x%08X Tx 0x%08X, IDE Rx {2} Tx {3}, DLC Rx {4} size Tx {5}", (unsigned int)pCanRxMsg->ID, (unsigned int)pCanTxMsg->ID, (int)pCanRxMsg->IDE, (int)pCanTxMsg->IDE, (int)pCanRxMsg->DLC, (int)size);// TODO: Throw exception // TODO: Convert to hex
+            Console::WriteLine("CAN ERROR ID Rx: 0x{0} Tx 0x{1}, IDE Rx {2} Tx {3}, DLC Rx {4} size Tx {5}", pCanRxMsg->ID.ToString("X"), pCanTxMsg->ID.ToString("X"), (int)pCanRxMsg->IDE, (int)pCanTxMsg->IDE, (int)pCanRxMsg->DLC, (int)size);// TODO: Throw exception
         }
         else {
             for (int i = 0; i < size; i++) {
                 if (pDataRx[i] != pDataTx[i]) {
-                    Console::WriteLine("CAN ERROR data[{0}] Rx: 0x%02hX Tx 0x%02hX", (int)i, (unsigned short)(unsigned char)pDataRx[i], (unsigned short)(unsigned char)pDataTx[i]);// TODO: Throw exception // TODO: Convert to hex
+                    Console::WriteLine("CAN ERROR data[{0}] Rx: 0x{1} Tx 0x{2}", (int)i, pDataRx[i].ToString("X"), pDataTx[i].ToString("X"));// TODO: Throw exception
                     BridgeStatus = Brg_StatusT::BRG_VERIF_ERR;
                 }
             }

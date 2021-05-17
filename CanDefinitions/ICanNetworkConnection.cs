@@ -27,6 +27,7 @@ namespace CanDefinitions
 
     public class CanMessageReceivedEventArgs : EventArgs
     {
+        // TODO: Make field read-only for mor robustness in event raising
         public List<CanMessage> ReceivedMessages { get; set; } = new List<CanMessage>();
         public bool BufferOverrunDetected { get; set; } = false;
     }

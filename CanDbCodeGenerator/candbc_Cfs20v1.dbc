@@ -392,7 +392,7 @@ CM_ SG_ 519 RN_PE_RL_Torque_Set_Point "22.5 Nm = 24 Nm, due to error in torque c
 CM_ SG_ 2 fn_request "bit1-r2d,bit2-ts0n-bit3-precharge,bit4-AppsImplausibility,bit5-Apps-BrakeImplausibility,bit6-Pumps,bit7-Fans";
 CM_ SG_ 3 fn_state "Idle=0,Ready=1,Drive=2
 ";
-BA_DEF_ BO_  "Bus" ENUM  "CAN1","CAN2";
+BA_DEF_ BO_  "Bus" ENUM  "CAN1","CAN2","CAN3";
 BA_DEF_ SG_  "InternalType" ENUM  "int","float";
 BA_DEF_ EV_  "GenEnvIsGeneratedDsp" ENUM  "No","Yes";
 BA_DEF_ EV_  "GenEnvMsgName" STRING ;

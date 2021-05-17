@@ -143,12 +143,25 @@ namespace CanDefinitions
             {
                 throw new Exception("Motorola byte order not supported");
             }
-            return ExtractBits(signal.StartBit, signal.BitMask);
+
+            var bits = ExtractBits(signal.StartBit, signal.BitMask);
+
+            if (signal.Type == SignalType.Signed)
+                bits = TwosComplementCompensation(bits, signal.Length);
+                
+            return bits;
         }
 
         public void InsertBits(CanSignalType signal, UInt64 bits)
         {
             InsertBits(signal.StartBit, signal.BitMask, bits);
+        }
+
+        private UInt64 TwosComplementCompensation(UInt64 bits, int Length)
+        {
+            int shift = 64 - Length;
+            // Exploit arithmetic shift to fill MSBs with ones
+            return (UInt64)(((Int64)bits << shift) >> shift);
         }
 
     }
