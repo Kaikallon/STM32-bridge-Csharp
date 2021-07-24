@@ -13,7 +13,16 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
 {
     public static class CanDbCSharpCodeGeneration
     {
-        
+        //public static string GenerateMessageCode(int o, int n = 4)
+        //{
+        //    StringBuilder stringBuilder = new StringBuilder();
+        //
+        //
+        //    stringBuilder.AppendLine(n * (0 + o), $"");
+        //
+        //
+        //}
+
         public static string GenerateMessageCode(CanMessageType canMessageType, int o, int n = 4)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -25,16 +34,18 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
             stringBuilder.AppendLine(n * (1 + o), $"{{");
             stringBuilder.AppendLine(n * (2 + o), $"MessageType = CanMessageTypes.{canMessageType.Name};");
             stringBuilder.AppendLine(n * (2 + o), $"Id = {canMessageType.Id};");
+            stringBuilder.AppendLine(n * (2 + o), $"DLC = {canMessageType.DLC};"); // TODO: Add more fields in constructor
             stringBuilder.AppendLine(n * (1 + o), $"}}");
 
             // TODO: Implement support for IEEE floats
             foreach (var CanSignalType in canMessageType.Signals.Values)
             {
+                //if (CanSignalType.Type == SignalType.Float || CanSignalType.Type == SignalType.Double)
+                //    throw new Exception("Error: IEEE floating point numbers not supported"); // TODO: Decorate message with more information
+
                 string type = CanSignalType.GetTypeName();
 
-                string floatException = ""; // This is used to append 'f' for float literals
-                if (CanSignalType.Type == SignalType.Float)
-                    floatException = "f";
+
 
                 // Check if any scaling or offsetting is performed. If so, then it only makes sense 
                 // to treat it as float. 
@@ -43,6 +54,11 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
                 {
                     type = "float";
                 }
+
+                string floatException = ""; // This is used to append 'f' for float literals
+                if (CanSignalType.Type == SignalType.Float || type == "float")
+                    floatException = "f";
+
                 string boolException1 = "";
                 string boolException2 = "";
                 if (type == "bool")
@@ -50,6 +66,8 @@ namespace CanDbCodeGenerator.CodeGenerationExtensions
                     boolException1 = "!= 0";
                     boolException2 = "? 1 : 0";
                 }
+
+
                 
                 stringBuilder.AppendLine(n * (1 + o), $"public {type} {CanSignalType.Name}()");
                 stringBuilder.AppendLine(n * (1 + o), $"{{");

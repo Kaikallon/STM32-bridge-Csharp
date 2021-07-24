@@ -19,7 +19,7 @@ namespace WinFormsControls
         #region Storage
 
         readonly Dictionary<UInt32, CanActivityDisplayData> ReceivedDataSummary = new Dictionary<UInt32, CanActivityDisplayData>();
-        public Dictionary<UInt32, CanMessageType> CanMessagesDatabase { get; set; }
+        public Dictionary<UInt32, CanMessageType> CanMessagesDatabase { get; set; } = new Dictionary<uint, CanMessageType>(); // Add null checking where this is used
         public STLinkBridgeWrapper.STLinkBridgeWrapper StLinkBridge { get; private set; }
 
         /// <summary>
@@ -173,7 +173,22 @@ namespace WinFormsControls
                 if (deviceInfo == null)
                     return;
 
-                var baudrate = (uint)cbSpeed.SelectedItem * 1000;
+
+                uint baudrate;
+                if (cbSpeed.SelectedItem is uint)
+                {
+                    baudrate = (uint)cbSpeed.SelectedItem * 1000;
+                }
+                else if (uint.TryParse(cbSpeed.Text, out baudrate))
+                {
+                    // Done
+                }
+                else
+                {
+                    MessageBox.Show("Invalid Baudrate", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 var polltime = nudPollTime.Value;
 
                 InitializeCAN(deviceInfo, baudrate, (double)polltime);

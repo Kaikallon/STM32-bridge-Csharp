@@ -29,7 +29,7 @@ namespace WinFormsControls
                     TabIndex = i + 2,
                     
                 };
-                tableDataFields.Controls.Add(dataFields[i], i, 0);
+                tableDataFields.Controls.Add(dataFields[i], 7-i, 0);
             }
         }
 

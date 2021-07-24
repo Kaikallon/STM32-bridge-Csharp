@@ -122,8 +122,27 @@ namespace STLinkBridgeUnitTests
         public void ExtractBitsTest()
         {
             AmsClient.CanTypes.Messages.AmsThermistorTemperaturesMessage amsCellVoltages = new AmsClient.CanTypes.Messages.AmsThermistorTemperaturesMessage();
-            amsCellVoltages.Data = 0xFFFFFFFF;
-            ulong test = amsCellVoltages.ExtractBits(AmsClient.CanTypes.CanSignalTypes.AmsThermistorTemperatures__temperature_2);
+            //amsCellVoltages.Data = 0xFFFFFFFF;
+            //ulong test = amsCellVoltages.ExtractBits(AmsClient.CanTypes.CanSignalTypes.AmsThermistorTemperatures__temperature_2);
+
+            //float test = -20.4324;
+            unsafe
+            {
+                UInt64 test4 = 1166439267;
+                UInt32 test5 = (UInt32)test4;
+                float test6 = *(float*)(&test5);
+
+
+
+                float test3 = 4302.423432f;
+                Int32 test = *(Int32*)(&test3);
+                float test2 = *(float*)(&test);
+
+                //amsCellVoltages.Data = amsCellVoltages.floatToBits(test3);
+                //var test7 = amsCellVoltages.BitsToFloat(amsCellVoltages.Data);
+
+            }
+
 
         }
         public CanMessageType GenerateSimpleCanMessageType()

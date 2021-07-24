@@ -10,13 +10,13 @@ using CanDbCodeGenerator.CodeGenerationExtensions;
 
 namespace CanDbCodeGenerator
 {
-    class Program
+    public class Program
     {
         /// <summary>
         /// Crteates a static library from DBC file
         /// </summary>
         /// <param name="args">1: Full path to dbc-file. 2: Output path and name. 3: Given namespace for the resulting code</param>
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             if (args.Length < 3)
                 throw new Exception("Not enough arguments!");

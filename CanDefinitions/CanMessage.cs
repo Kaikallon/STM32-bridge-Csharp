@@ -6,75 +6,6 @@ using System.Threading.Tasks;
 
 namespace CanDefinitions
 {
-    public interface ICanSignal
-    {
-        UInt64 ExtractBits(CanSignalType signal);
-
-        UInt64 Data { get; set; }
-
-
-        //public sbyte GetFN_WaterR()
-        //{
-        //    // Get bits from raw data storage and cast
-        //    sbyte tempValue = (sbyte)ExtractBits(FN_WaterR);
-        //    // Apply inverse transform to restore actual value
-        //    tempValue += -5;
-        //    tempValue *= 2;
-        //    return tempValue;
-        //}
-    }
-    public interface ICanSignal<T> : ICanSignal
-    {
-        T Get();
-        void Set(T value);
-    }
-
-    public abstract class ACanSignal<T> : ICanSignal<T>
-    {
-        public UInt64         Data                      { get; set; }
-        public CanSignalType  SignalType                { get; protected set; } 
-
-
-        public abstract T Get();
-        public abstract void Set(T value);
-        public ulong ExtractBits(CanSignalType signal)
-        {
-            if (signal.Encoding == SignalEncoding.Motorola)
-            {
-                throw new Exception("Motorola byte order not supported");
-            }
-            // TODO: Check if the bitmask has been calculated
-            // Isolate relevant bits using precalculated bitmask
-            UInt64 bits = Data;
-            bits &= signal.BitMask;
-
-            // Shift back to original state according to specification
-            bits >>= signal.StartBit;
-
-            return bits;
-        }
-
-    }
-
-    public class CanSignalTestDouble : ACanSignal<double>
-    {
-        public override double Get()
-        {
-            // Get bits from raw data storage and cast
-            double tempValue = (double)ExtractBits(SignalType);
-            // Apply inverse transform to restore actual value
-            tempValue -= SignalType.Offset;
-            tempValue /= SignalType.ScaleFactor;
-            return tempValue;
-        }
-
-        override public void Set(double value)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
     public class CanMessage
     {
         public bool           IdExtended         { get; set; }     // Specifies if ID is standard (11-bit) or extended (29-bit) identifier.
@@ -164,6 +95,25 @@ namespace CanDefinitions
             return (UInt64)(((Int64)bits << shift) >> shift);
         }
 
+
+        private float BitsToFloat(UInt64 data)
+        {
+            UInt32 temp = (UInt32)data;
+            unsafe
+            {
+                return *(float*)(&temp);
+
+            }
+        }
+
+        private UInt64 floatToBits(float data)
+        {
+            unsafe
+            {
+                UInt32 temp = *(UInt32*)(&data);
+                return (UInt64)temp;
+            }
+        }
     }
 
     public abstract class CanMessageExtended<T> : CanMessageExtended where T : CanMessageExtended<T>

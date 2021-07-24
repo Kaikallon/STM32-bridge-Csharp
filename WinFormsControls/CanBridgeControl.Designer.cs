@@ -143,8 +143,10 @@
             // 
             this.textBoxTargetVoltage.Location = new System.Drawing.Point(174, 19);
             this.textBoxTargetVoltage.Name = "textBoxTargetVoltage";
+            this.textBoxTargetVoltage.ReadOnly = true;
             this.textBoxTargetVoltage.Size = new System.Drawing.Size(77, 20);
             this.textBoxTargetVoltage.TabIndex = 11;
+            this.textBoxTargetVoltage.WordWrap = false;
             // 
             // lblTargetVoltage
             // 

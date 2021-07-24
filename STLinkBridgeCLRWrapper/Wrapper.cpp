@@ -172,8 +172,8 @@ Brg_StatusT STLinkBridgeWrapperCpp::OpenBridge(DeviceInfo^ device)
 
     // Open the STLink connection
     Bridge->SetOpenModeExclusive(true); // TODO: Research exclusive mode and consider setting to false
-                                        // Note: Exclusive mode is recommended by ST when running the 
-                                        // link in bridge mode, but it is not clear why.
+                                         // Note: Exclusive mode is recommended by ST when running the 
+                                         // link in bridge mode, but it is not clear why.
 
 	char* tempChar = (char*)(void*)Marshal::StringToHGlobalAnsi(device->EnumUniqueId);
     BridgeStatus = Bridge->OpenStlink(tempChar, true);
